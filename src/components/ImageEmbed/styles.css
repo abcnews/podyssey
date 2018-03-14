@@ -1,0 +1,63 @@
+.root {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--pod-white);
+}
+
+.root::before {
+  content: '';
+  opacity: 0;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 5rem;
+  background-image: var(--pod-blend);
+  transition: 0.25s opacity;
+}
+
+.isActive::before {
+  opacity: 1;
+}
+
+.root > :first-child {
+  mix-blend-mode: multiply;
+}
+
+.root > :nth-child(2) {
+  opacity: 0;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+  color: var(--pod-white);
+  transition: 0.25s opacity;
+  pointer-events: none;
+}
+
+.isActive > :nth-child(2) {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.root > :nth-child(2) em {
+  color: var(--pod-grey);
+}
+
+.root::after {
+  content: 'ℹ️';
+  opacity: 0.75;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 0.75rem;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: 0.25s opacity;
+}
+
+.isActive::after {
+  opacity: 0;
+  cursor: default;
+}

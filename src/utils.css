@@ -1,0 +1,19 @@
+.aspect16x9 {
+  padding-top: 56.25%;
+}
+
+.aspect3x2 {
+  padding-top: 66.6666667%;
+}
+
+.aspect4x3 {
+  padding-top: 75%;
+}
+
+.aspect1x1 {
+  padding-top: 100%;
+}
+
+.aspect3x4 {
+  padding-top: 133.3333333%;
+}

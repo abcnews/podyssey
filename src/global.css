@@ -1,0 +1,49 @@
+:root {
+  --pod-black: #1c1c1c;
+  --pod-white: #fff;
+  --pod-grey: #efefef;
+  --pod-darkgrey: #999;
+  --pod-yellow: #ffc100;
+  --pod-blue: #01cfff;
+  --pod-darkblue: #069bc0;
+  --pod-filter: rgba(0, 0, 0, 0.25);
+  --pod-shadow: 0 0.125rem 0.5rem var(--pod-filter);
+  --pod-radius: 0.5rem;
+  --pod-blend: linear-gradient(to bottom, rgba(63, 63, 63, 0) 0%, rgba(63, 63, 63, 0.75) 100%);
+  --pod-bounce: cubic-bezier(0.68, 1.77, 0.51, 0.85);
+}
+
+html {
+  position: fixed;
+}
+
+html,
+body,
+[data-podyssey-root] {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: auto;
+  cursor: auto;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+body::before,
+body::after,
+body > :not([data-podyssey-root]) {
+  display: none;
+}
+
+body > :global(.tooltip) {
+  display: none !important;
+}
+
+:global(.FormattedTime) {
+  font-variant-numeric: oldstyle-nums;
+  letter-spacing: 0.05rem;
+}

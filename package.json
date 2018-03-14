@@ -1,0 +1,27 @@
+{
+  "name": "podyssey",
+  "version": "1.0.0",
+  "description": "A project generated from aunty's preact-app template.",
+  "license": "MIT",
+  "private": true,
+  "contributors": [
+    "Colin Gourlay <Gourlay.Colin@abc.net.au>"
+  ],
+  "aunty": "preact-app",
+  "scripts": {
+    "start": "aunty serve"
+  },
+  "devDependencies": {
+    "@abcnews/aunty": "^7.8.0"
+  },
+  "dependencies": {
+    "body-scroll-lock": "^2.3.3",
+    "html5-audio-driver": "^0.6.3",
+    "preact": "^8.2.7",
+    "preact-compat": "^3.18.0",
+    "preact-markup": "^1.6.0",
+    "react-flip-move": "^3.0.1",
+    "react-player-controls": "^0.5.18",
+    "react-rangeslider": "^2.2.0"
+  }
+}

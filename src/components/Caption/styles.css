@@ -1,0 +1,21 @@
+.root {
+  padding: 0.5rem 0.75rem;
+  width: 100%;
+  font-weight: normal;
+  font-size: 0.875rem;
+}
+
+.attribution {
+  float: right;
+  margin: 0.1875rem 0 0 0.75rem;
+  color: var(--pod-grey);
+  font-size: 0.75rem;
+  line-height: 1rem;
+  white-space: nowrap;
+}
+
+.root:after {
+  content: '';
+  display: table;
+  clear: both;
+}

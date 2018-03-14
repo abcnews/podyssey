@@ -1,0 +1,36 @@
+.root {
+  display: inline-block;
+  background-color: var(--pod-grey);
+  -webkit-touch-callout: unset;
+  -webkit-user-select: text;
+  -khtml-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+.root > p,
+.root > ul,
+.root > ol {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+}
+
+.root img {
+  width: 100%;
+  height: auto;
+  vertical-align: bottom;
+}
+
+.root p,
+.root li {
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.root > * a,
+.root > * a:active,
+.root > * a:link,
+.root > * a:visited {
+  color: var(--pod-darkblue);
+}
