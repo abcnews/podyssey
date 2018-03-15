@@ -28,7 +28,7 @@ class Note extends Component {
     const Constructor = !isStateless(component) && component;
 
     return (
-      <div className={styles.root} style={{ animationDelay: timeIndex ? `${timeIndex / 15}s` : null }}>
+      <article className={styles.root} style={{ animationDelay: timeIndex ? `${timeIndex / 15}s` : null }}>
         {timeIndex === 0 &&
           time > 0 && (
             <div className={styles.time} onClick={() => this.props.onTimeLink(time)}>
@@ -36,7 +36,7 @@ class Note extends Component {
             </div>
           )}
         <div className={styles.content}>{Constructor ? <Constructor {...props} /> : component(props)}</div>
-      </div>
+      </article>
     );
   }
 }

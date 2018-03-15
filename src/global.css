@@ -18,8 +18,7 @@ html {
 }
 
 html,
-body,
-[data-podyssey-root] {
+body {
   width: 100%;
   height: 100%;
 }
@@ -37,6 +36,23 @@ body::before,
 body::after,
 body > :not([data-podyssey-root]) {
   display: none;
+}
+
+[data-podyssey-root] {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  background-color: var(--pod-yellow);
+}
+
+[data-podyssey-root] *,
+[data-podyssey-root] *::before,
+[data-podyssey-root] *::after {
+  box-sizing: inherit;
 }
 
 body > :global(.tooltip) {

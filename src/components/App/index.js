@@ -123,8 +123,8 @@ class App extends Component {
         <audio ref={this.getAudioElRef}>
           <source src={audioData.url} type={audioData.mimeType} />
         </audio>
+        <Nav />
         <main>
-          <Nav />
           <Notes notes={notes} time={currentTime} onTimeLink={this.playFrom} />
           <footer className={styles.player}>
             <div className={styles.scrub}>

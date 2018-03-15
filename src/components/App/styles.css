@@ -1,12 +1,11 @@
 .root {
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  box-sizing: border-box;
+  justify-content: stretch;
+  align-items: stretch;
   width: 100%;
   height: 100%;
-  background-color: var(--pod-yellow);
   font-family: ABCSans;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -16,19 +15,40 @@
   user-select: none;
 }
 
-@media (min-width: 30rem) and (min-height: 40rem) {
+@media (min-width: 40rem) and (min-height: 40rem) {
   .root {
-    padding: 1rem;
+    overflow: hidden;
+    border-radius: var(--pod-radius);
+    min-width: 30rem;
+    max-width: 45vh;
+    min-height: 30rem;
+    max-height: 80vh;
+    box-shadow: var(--pod-shadow);
   }
 }
 
-.root *,
-.root *::before,
-.root *::after {
-  box-sizing: inherit;
+@media (min-width: 40rem) and (min-height: 40rem) and (orientation: landscape) {
+  .root {
+    max-width: 80vw;
+    max-height: 45vw;
+  }
 }
 
-.root main {
+@media (min-width: 80rem) and (min-height: 80rem) {
+  .root {
+    max-width: 36rem;
+    max-height: 64rem;
+  }
+}
+
+@media (min-width: 80rem) and (min-height: 80rem) and (orientation: landscape) {
+  .root {
+    max-width: 64rem;
+    max-height: 36rem;
+  }
+}
+
+.root > main {
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -39,22 +59,26 @@
   background-color: var(--pod-white);
 }
 
-@media (min-width: 30rem) and (min-height: 40rem) {
+@media (orientation: landscape) {
   .root main {
-    overflow: hidden;
-    border-radius: var(--pod-radius);
-    min-width: 22.5rem;
-    max-width: 45vh;
-    min-height: 30rem;
-    max-height: 80vh;
-    box-shadow: var(--pod-shadow);
+    flex-direction: row-reverse;
   }
 }
 
 .player {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
   flex-shrink: 0;
   padding: 0.5rem;
   background-color: var(--pod-blue);
+}
+
+@media (orientation: landscape) {
+  .player {
+    width: 31.25%;
+    min-width: 16rem;
+  }
 }
 
 .player > * {
@@ -62,7 +86,13 @@
 }
 
 .scrub {
-  margin: -0.5rem -1rem 0.5rem;
+  margin: -0.5rem -0.5rem 0.5rem;
+}
+
+@media (orientation: landscape) {
+  .scrub {
+    margin: 0.5rem 0;
+  }
 }
 
 .scrub :global(.rangeslider) {
@@ -71,6 +101,12 @@
   height: 0.5rem;
   background-color: var(--pod-darkblue);
   touch-action: none;
+}
+
+@media (orientation: landscape) {
+  .scrub :global(.rangeslider) {
+    border-radius: 0.25rem;
+  }
 }
 
 .scrub :global(.rangeslider)::before {
@@ -85,6 +121,12 @@
 .scrub :global(.rangeslider__fill) {
   height: 100%;
   background-color: var(--pod-yellow);
+}
+
+@media (orientation: landscape) {
+  .scrub :global(.rangeslider__fill) {
+    border-radius: 0.25rem;
+  }
 }
 
 .scrub :global(.rangeslider__handle) {
@@ -107,24 +149,11 @@
   left: -0.5rem;
 }
 
-/* .scrub :global(.rangeslider__handle):focus::before {
-  outline-width: 4px;
-  outline-style: solid;
-  outline-color: Highlight;
-}
-
-@media (-webkit-min-device-pixel-ratio: 0) {
-  .scrub :global(.rangeslider__handle):focus::before {
-    outline-color: -webkit-focus-ring-color;
-    outline-style: auto;
-  }
-} */
-
 .playerText {
   justify-content: space-between;
   align-items: center;
   pointer-events: none;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .playerText > :first-child,
