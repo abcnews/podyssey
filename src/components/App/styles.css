@@ -212,3 +212,9 @@
   display: block;
   flex: 0 0 1px;
 }
+
+.stepButtonText {
+  font-size: 0.75rem;
+  font-family: ABCSans;
+  font-variant-numeric: oldstyle-nums;
+}

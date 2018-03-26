@@ -42,7 +42,8 @@ class Notes extends Component {
   }
 
   componentWillUnmount() {
-    enableBodyScroll();
+    // Re-enable this when we stop getting ontouchstart binding errors during hot-reloading. It's probably important.
+    // enableBodyScroll();
   }
 
   render({ notes, time }) {

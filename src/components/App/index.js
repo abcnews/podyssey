@@ -10,6 +10,7 @@ const STORAGE_PREFIX = 'podyssey';
 const HOP_BACK_SECONDS = 15;
 const HOP_FORWARD_SECONDS = 30;
 const INERT_EL = { focus: () => {} };
+const NO_BUBBLE = event => event.stopPropagation();
 
 class App extends Component {
   constructor(props) {
@@ -126,7 +127,7 @@ class App extends Component {
         <Nav />
         <main>
           <Notes notes={notes} time={currentTime} onTimeLink={this.playFrom} />
-          <footer className={styles.player}>
+          <footer className={styles.player} onTouchMove={NO_BUBBLE} onMouseMove={NO_BUBBLE}>
             <div className={styles.scrub}>
               <Slider
                 min={0}
@@ -144,16 +145,19 @@ class App extends Component {
               <FormattedTime numSeconds={Math.round(duration)} />
             </div>
             <div className={styles.toggle}>
-              <Button
+              <StepButton
+                seconds={HOP_BACK_SECONDS}
                 isEnabled={currentTime - HOP_BACK_SECONDS >= 0}
                 onClick={this.hopBack}
-              >{`-${HOP_BACK_SECONDS}s`}</Button>
+              />
               <PauseButton ref={this.getPauseElRef} isEnabled={!isPaused} onClick={this.pause} />
               <PlayButton ref={this.getPlayElRef} isEnabled={isPaused} onClick={this.play} />
-              <Button
+              <StepButton
+                seconds={HOP_FORWARD_SECONDS}
                 isEnabled={currentTime + HOP_FORWARD_SECONDS <= duration}
+                isForward={true}
                 onClick={this.hopForward}
-              >{`+${HOP_FORWARD_SECONDS}s`}</Button>
+              />
             </div>
           </footer>
         </main>
@@ -163,5 +167,30 @@ class App extends Component {
     );
   }
 }
+
+const StepButton = ({ seconds, isEnabled, isForward, onClick }) => (
+  <Button isEnabled={isEnabled} onClick={onClick}>
+    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+      <path
+        transform={`scale(${isForward ? '-' : ''}1, 1) translate(-2, 1)`}
+        transform-origin="50% 50%"
+        fill="currentColor"
+        d="M32.3,14.9c0-7.3-6-13.3-13.3-13.3C12.5,1.7,6.8,6.5,5.9,13l-0.1,0.9H2.7l4.1,5.5l4.1-5.5H7.8l0.2-1.2
+          c1.1-5.2,5.7-9,11-9c6.2,0,11.2,5,11.2,11.2c0,5.8-4.5,10.6-10.2,11.2v2.1C26.9,27.7,32.3,21.9,32.3,14.9z"
+      />
+      <text
+        className={styles.stepButtonText}
+        x="50%"
+        y="50%"
+        dx={`${isForward ? '-' : ''}1`}
+        fill="currentColor"
+        text-anchor="middle"
+        alignment-baseline="middle"
+      >
+        {seconds}
+      </text>
+    </svg>
+  </Button>
+);
 
 module.exports = App;
