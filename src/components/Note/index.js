@@ -18,6 +18,10 @@ class Note extends Component {
 
   componentDidMount() {
     this.base.addEventListener('animationend', this.makeStatic);
+
+    if (this.props.maxWidth) {
+      this.base.style.setProperty('--note-max-width', this.props.maxWidth);
+    }
   }
 
   componentWillUnmount() {

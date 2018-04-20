@@ -1,8 +1,10 @@
 const ImageEmbed = require('./components/ImageEmbed');
+const Quote = require('./components/Quote');
 const Raw = require('./components/Raw');
+const { select, selectAll } = require('./dom');
 
 module.exports.normalise = () => {
-  let viewportEl = document.querySelector('meta[name="viewport"]');
+  let viewportEl = select('meta[name="viewport"]');
 
   if (!viewportEl) {
     viewportEl = document.createElement('meta');
@@ -12,7 +14,7 @@ module.exports.normalise = () => {
   viewportEl.setAttribute('content', 'width=device-width, initial-scale=1');
 
   if (!viewportEl.parentElement) {
-    document.head.appendChild(viewportEl);
+    append(document.head, viewportEl);
   }
 };
 
@@ -39,8 +41,8 @@ module.exports.getNotes = () => {
   let notes = { 0: [] };
   let currentNode;
 
-  const startNode = document.querySelector('a[name="notes"]');
-  const endNode = document.querySelector('a[name="endnotes"]');
+  const startNode = select('a[name="notes"]');
+  const endNode = select('a[name="endnotes"]');
 
   if (!startNode || !endNode) {
     return notes;
@@ -66,13 +68,32 @@ module.exports.getNotes = () => {
         notes[time] = [];
       }
     } else if (
-      currentNode.matches('.inline-content.photo, [class*="view-image-embed"]') ||
-      currentNode.querySelector('.type-photo')
+      currentNode.matches(`
+        .inline-content.photo,
+        [class*="view-image-embed"]
+      `) ||
+      select('.type-photo', currentNode)
     ) {
       // Transform image embeds
       notes[time].push({
         component: ImageEmbed,
         props: ImageEmbed.inferProps(currentNode)
+      });
+    } else if (
+      currentNode.matches(
+        `blockquote:not([class]),
+          .quote--pullquote,
+          .inline-content.quote,
+          .embed-quote,
+          .comp-rich-text-blockquote,
+          .view-inline-pullquote
+        `
+      )
+    ) {
+      // Transform quotes
+      notes[time].push({
+        component: Quote,
+        props: Quote.inferProps(currentNode)
       });
     } else {
       // Keep everything else, as-is (with links opening in new windows)
@@ -87,7 +108,7 @@ module.exports.getNotes = () => {
 };
 
 module.exports.parse = () => {
-  const audio = window.inlineAudioData ? window.inlineAudioData[0][0] : document.querySelector('figure audio source');
+  const audio = window.inlineAudioData ? window.inlineAudioData[0][0] : select('figure audio source');
   const audioData = audio
     ? {
         url: audio.src || audio.url,

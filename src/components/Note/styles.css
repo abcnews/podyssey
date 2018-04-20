@@ -28,6 +28,9 @@
 .root {
   display: flex;
   flex-direction: column;
+  border: 0;
+  padding: 0;
+  padding-left: calc((100% - var(--note-max-width)) / 2);
   animation: fadeIn 0.75s var(--pod-bounce) backwards;
 }
 
@@ -54,10 +57,15 @@
   overflow: hidden;
   -webkit-mask-image: -webkit-radial-gradient(white, black);
   margin: 0.5rem 0 0;
-  max-width: 29.375rem; /* 470px (940px-wide images will appear at 2x) */
+  max-width: var(--note-max-width, auto);
 }
 
 .content,
 .content > * {
   border-radius: var(--pod-radius);
+}
+
+.content > * {
+  display: inline-block;
+  background-color: var(--pod-grey);
 }

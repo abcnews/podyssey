@@ -1,6 +1,4 @@
 .root {
-  display: inline-block;
-  background-color: var(--pod-grey);
   -webkit-touch-callout: unset;
   -webkit-user-select: text;
   -khtml-user-select: text;
@@ -9,11 +7,28 @@
   user-select: text;
 }
 
-.root > p,
-.root > ul,
-.root > ol {
+.root[h2],
+.root[h3] {
+  padding: 0.25rem;
+  width: 100%;
+  background-color: var(--pod-yellow);
+  text-align: center;
+}
+
+.root[h3] {
+  background-color: var(--pod-blue);
+}
+
+.root > * {
   margin: 0;
+  border: 0;
   padding: 0.5rem 0.75rem;
+}
+
+.root[h2] > *,
+.root[h3] > * {
+  border-radius: calc(var(--pod-radius) * 0.625);
+  background-color: rgba(255, 255, 255, 0.75);
 }
 
 .root img {
@@ -22,10 +37,49 @@
   vertical-align: bottom;
 }
 
+.root h1,
+.root h2,
+.root h3 {
+  font-weight: normal;
+  line-height: 1.2;
+  text-transform: none;
+}
+
+.root h2 {
+  font-size: 1.25rem;
+}
+
+@media (min-width: 24rem) {
+  .root h2 {
+    font-size: 1rem;
+  }
+}
+
+.root h3 {
+  font-size: 1rem;
+}
+
+@media (min-width: 24rem) {
+  .root h3 {
+    font-size: 1.25rem;
+  }
+}
+
 .root p,
 .root li {
   font-size: 0.875rem;
   line-height: 1.5;
+}
+
+@media (min-width: 24rem) {
+  .root p,
+  .root li {
+    font-size: 1rem;
+  }
+}
+
+.root p {
+  hanging-punctuation: first;
 }
 
 .root > * a,

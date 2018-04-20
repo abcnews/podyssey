@@ -28,6 +28,8 @@ class ImageEmbed extends Component {
 
 module.exports = ImageEmbed;
 
+module.exports.MAX_WIDTH = '29.375rem';
+
 module.exports.inferProps = el => ({
   picture: Picture.inferProps(el),
   caption: Caption.inferProps(el)

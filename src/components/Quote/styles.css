@@ -1,0 +1,42 @@
+.root {
+  margin: 0;
+  padding: 0;
+}
+
+.root:not(.isPullquote) {
+  border-left: 0.5rem solid var(--pod-darkblue);
+}
+
+.root.isPullquote {
+  transform: translate(-50%, 0);
+  position: relative;
+  left: 50%;
+  background-color: var(--pod-white);
+}
+
+.root > :not(:first-child) > * {
+  padding-top: 0.125rem;
+}
+
+.root > :not(:last-child) > * {
+  padding-bottom: 0.125rem;
+}
+
+.root.isPullquote p {
+  color: var(--pod-darkblue);
+  font-size: 1.5rem;
+}
+
+.root footer {
+  font-size: 0.75rem;
+  font-style: italic;
+}
+
+.root.isPullquote footer {
+  font-size: 0.875rem;
+  text-align: right;
+}
+
+.root footer::before {
+  content: '\2014\00A0';
+}

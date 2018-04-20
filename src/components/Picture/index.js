@@ -1,4 +1,4 @@
-const { h, Component } = require('preact');
+const { h } = require('preact');
 const { MS_VERSION } = require('../../constants');
 const styleUtils = require('../../utils.css');
 const styles = require('./styles.css');

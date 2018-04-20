@@ -22,6 +22,10 @@ class Notes extends Component {
     this.notesEndEl = el;
   }
 
+  componentDidMount() {
+    this.notesEl.scrollTop = this.notesEl.scrollHeight;
+  }
+
   componentWillReceiveProps() {
     this._wasAtEnd = this.notesEndEl.getBoundingClientRect().top < this.base.getBoundingClientRect().bottom;
   }
@@ -67,6 +71,7 @@ class Notes extends Component {
             .map(({ note, time, timeIndex }, index) => (
               <Note
                 component={note.component}
+                maxWidth={note.component.MAX_WIDTH}
                 props={note.props}
                 time={time}
                 timeIndex={timeIndex}

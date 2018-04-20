@@ -76,8 +76,9 @@
 
 @media (orientation: landscape) {
   .player {
-    width: 31.25%;
+    width: 38.75%;
     min-width: 16rem;
+    max-width: 24rem;
   }
 }
 
@@ -153,14 +154,14 @@
   justify-content: space-between;
   align-items: center;
   pointer-events: none;
-  margin-bottom: 0.5rem;
+  margin: 0.25rem 0 0.5rem;
 }
 
 .playerText > :first-child,
 .playerText > :last-child {
   display: block;
   font-size: 0.75rem;
-  width: 2.75rem;
+  width: 4rem;
 }
 
 .playerText > :last-child {
@@ -169,8 +170,10 @@
 
 .playerText h1 {
   flex-shrink: 1;
+  margin: 0 0.25rem;
   font-size: 0.875rem;
   font-weight: normal;
+  line-height: 1.2;
   text-align: center;
 }
 

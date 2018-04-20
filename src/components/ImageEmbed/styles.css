@@ -1,4 +1,5 @@
 .root {
+  display: block !important;
   position: relative;
   overflow: hidden;
   background-color: var(--pod-white);
