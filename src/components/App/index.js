@@ -126,7 +126,7 @@ class App extends Component {
         </audio>
         <Nav />
         <main>
-          <Notes notes={notes} time={currentTime} onTimeLink={this.playFrom} />
+          <Notes notes={notes} time={Math.round(currentTime)} onTimeLink={this.playFrom} />
           <footer className={styles.player} onTouchMove={NO_BUBBLE} onMouseMove={NO_BUBBLE}>
             <div className={styles.scrub}>
               <Slider

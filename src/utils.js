@@ -1,7 +1,10 @@
 const ImageEmbed = require('./components/ImageEmbed');
 const Quote = require('./components/Quote');
 const Raw = require('./components/Raw');
-const { select, selectAll } = require('./dom');
+const { append, before, detach, select, selectAll } = require('./dom');
+
+const PREVIEW_CTX_SELECTOR = 'span[id^="CTX"]';
+const PREVIEW_SCRIPT_PATTERN = /(?:coremedia|joo\.classLoader)/;
 
 module.exports.normalise = () => {
   let viewportEl = select('meta[name="viewport"]');
@@ -16,6 +19,18 @@ module.exports.normalise = () => {
   if (!viewportEl.parentElement) {
     append(document.head, viewportEl);
   }
+
+  selectAll(PREVIEW_CTX_SELECTOR).forEach(el => {
+    console.log(el);
+    Array.from(el.children).forEach(childEl => {
+      if (childEl.tagName === 'SCRIPT' && childEl.textContent.match(PREVIEW_SCRIPT_PATTERN)) {
+        detach(childEl);
+      } else {
+        before(el, childEl);
+      }
+    });
+    detach(el);
+  });
 };
 
 const TIMESTAMP_PATTERN = /\d*h?\d*m?\d*s?/;

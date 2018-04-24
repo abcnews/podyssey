@@ -1,6 +1,7 @@
-const { h } = require('preact');
+const { h, Component } = require('preact');
 const { MS_VERSION } = require('../../constants');
 const styleUtils = require('../../utils.css');
+const Loader = require('../Loader');
 const styles = require('./styles.css');
 
 const DEFAULT_RATIO = '1x1';
@@ -15,6 +16,19 @@ const RATIO_PATTERN = /(\d+x\d+)/;
 const P1_RATIO_SIZE_PATTERN = /(\d+x\d+)-(\d+x\d+)/;
 const P2_RATIO_SIZE_PATTERN = /(\d+x\d+)-([a-z]+)/;
 
+const preloaded = {};
+
+function load(src, done) {
+  const loader = new Image();
+
+  loader.onload = () => {
+    preloaded[src] = true;
+    done();
+  };
+
+  loader.src = src;
+}
+
 function resize({ url, ratio }) {
   return url
     .replace(P2_RATIO_SIZE_PATTERN, '$1-large')
@@ -22,16 +36,51 @@ function resize({ url, ratio }) {
     .replace(P1_RATIO_SIZE_PATTERN, `$1-${RATIO_SIZES[ratio]}`);
 }
 
-module.exports = ({ url = '', alt = '', ratio = DEFAULT_RATIO }) => {
-  const [, originalRatio] = url.match(RATIO_PATTERN) || [, null];
+class Picture extends Component {
+  constructor(props) {
+    super(props);
 
-  return (
-    <div className={styles.root}>
-      <div className={styleUtils[`aspect${ratio}`]} />
-      <img src={resize({ url, ratio })} alt={alt} />
-    </div>
-  );
-};
+    this.getImageRef = this.getImageRef.bind(this);
+
+    const ratio = this.props.ratio || DEFAULT_RATIO;
+    const src = resize({ url: this.props.url, ratio });
+    const wasPreloaded = preloaded[src];
+
+    this.state = {
+      aspectClassName: styleUtils[`aspect${ratio}`],
+      loaded: wasPreloaded,
+      src,
+      wasPreloaded
+    };
+  }
+
+  getImageRef(el) {
+    this.imageEl = el;
+  }
+
+  componentDidMount() {
+    if (this.state.wasPreloaded) {
+      return;
+    }
+
+    load(this.state.src, () => {
+      this.imageEl.src = this.state.src;
+      setTimeout(() => this.setState({ loaded: true }));
+    });
+  }
+
+  render({ alt = '' }, { aspectClassName, loaded, src, wasPreloaded }) {
+    return (
+      <div key={`Picture_${src}`} className={styles.root}>
+        <div className={aspectClassName} />
+        <Loader inverted large overlay />
+        <img ref={this.getImageRef} src={wasPreloaded ? src : null} alt={alt} loaded={loaded ? '' : null} />
+      </div>
+    );
+  }
+}
+
+module.exports = Picture;
 
 module.exports.inferProps = el => {
   el = el.matches('img') ? el : el.querySelector('img');

@@ -2,8 +2,10 @@
   display: flex;
   justify-content: space-between;
   flex-shrink: 0;
-  background-color: var(--pod-black);
-  color: var(--pod-white);
+  background-color: black;
+  background-color: var(--abc-black, black);
+  color: white;
+  color: var(--abc-white, white);
 }
 
 .root svg {
@@ -20,10 +22,12 @@
 .beta {
   position: relative;
   top: -0.25rem;
-  border-radius: 0.25rem;
+  border: 2px solid white;
+  border-width: var(--pod-ui-border-width, 2px);
+  border-radius: calc(var(--pod-radius) / 2);
   padding: 0 0.25rem;
-  background-color: var(--pod-blue);
-  color: var(--pod-black);
+  background-color: var(--news-blue);
+  color: var(--abc-black);
   font-size: 0.75rem;
   vertical-align: top;
 }

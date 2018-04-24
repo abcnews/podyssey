@@ -2,6 +2,7 @@ require('./polyfills');
 
 const { h, render } = require('preact');
 const { getNotes, normalise, parse } = require('./utils');
+require('./theme.css');
 require('./global.css');
 
 const root = document.createElement('div');

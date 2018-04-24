@@ -1,21 +1,23 @@
 .root {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
   padding: 0.5rem 0.75rem;
   width: 100%;
-  font-weight: normal;
   font-size: 0.875rem;
 }
 
+.root > :first-child {
+  margin-right: 0.75rem;
+}
+
 .attribution {
-  float: right;
-  margin: 0.1875rem 0 0 0.75rem;
+  margin-top: 0.1875rem;
   color: var(--pod-grey);
   font-size: 0.75rem;
   line-height: 1rem;
-  white-space: nowrap;
 }
 
-.root:after {
-  content: '';
-  display: table;
-  clear: both;
+.root:first-line .attribution {
+  text-align: right;
 }

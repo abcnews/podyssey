@@ -18,24 +18,20 @@ class Note extends Component {
 
   componentDidMount() {
     this.base.addEventListener('animationend', this.makeStatic);
-
-    if (this.props.maxWidth) {
-      this.base.style.setProperty('--note-max-width', this.props.maxWidth);
-    }
   }
 
   componentWillUnmount() {
     this.base.removeEventListener('animationend', this.makeStatic);
   }
 
-  render({ component, props, time, timeIndex }) {
+  render({ component, props = {}, time, timeIndex }) {
     const Constructor = !isStateless(component) && component;
 
     return (
       <article className={styles.root} style={{ animationDelay: timeIndex ? `${timeIndex / 15}s` : null }}>
         {timeIndex === 0 &&
           time > 0 && (
-            <div className={styles.time} onClick={() => this.props.onTimeLink(time)}>
+            <div className={styles.time} onClick={this.props.onTimeLink ? () => this.props.onTimeLink(time) : null}>
               <FormattedTime numSeconds={time} />
             </div>
           )}

@@ -4,14 +4,15 @@
 }
 
 .root:not(.isPullquote) {
-  border-left: 0.5rem solid var(--pod-darkblue);
+  border-left: 0.5rem solid black;
+  border-color: var(--pod-blue, black);
 }
 
 .root.isPullquote {
   transform: translate(-50%, 0);
   position: relative;
   left: 50%;
-  background-color: var(--pod-white);
+  background-color: var(--abc-white);
 }
 
 .root > :not(:first-child) > * {
@@ -23,7 +24,7 @@
 }
 
 .root.isPullquote p {
-  color: var(--pod-darkblue);
+  color: var(--pod-blue);
   font-size: 1.5rem;
 }
 

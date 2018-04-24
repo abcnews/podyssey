@@ -1,0 +1,29 @@
+:root {
+  --transparent: rgba(0, 0, 0, 0);
+  --abc-white: #fff;
+  --abc-black: #000;
+  /* --abc-warmgrey: #3c3c3b; */
+  --abc-lightgrey: #9d9d9c;
+  --abc-yellow: #fdc605;
+  --news-blue: #01cfff;
+  --news-yellow: #ffb300;
+  --pod-grey: #efefef;
+  --pod-blue: #069bc0;
+  --pod-filter: rgba(0, 0, 0, 0.25);
+  --pod-shadow: 0 0.125rem 0.5rem var(--pod-filter);
+  --pod-radius: 0.5rem;
+  --pod-blend: linear-gradient(to bottom, rgba(63, 63, 63, 0) 0%, rgba(63, 63, 63, 0.75) 100%);
+  --pod-bounce: cubic-bezier(0.68, 1.77, 0.51, 0.85);
+  --pod-font-weight-normal: 400;
+  --pod-font-weight-heavy: 700;
+  --pod-ui-border-width: 0;
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 1.3),
+  only screen and (-o-min-device-pixel-ratio: 13/10),
+  only screen and (min-resolution: 120dpi) {
+  :root {
+    --pod-font-weight-normal: 300;
+    --pod-font-weight-heavy: 600;
+  }
+}

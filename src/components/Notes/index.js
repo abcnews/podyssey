@@ -4,6 +4,7 @@ const Note = require('../Note');
 const styles = require('./styles.css');
 
 const getVisibleNoteTimes = (notes, time) => Object.keys(notes).filter(key => time >= +key);
+const getIsComposing = (notes, time) => Object.keys(notes).filter(key => +key > time && +key - 5 <= time).length > 0;
 
 class Notes extends Component {
   constructor(props) {
@@ -63,6 +64,7 @@ class Notes extends Component {
         ),
       []
     );
+    const isComposing = getIsComposing(notes, time);
 
     return (
       <section className={styles.root}>
@@ -70,19 +72,28 @@ class Notes extends Component {
           {visibleNotes
             .map(({ note, time, timeIndex }, index) => (
               <Note
+                key={`note${index}`}
                 component={note.component}
-                maxWidth={note.component.MAX_WIDTH}
                 props={note.props}
                 time={time}
                 timeIndex={timeIndex}
                 onTimeLink={this.props.onTimeLink}
               />
             ))
-            .concat([<div className={styles.end} ref={this.getNotesEndElRef} />])}
+            .concat(isComposing ? [<Note key="composing" component={Composing} time={time - 5} />] : [])
+            .concat([<div key="end" ref={this.getNotesEndElRef} className={styles.end} />])}
         </div>
       </section>
     );
   }
 }
+
+const Composing = () => (
+  <div className={styles.composing}>
+    <span className={styles.dot} />
+    <span className={styles.dot} />
+    <span className={styles.dot} />
+  </div>
+);
 
 module.exports = Notes;

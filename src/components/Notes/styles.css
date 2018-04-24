@@ -14,6 +14,54 @@
   padding: 0 3rem 0 1rem;
 }
 
+@keyframes dot {
+  from {
+    opacity: 0.25;
+  }
+  to {
+    opacity: 0.5;
+  }
+}
+
+.composing {
+  margin-top: 2.25rem;
+  padding: 0.8125rem 0.625rem;
+  line-height: 0;
+}
+
+@media (min-width: 24rem) {
+  .composing {
+    padding: 0.875rem 0.625rem;
+  }
+}
+
+.dot {
+  display: inline-block;
+  margin: 0.125rem;
+  border-radius: 50%;
+  width: 0.4375rem;
+  height: 0.4375rem;
+  vertical-align: top;
+  background-color: black;
+  background-color: var(--abc-black, black);
+  animation: dot 0.75s infinite alternate;
+}
+
+@media (min-width: 24rem) {
+  .dot {
+    width: 0.5rem;
+    height: 0.5rem;
+  }
+}
+
+.dot + .dot {
+  animation-delay: 0.25s;
+}
+
+.dot + .dot + .dot {
+  animation-delay: 0.5s;
+}
+
 .end {
   height: 1rem;
 }

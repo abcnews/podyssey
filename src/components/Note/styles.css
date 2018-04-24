@@ -28,9 +28,11 @@
 .root {
   display: flex;
   flex-direction: column;
+  margin: 0 auto;
   border: 0;
   padding: 0;
-  padding-left: calc((100% - var(--note-max-width)) / 2);
+  width: 100%;
+  max-width: 29.375rem;
   animation: fadeIn 0.75s var(--pod-bounce) backwards;
 }
 
@@ -48,24 +50,44 @@
 
 .time {
   margin: 1.5rem auto 0 0.75rem;
-  color: var(--pod-darkgrey);
+  border-bottom: 2px solid black;
+  border-bottom-width: var(--pod-ui-border-width, 2px);
+  padding-bottom: 2px;
+  padding-bottom: var(--pod-ui-border-width, 2px);
+  color: var(--abc-lightgrey);
   font-size: 0.75rem;
   line-height: 1;
+}
+
+@media (min-width: 80rem) and (min-height: 40rem) and (orientation: landscape) {
+  .time {
+    position: absolute;
+    right: 100%;
+    margin: 1.5rem 0.75rem 0;
+  }
 }
 
 .content {
   overflow: hidden;
   -webkit-mask-image: -webkit-radial-gradient(white, black);
   margin: 0.5rem 0 0;
-  max-width: var(--note-max-width, auto);
+}
+
+@media (min-width: 80rem) and (min-height: 40rem) and (orientation: landscape) {
+  .time + .content {
+    margin-top: 1.5rem;
+  }
 }
 
 .content,
 .content > * {
+  border-radius: var(--pod-radius);
   border-radius: var(--pod-radius);
 }
 
 .content > * {
   display: inline-block;
   background-color: var(--pod-grey);
+  border: 2px solid black;
+  border-width: var(--pod-ui-border-width, 2px);
 }

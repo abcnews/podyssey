@@ -11,12 +11,12 @@
 .root[h3] {
   padding: 0.25rem;
   width: 100%;
-  background-color: var(--pod-yellow);
+  background-color: var(--news-yellow);
   text-align: center;
 }
 
 .root[h3] {
-  background-color: var(--pod-blue);
+  background-color: var(--news-blue);
 }
 
 .root > * {
@@ -40,18 +40,18 @@
 .root h1,
 .root h2,
 .root h3 {
-  font-weight: normal;
+  font-weight: var(--pod-font-weight-heavy, bold);
   line-height: 1.2;
   text-transform: none;
 }
 
 .root h2 {
-  font-size: 1.25rem;
+  font-size: 1.125rem;
 }
 
 @media (min-width: 24rem) {
   .root h2 {
-    font-size: 1rem;
+    font-size: 1.25rem;
   }
 }
 
@@ -61,7 +61,7 @@
 
 @media (min-width: 24rem) {
   .root h3 {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
   }
 }
 
@@ -82,9 +82,29 @@
   hanging-punctuation: first;
 }
 
+.root ol,
+.root ul {
+  margin-left: 0.875rem;
+}
+
+@media (min-width: 24rem) {
+  .root ol,
+  .root ul {
+    margin-left: 1.125rem;
+  }
+}
+
+.root ol {
+  list-style: decimal;
+}
+
+.root ol li::before {
+  content: '';
+}
+
 .root > * a,
 .root > * a:active,
 .root > * a:link,
 .root > * a:visited {
-  color: var(--pod-darkblue);
+  color: var(--pod-blue);
 }

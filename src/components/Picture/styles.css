@@ -1,8 +1,11 @@
 .root {
   position: relative;
+  background-color: var(--abc-black);
 }
 
 .root img {
+  opacity: 0;
+  transform: scale(1.25);
   position: absolute;
   top: 0;
   left: 0;
@@ -12,4 +15,10 @@
   font-size: 0;
   vertical-align: top;
   object-fit: cover;
+  transition: opacity 1s, transform 1s;
+}
+
+.root img[loaded] {
+  opacity: 1;
+  transform: none;
 }

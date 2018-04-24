@@ -6,7 +6,10 @@
   align-items: stretch;
   width: 100%;
   height: 100%;
+  color: black;
+  color: var(--abc-black, black);
   font-family: ABCSans;
+  font-weight: var(--pod-font-weight-normal);
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -20,31 +23,36 @@
     overflow: hidden;
     border-radius: var(--pod-radius);
     min-width: 30rem;
-    max-width: 45vh;
     min-height: 30rem;
-    max-height: 80vh;
     box-shadow: var(--pod-shadow);
+  }
+}
+
+@media (min-width: 40rem) and (min-height: 40rem) and (orientation: portrait) {
+  .root {
+    max-width: 53.3vh;
+    max-height: 80vh;
   }
 }
 
 @media (min-width: 40rem) and (min-height: 40rem) and (orientation: landscape) {
   .root {
     max-width: 80vw;
-    max-height: 45vw;
+    max-height: 53.3vw;
   }
 }
 
-@media (min-width: 80rem) and (min-height: 80rem) {
+@media (min-width: 40rem) and (min-height: 80rem) and (orientation: portrait) {
   .root {
-    max-width: 36rem;
+    max-width: 42.6666666667rem;
     max-height: 64rem;
   }
 }
 
-@media (min-width: 80rem) and (min-height: 80rem) and (orientation: landscape) {
+@media (min-width: 80rem) and (min-height: 40rem) and (orientation: landscape) {
   .root {
     max-width: 64rem;
-    max-height: 36rem;
+    max-height: 42.6666666667rem;
   }
 }
 
@@ -56,7 +64,14 @@
   align-items: stretch;
   width: 100%;
   height: 100%;
-  background-color: var(--pod-white);
+  background-color: var(--abc-white);
+}
+
+@media (min-width: 40rem) and (min-height: 40rem) {
+  .root > main {
+    border: 2px solid black;
+    border-width: var(--pod-ui-border-width, 2px);
+  }
 }
 
 @media (orientation: landscape) {
@@ -71,14 +86,23 @@
   justify-content: flex-end;
   flex-shrink: 0;
   padding: 0.5rem;
-  background-color: var(--pod-blue);
+  background-color: var(--news-blue);
 }
 
 @media (orientation: landscape) {
   .player {
+    border-top-width: 0;
+    border-right: 2px solid black;
+    border-right-width: var(--pod-ui-border-width, 2px);
     width: 38.75%;
     min-width: 16rem;
     max-width: 24rem;
+  }
+}
+
+@media (min-width: 40rem) and (min-height: 40rem) {
+  .player {
+    padding: 1rem;
   }
 }
 
@@ -96,17 +120,32 @@
   }
 }
 
+@media (min-width: 40rem) and (min-height: 40rem) and (orientation: portrait) {
+  .scrub {
+    margin: -1rem -1rem 0.5rem;
+  }
+}
+
 .scrub :global(.rangeslider) {
   position: relative;
+  border: 2px solid black;
+  border-width: var(--pod-ui-border-width, 2px);
   width: 100%;
   height: 0.5rem;
-  background-color: var(--pod-darkblue);
+  background-color: var(--pod-blue);
   touch-action: none;
+}
+
+@media (orientation: portrait) {
+  .scrub :global(.rangeslider) {
+    border-right-width: 0;
+    border-left-width: 0;
+  }
 }
 
 @media (orientation: landscape) {
   .scrub :global(.rangeslider) {
-    border-radius: 0.25rem;
+    border-radius: calc(var(--pod-radius) / 2);
   }
 }
 
@@ -121,12 +160,13 @@
 
 .scrub :global(.rangeslider__fill) {
   height: 100%;
-  background-color: var(--pod-yellow);
+  background-color: black;
+  background-color: var(--news-yellow, black);
 }
 
 @media (orientation: landscape) {
   .scrub :global(.rangeslider__fill) {
-    border-radius: 0.25rem;
+    border-radius: calc(var(--pod-radius) / 2);
   }
 }
 
@@ -134,11 +174,14 @@
   transform: translate(-50%, -50%);
   position: absolute;
   top: 50%;
-  border-radius: 50%;
+  /* border-radius: 50%; */
+  border-radius: calc(var(--pod-radius) * 2);
   width: 1.25rem;
   height: 1.25rem;
-  background-color: var(--pod-yellow);
-  box-shadow: var(--pod-shadow);
+  background-color: white;
+  background-color: var(--news-yellow, white);
+  box-shadow: inset 0 0 0 2px black;
+  box-shadow: var(--pod-shadow, inset 0 0 0 2px black);
 }
 
 .scrub :global(.rangeslider__handle)::before {
@@ -152,16 +195,29 @@
 
 .playerText {
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   pointer-events: none;
   margin: 0.25rem 0 0.5rem;
+}
+
+@media (min-width: 40rem) and (min-height: 40rem) {
+  .playerText {
+    margin: 0.75rem 0 1rem;
+  }
 }
 
 .playerText > :first-child,
 .playerText > :last-child {
   display: block;
   font-size: 0.75rem;
-  width: 4rem;
+  width: 6em;
+}
+
+@media (min-width: 40rem) and (min-height: 40rem) {
+  .playerText > :first-child,
+  .playerText > :last-child {
+    font-size: 0.875rem;
+  }
 }
 
 .playerText > :last-child {
@@ -171,10 +227,17 @@
 .playerText h1 {
   flex-shrink: 1;
   margin: 0 0.25rem;
+  max-width: 24rem;
   font-size: 0.875rem;
-  font-weight: normal;
+  font-weight: var(--pod-font-weight-normal);
   line-height: 1.2;
   text-align: center;
+}
+
+@media (min-width: 40rem) and (min-height: 40rem) {
+  .playerText h1 {
+    font-size: 1rem;
+  }
 }
 
 .toggle {
@@ -186,13 +249,15 @@
   margin: 0 0.5rem;
   padding: 0.25rem;
   background-color: transparent;
+  color: var(--pod-black);
   font-size: 1rem;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.25s;
 }
 
 .toggle > [disabled] {
-  opacity: 0.5;
+  opacity: 0.125;
 }
 
 .toggle > :global(.PauseButton)[disabled],
@@ -204,16 +269,20 @@
   width: 2rem;
   height: auto;
   vertical-align: bottom;
+  fill: currentColor;
 }
 
-.fullscreen {
+@media (min-width: 40rem) and (min-height: 40rem) {
+  .toggle svg {
+    width: 2.5rem;
+  }
 }
 
 /* Safari removes padding from last flex child */
 .player::after {
   content: '';
   display: block;
-  flex: 0 0 1px;
+  flex: 0 0 0.0625rem;
 }
 
 .stepButtonText {
