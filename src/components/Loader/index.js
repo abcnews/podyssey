@@ -19,3 +19,5 @@ module.exports = ({ inverted, large, overlay, ...props }) => (
     <div className={styles.spinner} />
   </div>
 );
+
+module.exports.displayName = 'Loader';

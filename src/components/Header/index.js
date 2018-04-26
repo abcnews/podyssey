@@ -1,7 +1,10 @@
 const { h } = require('preact');
+const Marquee = require('../Marquee');
 const styles = require('./styles.css');
 
-module.exports = () => (
+const BOOKEND = '♫';
+
+module.exports = ({ title }) => (
   <header className={styles.root}>
     <a href="/news/">
       <svg xmlns="http://www.w3.org/2000/svg" width="128" height="44" viewBox="0 0 128 44">
@@ -12,7 +15,12 @@ module.exports = () => (
       </svg>
     </a>
     <div className={styles.title}>
-      Podyssey <span class={styles.beta}>beta</span>
+      <Marquee text={`${BOOKEND} ${title} ${BOOKEND}`} />
     </div>
+    {/* <div className={styles.appTitle}>
+      Podyssey <span class={styles.beta}>beta</span>
+    </div> */}
   </header>
 );
+
+module.exports.displayName = 'Header';

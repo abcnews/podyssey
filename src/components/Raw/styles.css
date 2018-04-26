@@ -11,7 +11,7 @@
 .root[h3] {
   padding: 0.25rem;
   width: 100%;
-  background-color: var(--news-yellow);
+  background-color: var(--abc-yellow);
   text-align: center;
 }
 
@@ -98,6 +98,19 @@
   list-style: decimal;
 }
 
+.root ul {
+  list-style: disc;
+}
+
+.root li {
+  margin: 0;
+  padding: 0;
+}
+
+.root ul li {
+  background: none;
+}
+
 .root ol li::before {
   content: '';
 }
@@ -106,5 +119,5 @@
 .root > * a:active,
 .root > * a:link,
 .root > * a:visited {
-  color: var(--pod-blue);
+  color: var(--pod-link);
 }

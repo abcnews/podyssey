@@ -15,6 +15,8 @@ module.exports = ({ url, text, attribution }) => (
   </figcaption>
 );
 
+module.exports.displayName = 'Caption';
+
 const detach = el => (el ? (el.parentElement.removeChild(el), el) : MOCK_ELEMENT);
 const attr = (el, name) => (el || MOCK_ELEMENT).getAttribute(name);
 const text = (el, hasParenthesis) =>

@@ -1,0 +1,50 @@
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.root {
+  overflow: hidden;
+  position: relative;
+  white-space: nowrap;
+}
+
+.root:hover .content {
+  animation-play-state: paused;
+}
+
+.track {
+  transition: transform 0.5s ease-out;
+}
+
+.root:hover .track {
+  transform: translateX(-2.5%);
+}
+
+.root::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  box-shadow: inset 0 0 1rem 0.5rem black;
+  box-shadow: inset 0 0 1rem 0.5rem var(--abc-black, black);
+}
+
+.text {
+  display: inline-block;
+  padding: 0 2.5rem;
+  min-width: calc(100% - 0.5rem);
+  text-align: center;
+  animation: marquee 10s linear infinite;
+  animation-duration: inherit;
+}
+
+.root:hover .text {
+  animation-play-state: paused;
+}

@@ -21,7 +21,6 @@ module.exports.normalise = () => {
   }
 
   selectAll(PREVIEW_CTX_SELECTOR).forEach(el => {
-    console.log(el);
     Array.from(el.children).forEach(childEl => {
       if (childEl.tagName === 'SCRIPT' && childEl.textContent.match(PREVIEW_SCRIPT_PATTERN)) {
         detach(childEl);

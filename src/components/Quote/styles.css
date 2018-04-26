@@ -1,18 +1,18 @@
 .root {
   margin: 0;
   padding: 0;
+  /* reset news-core:desktop */
+  overflow: initial;
 }
 
-.root:not(.isPullquote) {
+/* Higher specificity required */
+.root.root {
   border-left: 0.5rem solid black;
-  border-color: var(--pod-blue, black);
+  border-color: var(--abc-yellow, black);
 }
 
 .root.isPullquote {
-  transform: translate(-50%, 0);
-  position: relative;
-  left: 50%;
-  background-color: var(--abc-white);
+  background-color: transparent;
 }
 
 .root > :not(:first-child) > * {
@@ -24,8 +24,8 @@
 }
 
 .root.isPullquote p {
-  color: var(--pod-blue);
   font-size: 1.5rem;
+  line-height: 1.25;
 }
 
 .root footer {
@@ -35,7 +35,6 @@
 
 .root.isPullquote footer {
   font-size: 0.875rem;
-  text-align: right;
 }
 
 .root footer::before {

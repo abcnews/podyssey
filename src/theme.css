@@ -2,13 +2,13 @@
   --transparent: rgba(0, 0, 0, 0);
   --abc-white: #fff;
   --abc-black: #000;
-  /* --abc-warmgrey: #3c3c3b; */
   --abc-lightgrey: #9d9d9c;
+  /* --abc-warmgrey: #3c3c3b; */
   --abc-yellow: #fdc605;
   --news-blue: #01cfff;
   --news-yellow: #ffb300;
   --pod-grey: #efefef;
-  --pod-blue: #069bc0;
+  --pod-link: #069bc0;
   --pod-filter: rgba(0, 0, 0, 0.25);
   --pod-shadow: 0 0.125rem 0.5rem var(--pod-filter);
   --pod-radius: 0.5rem;

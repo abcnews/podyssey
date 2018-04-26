@@ -2,7 +2,6 @@
   display: block !important;
   position: relative;
   overflow: hidden;
-  background-color: var(--abc-white);
 }
 
 .root::before {

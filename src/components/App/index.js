@@ -2,7 +2,7 @@ const { actions, events } = require('html5-audio-driver');
 const { h, Component } = require('preact');
 const { Button, FormattedTime, PauseButton, PlayButton, ProgressBar } = require('react-player-controls');
 const Slider = require('react-rangeslider').default;
-const Nav = require('../Nav');
+const Header = require('../Header');
 const Notes = require('../Notes');
 const styles = require('./styles.css');
 
@@ -124,7 +124,7 @@ class App extends Component {
         <audio ref={this.getAudioElRef}>
           <source src={audioData.url} type={audioData.mimeType} />
         </audio>
-        <Nav />
+        <Header title={title} />
         <main>
           <Notes notes={notes} time={Math.round(currentTime)} onTimeLink={this.playFrom} />
           <footer className={styles.player} onTouchMove={NO_BUBBLE} onMouseMove={NO_BUBBLE}>
@@ -139,25 +139,26 @@ class App extends Component {
                 onChangeComplete={this.seekEnd}
               />
             </div>
-            <div className={styles.playerText}>
-              <FormattedTime numSeconds={Math.round(currentTime)} />
-              <h1>{title}</h1>
-              <FormattedTime numSeconds={Math.round(duration)} />
-            </div>
-            <div className={styles.toggle}>
-              <StepButton
-                seconds={HOP_BACK_SECONDS}
-                isEnabled={currentTime - HOP_BACK_SECONDS >= 0}
-                onClick={this.hopBack}
-              />
-              <PauseButton ref={this.getPauseElRef} isEnabled={!isPaused} onClick={this.pause} />
-              <PlayButton ref={this.getPlayElRef} isEnabled={isPaused} onClick={this.play} />
-              <StepButton
-                seconds={HOP_FORWARD_SECONDS}
-                isEnabled={currentTime + HOP_FORWARD_SECONDS <= duration}
-                isForward={true}
-                onClick={this.hopForward}
-              />
+            <div className={styles.playback}>
+              <div className={styles.times}>
+                <FormattedTime numSeconds={Math.round(currentTime)} />
+                <FormattedTime numSeconds={Math.round(duration)} />
+              </div>
+              <div className={styles.buttons}>
+                <StepButton
+                  seconds={HOP_BACK_SECONDS}
+                  isEnabled={currentTime - HOP_BACK_SECONDS >= 0}
+                  onClick={this.hopBack}
+                />
+                <PauseButton ref={this.getPauseElRef} isEnabled={!isPaused} onClick={this.pause} />
+                <PlayButton ref={this.getPlayElRef} isEnabled={isPaused} onClick={this.play} />
+                <StepButton
+                  seconds={HOP_FORWARD_SECONDS}
+                  isEnabled={currentTime + HOP_FORWARD_SECONDS <= duration}
+                  isForward={true}
+                  onClick={this.hopForward}
+                />
+              </div>
             </div>
           </footer>
         </main>

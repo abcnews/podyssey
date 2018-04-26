@@ -20,7 +20,6 @@
     "preact": "^8.2.7",
     "preact-compat": "^3.18.0",
     "preact-markup": "^1.6.0",
-    "react-flip-move": "^3.0.1",
     "react-player-controls": "^0.5.18",
     "react-rangeslider": "^2.2.0"
   }

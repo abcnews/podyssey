@@ -28,6 +28,7 @@
 .root {
   display: flex;
   flex-direction: column;
+  position: relative;
   margin: 0 auto;
   border: 0;
   padding: 0;
@@ -81,7 +82,6 @@
 
 .content,
 .content > * {
-  border-radius: var(--pod-radius);
   border-radius: var(--pod-radius);
 }
 

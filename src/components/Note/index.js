@@ -2,7 +2,7 @@ const { h, Component } = require('preact');
 const { FormattedTime } = require('react-player-controls');
 const styles = require('./styles.css');
 
-const isStateless = component => typeof component !== 'string' && !component.prototype.render;
+const isStateless = component => typeof component !== 'string' && !(component.prototype && component.prototype.render);
 
 class Note extends Component {
   constructor(props) {

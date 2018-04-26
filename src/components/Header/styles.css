@@ -13,9 +13,24 @@
 }
 
 .title {
+  margin-right: 0.5rem;
+  min-width: 0;
+  font-size: 0.875rem;
+  font-style: italic;
+  line-height: 44px;
+}
+
+@media (min-width: 40rem) and (min-height: 40rem) {
+  .title {
+    font-size: 1rem;
+  }
+}
+
+.appTitle {
   padding-right: 10px;
   font-size: 1.5rem;
   line-height: 44px;
+  white-space: nowrap;
   pointer-events: none;
 }
 
