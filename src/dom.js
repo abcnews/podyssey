@@ -35,6 +35,8 @@ const INLINE_TAG_NAMES = [
   'textarea'
 ];
 
+const TYPOGRPAHIC_BLOCK_TAG_NAMES = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'ul', 'ol', 'dl', 'blockquote', 'table'];
+
 const MOCK_NODE = (module.exports.MOCK_NODE = Object.freeze({
   parentNode: null,
   parentElement: null,
@@ -46,7 +48,7 @@ const MOCK_NODE = (module.exports.MOCK_NODE = Object.freeze({
   textContent: ''
 }));
 
-module.exports.MOCK_ELEMENT = Object.freeze(
+const MOCK_ELEMENT = (module.exports.MOCK_ELEMENT = Object.freeze(
   Object.assign(
     {
       tagName: 'MOCK-ELEMENT',
@@ -66,7 +68,7 @@ module.exports.MOCK_ELEMENT = Object.freeze(
     },
     MOCK_NODE
   )
-);
+));
 
 module.exports.isDocument = node => node && node.nodeType === Node.DOCUMENT_NODE;
 
@@ -104,24 +106,35 @@ const detach = (module.exports.detach = (node = {}) => (
 
 module.exports.detachAll = nodes => nodes.map(detach);
 
-module.exports.append = (parent, node) => parent.appendChild(node);
+module.exports.append = (parent, node) => (parent.appendChild(node), node);
 
-const prepend = (module.exports.prepend = (parent, node) => parent.insertBefore(node, parent.firstChild));
+const prepend = (module.exports.prepend = (parent, node) => (parent.insertBefore(node, parent.firstChild), node));
 
-const before = (module.exports.before = (sibling, node) => sibling.parentNode.insertBefore(node, sibling));
+const before = (module.exports.before = (sibling, node) => (sibling.parentNode.insertBefore(node, sibling), node));
 
-const after = (module.exports.before = (sibling, node) => sibling.parentNode.insertBefore(node, sibling.nextSibling));
+const after = (module.exports.after = (sibling, node) => (
+  sibling.parentNode.insertBefore(node, sibling.nextSibling), node
+));
 
 module.exports.substitute = (node, replacementNode) => (before(node, replacementNode), detach(node));
 
 module.exports.clone = (
   el,
-  { areLinksCitations = false, shouldHaveSmartQuotes = true, shouldLinksOpenNewWindow = true } = {}
+  {
+    areLinksCitations = false,
+    shouldCleanRootEl = true,
+    shouldHaveSmartQuotes = true,
+    shouldLinksOpenNewWindow = true
+  } = {}
 ) => {
   const clonedEl = el.cloneNode(true);
 
   if (shouldHaveSmartQuotes) {
     smartquotes(clonedEl);
+  }
+
+  if (shouldCleanRootEl && TYPOGRPAHIC_BLOCK_TAG_NAMES.indexOf(el.tagName.toLowerCase()) > -1) {
+    clonedEl.removeAttribute('class');
   }
 
   Array.from(clonedEl.querySelectorAll('a[href]')).forEach(linkEl => {
@@ -155,3 +168,6 @@ const toggleAttribute = (module.exports.toggleAttribute = (node, attribute, shou
 
 module.exports.toggleBooleanAttributes = (node, map) =>
   Object.keys(map).forEach(name => toggleAttribute(node, name, map[name]));
+
+module.exports.getMetaContent = name =>
+  (select(`meta[name="${name}"], meta[property="${name}"]`) || MOCK_ELEMENT).getAttribute('content') || null;

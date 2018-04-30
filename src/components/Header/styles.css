@@ -13,10 +13,13 @@
 }
 
 .title {
-  margin-right: 0.5rem;
+  margin: 0 0.5rem 0 0;
+  width: 100%;
   min-width: 0;
   font-size: 0.875rem;
   font-style: italic;
+  font-weight: normal;
+  font-weight: var(--pod-font-weight-normal, normal);
   line-height: 44px;
 }
 

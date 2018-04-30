@@ -3,6 +3,8 @@ const { disableBodyScroll, enableBodyScroll } = require('body-scroll-lock');
 const Note = require('../Note');
 const styles = require('./styles.css');
 
+const NEAR_END_DISTANCE = 200;
+
 const getVisibleNoteTimes = (notes, time) => Object.keys(notes).filter(key => time >= +key);
 const getIsComposing = (notes, time) => Object.keys(notes).filter(key => +key > time && +key - 5 <= time).length > 0;
 
@@ -28,22 +30,25 @@ class Notes extends Component {
   }
 
   componentWillReceiveProps() {
-    this._wasAtEnd = this.notesEndEl.getBoundingClientRect().top < this.base.getBoundingClientRect().bottom;
+    this._wasNearEnd =
+      this.notesEndEl.getBoundingClientRect().top - this.base.getBoundingClientRect().bottom < NEAR_END_DISTANCE;
   }
 
   componentDidUpdate(prevProps) {
-    this._hasMoreVisibleNoteTimes =
+    // We have more content if we've added more note times, or we're 'composing' the next note time
+    this._hasMoreContent =
       getVisibleNoteTimes(prevProps.notes, prevProps.time).length <
-      getVisibleNoteTimes(this.props.notes, this.props.time).length;
+        getVisibleNoteTimes(this.props.notes, this.props.time).length ||
+      (getIsComposing(this.props.notes, this.props.time) && !getIsComposing(prevProps.notes, prevProps.time));
 
-    if (this._hasMoreVisibleNoteTimes && this._wasAtEnd) {
+    if (this._hasMoreContent && this._wasNearEnd) {
       this.notesEndEl.scrollIntoView({
         behavior: 'smooth'
       });
     }
 
-    this._wasAtEnd = null;
-    this._hasMoreVisibleNoteTimes = null;
+    this._wasNearEnd = null;
+    this._hasMoreContent = null;
   }
 
   componentWillUnmount() {
@@ -68,7 +73,7 @@ class Notes extends Component {
 
     return (
       <section className={styles.root}>
-        <div ref={this.getNotesElRef} className={styles.notes}>
+        <div ref={this.getNotesElRef} className={styles.notes} aria-live="polite">
           {visibleNotes
             .map(({ note, time, timeIndex }, index) => (
               <Note

@@ -46,6 +46,7 @@
 }
 
 .root h2 {
+  color: inherit;
   font-size: 1.125rem;
 }
 

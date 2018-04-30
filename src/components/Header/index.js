@@ -14,9 +14,9 @@ module.exports = ({ title }) => (
         </g>
       </svg>
     </a>
-    <div className={styles.title}>
+    <h1 className={styles.title}>
       <Marquee text={`${BOOKEND} ${title} ${BOOKEND}`} />
-    </div>
+    </h1>
     {/* <div className={styles.appTitle}>
       Podyssey <span class={styles.beta}>beta</span>
     </div> */}

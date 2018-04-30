@@ -4,6 +4,7 @@ const { Button, FormattedTime, PauseButton, PlayButton, ProgressBar } = require(
 const Slider = require('react-rangeslider').default;
 const Header = require('../Header');
 const Notes = require('../Notes');
+const Picture = require('../Picture');
 const styles = require('./styles.css');
 
 const STORAGE_PREFIX = 'podyssey';
@@ -118,7 +119,7 @@ class App extends Component {
     this.audioActions.setPlaytime(this._lastStoredTime);
   }
 
-  render({ audioData, notes, title }, { currentTime, duration, isEnded, isPaused }) {
+  render({ audioData, cover, notes, title }, { currentTime, duration, isEnded, isPaused }) {
     return audioData ? (
       <div className={styles.root}>
         <audio ref={this.getAudioElRef}>
@@ -128,6 +129,11 @@ class App extends Component {
         <main>
           <Notes notes={notes} time={Math.round(currentTime)} onTimeLink={this.playFrom} />
           <footer className={styles.player} onTouchMove={NO_BUBBLE} onMouseMove={NO_BUBBLE}>
+            {cover && (
+              <div className={styles.cover}>
+                <Picture url={cover} />
+              </div>
+            )}
             <div className={styles.scrub}>
               <Slider
                 min={0}
