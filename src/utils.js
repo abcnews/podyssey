@@ -1,12 +1,13 @@
+const url2cmid = require('@abcnews/url2cmid');
 const ImageEmbed = require('./components/ImageEmbed');
 const Quote = require('./components/Quote');
 const Raw = require('./components/Raw');
-const { append, before, detach, getMetaContent, prepend, select, selectAll } = require('./dom');
+const { append, before, detach, prepend, select, selectAll } = require('./dom');
 
 const PREVIEW_CTX_SELECTOR = 'span[id^="CTX"]';
 const PREVIEW_SCRIPT_PATTERN = /(?:coremedia|joo\.classLoader)/;
 
-module.exports.normalise = () => {
+module.exports.normalise = rootEl => {
   let viewportEl = select('meta[name="viewport"]');
 
   if (!viewportEl) {
@@ -30,6 +31,13 @@ module.exports.normalise = () => {
     });
     detach(el);
   });
+
+  let htmlFragmentEl = rootEl.parentElement;
+
+  before(htmlFragmentEl, rootEl);
+  detach(htmlFragmentEl);
+
+  return rootEl;
 };
 
 const TIMESTAMP_PATTERN = /\d*h?\d*m?\d*s?/;
@@ -50,39 +58,32 @@ const timestampToTime = timestamp => {
   return time;
 };
 
-const getNotesNodes = () => {
+const getNotesNodes = doc => {
   let transcriptEl;
   let startMarkerEl;
   let nodes = [];
 
-  if ((startMarkerEl = select('a[name="notes"]'))) {
+  if ((startMarkerEl = select('a[name="notes"]', doc))) {
     // Strategy 1: Bookend notes with markers (end is optional)
-    const endMarkerEl = select('a[name="endnotes"]');
+    const endMarkerEl = select('a[name="endnotes"]', doc);
     let node = startMarkerEl;
 
     while (((node = node.nextSibling), node && node !== endMarkerEl)) {
       nodes.push(node);
     }
-  } else if ((transcriptEl = select('.media-transcript, .view-transcript .comp-rich-text'))) {
-    // Strategy 2a: Get Phase 1 (standard) or Phase 2 transcript nodes
+  } else if ((transcriptEl = select('.media-transcript, .view-transcript .comp-rich-text', doc))) {
+    // Strategy 2: Get all transcript child elements
     nodes = [...transcriptEl.children];
-  } else if ((transcriptEl = select('.transcript.richtext'))) {
-    // Strategy 2b: Get Phase 1 (mobile) transcript nodes
-    // (the expandable widget may have been initialised first)
-    nodes =
-      transcriptEl.className.indexOf('expandable') > -1
-        ? [...select('.contents', transcriptEl).children].slice(0, -1)
-        : [...transcriptEl.children].slice(1);
   }
 
   return nodes;
 };
 
-const getNotes = () => {
+module.exports.getNotes = (doc = document) => {
   let time = 0;
   let notes = { 0: [] };
 
-  getNotesNodes().forEach(node => {
+  getNotesNodes(doc).forEach(node => {
     if (
       !node.tagName ||
       (node.tagName === 'P' && node.textContent.trim().length === 0) ||
@@ -139,25 +140,21 @@ const getNotes = () => {
   return notes;
 };
 
-// Phase 1 (standard) : window.inlineAudioData[] → {url, contentType}
-// Phase 1 (mobile) : <article|figure class="type-audio"> → <audio> → <source src type>
-// Phase 2 : <div class="view-download-link"> → <a href> [or] <a href data-duration>
+module.exports.detailPageURLFromCMID = cmid =>
+  `${(window.location.origin || '').replace('mobile', 'www')}/news/${cmid}?pfm=ms`;
 
-module.exports.parse = () => {
-  const audio = window.inlineAudioData
-    ? window.inlineAudioData[0][0]
-    : select('.type-audio source, .view-download-link > a, a[data-duration]');
-  const audioData = audio
-    ? {
-        url: audio.src || audio.url || audio.href,
-        mimeType: audio.type || audio.contentType || 'audio/mp3'
-      }
-    : null;
+module.exports.convertAudioEmbedToCMID = () => {
+  const embedEl = selectAll(
+    '.inline-content.audio, .media-wrapper-dl.type-audio, .view-inlineMediaPlayer.doctype-abcaudio'
+  ).concat(selectAll('.embed-content').filter(el => select('.type-audio', el)))[0];
 
-  return {
-    title: document.title.split(' - ')[0],
-    cover: getMetaContent('og:image'),
-    audioData,
-    notes: getNotes()
-  };
+  if (!embedEl) {
+    return;
+  }
+
+  detach(embedEl);
+
+  return selectAll('a', embedEl)
+    .filter(x => x.href.indexOf('mpegmedia') < 0)
+    .map(x => url2cmid(x.href))[0];
 };

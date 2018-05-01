@@ -13,14 +13,14 @@
 }
 
 .title {
-  margin: 0 0.5rem 0 0;
+  margin: 0;
   width: 100%;
   min-width: 0;
   font-size: 0.875rem;
   font-style: italic;
   font-weight: normal;
   font-weight: var(--pod-font-weight-normal, normal);
-  line-height: 44px;
+  line-height: 2.75rem;
 }
 
 @media (min-width: 40rem) and (min-height: 40rem) {
@@ -32,7 +32,7 @@
 .appTitle {
   padding-right: 10px;
   font-size: 1.5rem;
-  line-height: 44px;
+  line-height: 2.75rem;
   white-space: nowrap;
   pointer-events: none;
 }
@@ -48,4 +48,16 @@
   color: var(--abc-black);
   font-size: 0.75rem;
   vertical-align: top;
+}
+
+.close {
+  flex-shrink: 0;
+  border: 0;
+  padding: 0;
+  width: 2.25rem;
+  background-color: transparent;
+  color: inherit;
+  font-size: 1.125rem;
+  line-height: 2.75rem;
+  text-align: center;
 }

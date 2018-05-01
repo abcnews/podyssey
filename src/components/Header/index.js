@@ -4,7 +4,7 @@ const styles = require('./styles.css');
 
 const BOOKEND = '♫';
 
-module.exports = ({ title }) => (
+module.exports = ({ close, title }) => (
   <header className={styles.root}>
     <a href="/news/">
       <svg xmlns="http://www.w3.org/2000/svg" width="128" height="44" viewBox="0 0 128 44">
@@ -20,6 +20,11 @@ module.exports = ({ title }) => (
     {/* <div className={styles.appTitle}>
       Podyssey <span class={styles.beta}>beta</span>
     </div> */}
+    {close && (
+      <button className={styles.close} onClick={close}>
+        X
+      </button>
+    )}
   </header>
 );
 

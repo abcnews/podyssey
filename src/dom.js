@@ -70,7 +70,7 @@ const MOCK_ELEMENT = (module.exports.MOCK_ELEMENT = Object.freeze(
   )
 ));
 
-module.exports.isDocument = node => node && node.nodeType === Node.DOCUMENT_NODE;
+const isDocument = (module.exports.isDocument = node => node && node.nodeType === Node.DOCUMENT_NODE);
 
 const isElement = (module.exports.isElement = node => node && node.nodeType === Node.ELEMENT_NODE);
 
@@ -79,7 +79,7 @@ module.exports.isInlineElement = node => isElement(node) && INLINE_TAG_NAMES.ind
 const isText = (module.exports.isText = node => node && node.nodeType === Node.TEXT_NODE);
 
 const select = (module.exports.select = (selector, root) =>
-  (isElement(root) ? root : document).querySelector(selector));
+  (isElement(root) || isDocument(root) ? root : document).querySelector(selector));
 
 module.exports.selectAll = (selector, roots) => {
   roots = Array.isArray(roots) ? roots : [roots];
@@ -169,5 +169,6 @@ const toggleAttribute = (module.exports.toggleAttribute = (node, attribute, shou
 module.exports.toggleBooleanAttributes = (node, map) =>
   Object.keys(map).forEach(name => toggleAttribute(node, name, map[name]));
 
-module.exports.getMetaContent = name =>
-  (select(`meta[name="${name}"], meta[property="${name}"]`) || MOCK_ELEMENT).getAttribute('content') || null;
+module.exports.getMetaContent = (name, doc) =>
+  (select(`meta[name="${name}"], meta[property="${name}"]`, doc || document) || MOCK_ELEMENT).getAttribute('content') ||
+  null;

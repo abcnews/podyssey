@@ -18,7 +18,6 @@ class Notes extends Component {
 
   getNotesElRef(el) {
     this.notesEl = el;
-    disableBodyScroll(this.notesEl);
   }
 
   getNotesEndElRef(el) {
@@ -27,6 +26,7 @@ class Notes extends Component {
 
   componentDidMount() {
     this.notesEl.scrollTop = this.notesEl.scrollHeight;
+    disableBodyScroll(this.notesEl);
   }
 
   componentWillReceiveProps() {
@@ -52,8 +52,7 @@ class Notes extends Component {
   }
 
   componentWillUnmount() {
-    // Re-enable this when we stop getting ontouchstart binding errors during hot-reloading. It's probably important.
-    // enableBodyScroll();
+    enableBodyScroll(this.notesEl);
   }
 
   render({ notes, time }) {
