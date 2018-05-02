@@ -24,14 +24,18 @@ class Note extends Component {
     this.base.removeEventListener('animationend', this.makeStatic);
   }
 
-  render({ component, props = {}, time, timeIndex }) {
+  render({ component, section, props = {}, time, timeIndex }) {
     const Constructor = !isStateless(component) && component;
 
     return (
       <article className={styles.root} style={{ animationDelay: timeIndex ? `${timeIndex / 15}s` : null }}>
         {timeIndex === 0 &&
           time > 0 && (
-            <div className={styles.time} onClick={this.props.onTimeLink ? () => this.props.onTimeLink(time) : null}>
+            <div
+              className={styles.time}
+              title={section.title}
+              onClick={this.props.onTimeLink ? () => this.props.onTimeLink(time) : null}
+            >
               <FormattedTime numSeconds={time} />
             </div>
           )}

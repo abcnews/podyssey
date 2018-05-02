@@ -2,7 +2,7 @@ const url2cmid = require('@abcnews/url2cmid');
 const ImageEmbed = require('./components/ImageEmbed');
 const Quote = require('./components/Quote');
 const Raw = require('./components/Raw');
-const { append, before, create, detach, prepend, select, selectAll } = require('./dom');
+const { append, before, create, detach, getMetaContent, prepend, select, selectAll } = require('./dom');
 
 const META_PROPS = {
   // Android
@@ -14,8 +14,16 @@ const META_PROPS = {
   // UC Mobile Browser
   'full-screen': 'yes'
 };
+const NEWLINES_PATTERN = /[\n\r]/g;
 const PREVIEW_CTX_SELECTOR = 'span[id^="CTX"]';
 const PREVIEW_SCRIPT_PATTERN = /(?:coremedia|joo\.classLoader)/;
+const TIMESTAMP_PATTERN = /^\d*h?\d*m?\d*s?/;
+const TIMESTAMP_SEGMENT_PATTERN = /(\d+)(\w)/g;
+const TIMESTAMP_UNIT_VALUES = {
+  h: 3600,
+  m: 60,
+  s: 1
+};
 
 module.exports.normalise = rootEl => {
   const viewportMetaEl = select('meta[name="viewport"]') || create('meta', { name: 'viewport' });
@@ -47,14 +55,6 @@ module.exports.normalise = rootEl => {
   return rootEl;
 };
 
-const TIMESTAMP_PATTERN = /\d*h?\d*m?\d*s?/;
-const TIMESTAMP_SEGMENT_PATTERN = /(\d+)(\w)/g;
-const TIMESTAMP_UNIT_VALUES = {
-  h: 3600,
-  m: 60,
-  s: 1
-};
-
 const timestampToTime = timestamp => {
   let time = 0;
 
@@ -65,14 +65,14 @@ const timestampToTime = timestamp => {
   return time;
 };
 
-const getNotesNodes = doc => {
+const getSourceNodes = doc => {
   let transcriptEl;
   let startMarkerEl;
   let nodes = [];
 
-  if ((startMarkerEl = select('a[name="notes"]', doc))) {
-    // Strategy 1: Bookend notes with markers (end is optional)
-    const endMarkerEl = select('a[name="endnotes"]', doc);
+  if ((startMarkerEl = select('a[name="podyssey"]', doc))) {
+    // Strategy 1: Bookend nodes with markers (end is optional)
+    const endMarkerEl = select('a[name="endpodyssey"]', doc);
     let node = startMarkerEl;
 
     while (((node = node.nextSibling), node && node !== endMarkerEl)) {
@@ -86,27 +86,54 @@ const getNotesNodes = doc => {
   return nodes;
 };
 
-module.exports.getNotes = (doc = document) => {
-  let time = 0;
-  let notes = { 0: [] };
+module.exports.parsePlayerProps = html => {
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  const sections = [];
+  const entries = {};
+  let time = null;
+  let audioData = null;
 
-  getNotesNodes(doc).forEach(node => {
+  if (html.indexOf('inlineAudioData') > -1) {
+    // Phase 1 (Standard)
+    const { url, contentType } = JSON.parse(
+      html
+        .replace(NEWLINES_PATTERN, '')
+        .match(/inlineAudioData\.push\((\[.*\])\)/)[1]
+        .replace(/'/g, '"')
+    )[0];
+
+    audioData = { url, contentType };
+  } else if (html.indexOf('WCMS.pluginCache') > -1) {
+    // Phase 2
+    const { url, contentType } = JSON.parse(
+      html.replace(NEWLINES_PATTERN, '').match(/"sources":(\[.*\]),"defaultTracking"/)[1]
+    )[0];
+
+    audioData = { url, contentType };
+  }
+
+  getSourceNodes(doc).forEach(node => {
     if (
       !node.tagName ||
       (node.tagName === 'P' && node.textContent.trim().length === 0) ||
       (node.tagName === 'A' && node.getAttribute('name').length > 0)
     ) {
       // Skip non-elements, empty paragraphs and #markers
-    } else if (
-      node.tagName.indexOf('H') === 0 &&
-      node.textContent.match(TIMESTAMP_PATTERN).toString() === node.textContent
-    ) {
-      // Headings matching the timestamp pattern create new entries
+    } else if (node.tagName.indexOf('H') === 0 && node.textContent.match(TIMESTAMP_PATTERN).toString().length > 0) {
+      // Headings matching the timestamp pattern create new entries (and potentially sections)
       time = timestampToTime(node.textContent);
 
-      if (!notes[time]) {
-        notes[time] = [];
+      if (!entries[time]) {
+        if (node.tagName === 'H2' || sections.length === 0) {
+          // Create the next section
+          sections.push({ time, title: node.textContent.replace(TIMESTAMP_PATTERN, '').trim() || null });
+        }
+
+        // Create the next entry
+        entries[time] = { content: [], media: null, sectionIndex: sections.length ? sections.length - 1 : null };
       }
+    } else if (time === null) {
+      // Skip anything that occurs before the first entry exists
     } else if (
       node.matches(`
         .inline-content.photo,
@@ -114,11 +141,11 @@ module.exports.getNotes = (doc = document) => {
       `) ||
       select('.type-photo', node)
     ) {
-      // Transform image embeds
-      notes[time].push({
+      // Set the current entry's media
+      entries[time].media = {
         component: ImageEmbed,
         props: ImageEmbed.inferProps(node)
-      });
+      };
     } else if (
       node.matches(
         `blockquote:not([class]),
@@ -130,21 +157,28 @@ module.exports.getNotes = (doc = document) => {
         `
       )
     ) {
-      // Transform quotes
-      notes[time].push({
+      // Transform quotes and add them to the entry's content
+      entries[time].content.push({
         component: Quote,
         props: Quote.inferProps(node)
       });
     } else {
-      // Keep everything else, as-is (with links opening in new windows)
-      notes[time].push({
+      // Keep everything else, as-is (with links opening in new windows),
+      // and add it to the entry's content
+      entries[time].content.push({
         component: Raw,
         props: Raw.inferProps(node)
       });
     }
   });
 
-  return notes;
+  return {
+    cover: getMetaContent('og:image', doc),
+    title: getMetaContent('title', doc),
+    audioData,
+    sections,
+    entries
+  };
 };
 
 module.exports.detailPageURLFromCMID = cmid =>

@@ -1,13 +1,10 @@
 const { h, Component } = require('preact');
 const Portal = require('preact-portal');
 const xhr = require('xhr');
-const { getMetaContent, select } = require('../../dom');
-const { detailPageURLFromCMID, getNotes, normalise } = require('../../utils');
+const { detailPageURLFromCMID, normalise, parsePlayerProps } = require('../../utils');
 const Modal = require('../Modal');
 const Player = require('../Player');
 const styles = require('./styles.css');
-
-const NEWLINES_PATTERN = /[\n\r]/g;
 
 class App extends Component {
   constructor(props) {
@@ -47,34 +44,7 @@ class App extends Component {
         return this.close();
       }
 
-      const doc = new DOMParser().parseFromString(body, 'text/html');
-
-      const playerProps = {
-        cover: getMetaContent('og:image', doc),
-        notes: getNotes(doc),
-        title: getMetaContent('title', doc)
-      };
-
-      if (body.indexOf('inlineAudioData') > -1) {
-        // Phase 1 (Standard)
-        const { url, contentType } = JSON.parse(
-          body
-            .replace(NEWLINES_PATTERN, '')
-            .match(/inlineAudioData\.push\((\[.*\])\)/)[1]
-            .replace(/'/g, '"')
-        )[0];
-
-        playerProps.audioData = { url, contentType };
-      } else if (body.indexOf('WCMS.pluginCache') > -1) {
-        // Phase 2
-        const { url, contentType } = JSON.parse(
-          body.replace(NEWLINES_PATTERN, '').match(/"sources":(\[.*\]),"defaultTracking"/)[1]
-        )[0];
-
-        playerProps.audioData = { url, contentType };
-      }
-
-      this.setState({ playerProps });
+      this.setState({ playerProps: parsePlayerProps(body) });
     });
   }
 

@@ -125,7 +125,7 @@ class Player extends Component {
     detach(this.audioEl);
   }
 
-  render({ audioData, close, cover, notes, title }, { currentTime, duration, isEnded, isPaused }) {
+  render({ audioData, cover, entries, sections, title, close }, { currentTime, duration, isEnded, isPaused }) {
     return (
       <div className={styles.root}>
         <audio ref={this.getAudioElRef}>
@@ -133,7 +133,7 @@ class Player extends Component {
         </audio>
         <Header close={close} title={title} />
         <main>
-          <Notes notes={notes} time={Math.round(currentTime)} onTimeLink={this.playFrom} />
+          <Notes entries={entries} sections={sections} time={Math.round(currentTime)} onTimeLink={this.playFrom} />
           <footer className={styles.controls} onTouchMove={NO_BUBBLE} onMouseMove={NO_BUBBLE}>
             {cover && (
               <div className={styles.cover}>
