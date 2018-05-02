@@ -2,24 +2,31 @@ const url2cmid = require('@abcnews/url2cmid');
 const ImageEmbed = require('./components/ImageEmbed');
 const Quote = require('./components/Quote');
 const Raw = require('./components/Raw');
-const { append, before, detach, prepend, select, selectAll } = require('./dom');
+const { append, before, create, detach, prepend, select, selectAll } = require('./dom');
 
+const META_PROPS = {
+  // Android
+  'theme-color': 'black',
+  'mobile-web-app-capable': 'yes',
+  // iOS
+  'apple-mobile-web-app-capable': 'yes',
+  'apple-mobile-web-app-status-bar-style': 'black',
+  // UC Mobile Browser
+  'full-screen': 'yes'
+};
 const PREVIEW_CTX_SELECTOR = 'span[id^="CTX"]';
 const PREVIEW_SCRIPT_PATTERN = /(?:coremedia|joo\.classLoader)/;
 
 module.exports.normalise = rootEl => {
-  let viewportEl = select('meta[name="viewport"]');
+  const viewportMetaEl = select('meta[name="viewport"]') || create('meta', { name: 'viewport' });
 
-  if (!viewportEl) {
-    viewportEl = document.createElement('meta');
-    viewportEl.setAttribute('name', 'viewport');
+  viewportMetaEl.setAttribute('content', 'width=device-width, initial-scale=1');
+
+  if (!viewportMetaEl.parentElement) {
+    append(document.head, viewportMetaEl);
   }
 
-  viewportEl.setAttribute('content', 'width=device-width, initial-scale=1');
-
-  if (!viewportEl.parentElement) {
-    append(document.head, viewportEl);
-  }
+  Object.keys(META_PROPS).forEach(name => append(document.head, create('meta', { name, content: META_PROPS[name] })));
 
   selectAll(PREVIEW_CTX_SELECTOR).forEach(el => {
     Array.from(el.children).forEach(childEl => {

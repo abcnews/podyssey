@@ -78,6 +78,12 @@ module.exports.isInlineElement = node => isElement(node) && INLINE_TAG_NAMES.ind
 
 const isText = (module.exports.isText = node => node && node.nodeType === Node.TEXT_NODE);
 
+module.exports.create = (tagName, attributes = {}) =>
+  Object.keys(attributes).reduce(
+    (el, name) => (el.setAttribute(name, attributes[name]), el),
+    document.createElement(tagName)
+  );
+
 const select = (module.exports.select = (selector, root) =>
   (isElement(root) || isDocument(root) ? root : document).querySelector(selector));
 

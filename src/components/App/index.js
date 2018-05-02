@@ -1,6 +1,5 @@
 const { h, Component } = require('preact');
 const Portal = require('preact-portal');
-const screenfull = require('screenfull');
 const xhr = require('xhr');
 const { getMetaContent, select } = require('../../dom');
 const { detailPageURLFromCMID, getNotes, normalise } = require('../../utils');
@@ -9,7 +8,6 @@ const Player = require('../Player');
 const styles = require('./styles.css');
 
 const NEWLINES_PATTERN = /[\n\r]/g;
-const SHOULD_APPEAR_FULLSCREEN = typeof window.orientation === 'number' && screenfull.enabled;
 
 class App extends Component {
   constructor(props) {
@@ -26,10 +24,6 @@ class App extends Component {
   }
 
   open() {
-    if (SHOULD_APPEAR_FULLSCREEN) {
-      screenfull.request();
-    }
-
     this.setState({ isOpen: true });
 
     if (this.state.playerProps === null) {
@@ -39,10 +33,6 @@ class App extends Component {
 
   close() {
     this.setState({ isOpen: false });
-
-    if (SHOULD_APPEAR_FULLSCREEN) {
-      screenfull.exit();
-    }
   }
 
   dismiss() {
