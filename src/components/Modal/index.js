@@ -10,7 +10,7 @@ class Modal extends Component {
   render({ children }) {
     return (
       <div className={styles.root}>
-        <Loader className={styles.loader} large overlay />
+        <Loader className={styles.loader} inverted large overlay />
         {children}
       </div>
     );

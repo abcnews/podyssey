@@ -1,10 +1,5 @@
-[data-podyssey-root][dismissed],
-[data-podyssey-root]:not([dismissed]) ~ * {
-  display: none;
-}
-
 .root {
-  margin: 4rem 0 12rem;
+  margin: 6rem 0 0;
   min-height: 5rem;
   font-size: 1.125rem;
   text-align: center;
@@ -38,6 +33,16 @@
   text-decoration: underline;
 }
 
+.bottom {
+  margin-top: 2rem;
+  height: 4rem;
+}
+
+[data-podyssey-root].hasDismissed .dismissChoice,
+[data-podyssey-root]:not(.hasDismissed) ~ * {
+  display: none;
+}
+
 html.hasOpen,
 html.hasOpen > body {
   min-height: 100%;
@@ -48,16 +53,14 @@ html.hasOpen > body {
   min-width: auto;
 }
 
-html > body::before,
+/* html > body::before,
 html > body::after,
 html > body > :not(.portal) {
   will-change: opacity;
-}
+} */
 
 html.hasOpen > body::before,
 html.hasOpen > body::after,
 html.hasOpen > body > :not(.portal) {
-  opacity: 0;
-  pointer-events: none;
-  transition: 0.25s opacity 0.75s;
+  display: none;
 }

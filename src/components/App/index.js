@@ -10,14 +10,20 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    this.getBottomRef = this.getBottomRef.bind(this);
     this.open = this.open.bind(this);
     this.close = this.close.bind(this);
     this.dismiss = this.dismiss.bind(this);
 
     this.state = {
+      isDismissed: false,
       isOpen: false,
       playerProps: null
     };
+  }
+
+  getBottomRef(el) {
+    this.bottomEl = el;
   }
 
   open() {
@@ -33,7 +39,14 @@ class App extends Component {
   }
 
   dismiss() {
-    this.base.parentElement.setAttribute('dismissed', '');
+    this.setState({ isDismissed: true });
+    setTimeout(() => {
+      this.bottomEl.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+        inline: 'nearest'
+      });
+    }, 500);
   }
 
   fetchPlayerProps() {
@@ -48,26 +61,25 @@ class App extends Component {
     });
   }
 
-  componentDidUpdate() {
-    if (this.state.isOpen) {
-      document.documentElement.classList.add(styles.hasOpen);
-    } else {
-      document.documentElement.classList.remove(styles.hasOpen);
-    }
+  componentDidUpdate(prevProps, prevState) {
+    document.documentElement.classList[this.state.isOpen ? 'add' : 'remove'](styles.hasOpen);
+    this.base.parentElement.classList[this.state.isDismissed ? 'add' : 'remove'](styles.hasDismissed);
   }
 
-  render({ audioCMID }, { isOpen, playerProps }) {
+  render({ audioCMID }, { isDismissed, isOpen, playerProps }) {
     return (
       <div className={styles.root}>
         <button className={styles.open} onClick={this.open}>
           {playerProps ? 'Resume' : 'Get started'}
           <span className={styles.icon}>🎧</span>
         </button>
-        <br />
-        {'or'}
-        <button className={styles.dismiss} onClick={this.dismiss}>
-          read the story without audio
-        </button>
+        <div className={styles.dismissChoice}>
+          {'or'}
+          <button className={styles.dismiss} onClick={this.dismiss}>
+            read the story without audio
+          </button>
+        </div>
+        <div ref={this.getBottomRef} className={styles.bottom} />
         <Portal into={'body'}>
           <div className={styles.portal}>
             {isOpen && (
