@@ -9,12 +9,10 @@
 
 .root {
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: stretch;
-  align-items: stretch;
   width: 100%;
   height: 100%;
+  background-color: black;
+  background-color: var(--pod-black, black);
   color: white;
   color: var(--pod-white, white);
   font-family: ABCSans;
@@ -29,28 +27,62 @@
   animation: enter 0.75s backwards;
 }
 
+@keyframes rotateHint {
+  0%,
+  50%,
+  100% {
+    transform: translate(-50%, -50%);
+  }
+
+  33% {
+    transform: translate(-50%, -50%) rotate(15deg);
+  }
+}
+
 @media (max-height: 30rem) and (orientation: landscape) {
-  .root {
-    display: none; /* TODO: Rotate screen notice */
+  .root > * {
+    display: none;
+  }
+
+  .root::after {
+    content: 'Please turn your device vertically';
+    transform: translate(-50%, -50%);
+    animation: rotateHint 2s infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    max-width: 20rem;
+    font-size: 1.5rem;
+    text-align: center;
   }
 }
 
 .root > main {
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: stretch;
-  align-items: stretch;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
 }
 
+.root > nav {
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  max-width: 40rem;
+  max-height: 40rem;
+}
+
 .controls {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  flex-shrink: 0;
-  padding: 0.5rem 0.5rem 3.5rem;
+  position: absolute;
+  right: 0;
+  bottom: 3rem;
+  left: 0;
+  padding: 0.5rem;
 }
 
 .scrub {

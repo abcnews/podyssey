@@ -130,7 +130,7 @@ module.exports.parsePlayerProps = html => {
         }
 
         // Create the next entry
-        entries[time] = { content: [], media: null, sectionIndex: sections.length ? sections.length - 1 : null };
+        entries[time] = { media: null, notes: [], sectionIndex: sections.length ? sections.length - 1 : null };
       }
     } else if (time === null) {
       // Skip anything that occurs before the first entry exists
@@ -157,15 +157,15 @@ module.exports.parsePlayerProps = html => {
         `
       )
     ) {
-      // Transform quotes and add them to the entry's content
-      entries[time].content.push({
+      // Transform quotes and add them to the entry's notes
+      entries[time].notes.push({
         component: Quote,
         props: Quote.inferProps(node)
       });
     } else {
       // Keep everything else, as-is (with links opening in new windows),
-      // and add it to the entry's content
-      entries[time].content.push({
+      // and add it to the entry's notes
+      entries[time].notes.push({
         component: Raw,
         props: Raw.inferProps(node)
       });

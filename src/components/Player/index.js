@@ -3,7 +3,7 @@ const { h, Component } = require('preact');
 const { Button, FormattedTime, PauseButton, PlayButton, ProgressBar } = require('react-player-controls');
 const Slider = require('react-rangeslider').default;
 const { detach } = require('../../dom');
-const Notes = require('../Notes');
+const Entry = require('../Entry');
 const styles = require('./styles.css');
 
 const STORAGE_PREFIX = 'podyssey';
@@ -115,14 +115,28 @@ class Player extends Component {
   }
 
   render({ audioData, entries, sections, title }, { currentTime, duration, isEnded, isPaused }) {
+    const activeEntryTime = Object.keys(entries)
+      .reverse()
+      .find(time => time < currentTime);
+    const activeEntry = activeEntryTime === null ? null : entries[activeEntryTime];
+
     return (
       <div className={styles.root}>
         <audio ref={this.getAudioElRef} preload="auto">
           <source src={audioData.url} type={audioData.contentType} />}
         </audio>
         <main>
-          <Notes entries={entries} sections={sections} time={Math.round(currentTime)} />
-          <footer className={styles.controls} onTouchMove={NO_BUBBLE} onMouseMove={NO_BUBBLE}>
+          {activeEntry && (
+            <Entry
+              key={activeEntry}
+              media={activeEntry.media}
+              notes={activeEntry.notes}
+              section={sections[activeEntry.sectionIndex]}
+            />
+          )}
+        </main>
+        <nav>
+          <div className={styles.controls} onTouchMove={NO_BUBBLE} onMouseMove={NO_BUBBLE}>
             <div className={styles.scrub}>
               <Slider
                 min={0}
@@ -155,8 +169,8 @@ class Player extends Component {
                 />
               </div>
             </div>
-          </footer>
-        </main>
+          </div>
+        </nav>
       </div>
     );
   }
