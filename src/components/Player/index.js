@@ -117,7 +117,7 @@ class Player extends Component {
   render({ audioData, entries, sections, title }, { currentTime, duration, isEnded, isPaused }) {
     return (
       <div className={styles.root}>
-        <audio ref={this.getAudioElRef}>
+        <audio ref={this.getAudioElRef} preload="auto">
           <source src={audioData.url} type={audioData.contentType} />}
         </audio>
         <main>

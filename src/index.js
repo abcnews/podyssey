@@ -1,27 +1,41 @@
 require('./polyfills');
 
 const { h, render } = require('preact');
-const { convertAudioEmbedToCMID, normalise } = require('./utils');
+const xhr = require('xhr');
+const { convertAudioEmbedToCMID, detailPageURLFromCMID, normalise, parsePlayerProps } = require('./utils');
 require('./theme.css');
 require('./global.css');
 
-const audioCMID = convertAudioEmbedToCMID();
 const rootEl = document.querySelector('[data-podyssey-root]');
 
 normalise(rootEl);
 
-function init() {
+let playerProps = null;
+
+function renderApp() {
   const App = require('./components/App');
 
-  render(<App audioCMID={audioCMID} />, rootEl, rootEl.firstChild);
+  render(<App playerProps={playerProps} />, rootEl, rootEl.firstChild);
 }
 
-init();
+renderApp();
+
+const audioDocumentCMID = convertAudioEmbedToCMID();
+const audioDocumentURL = detailPageURLFromCMID(audioDocumentCMID);
+
+xhr({ url: audioDocumentURL }, (error, response, body) => {
+  if (error || response.statusCode !== 200) {
+    console.error(error || new Error(response.statusCode));
+  }
+
+  playerProps = parsePlayerProps(body);
+  renderApp();
+});
 
 if (module.hot) {
   module.hot.accept('./components/App', () => {
     try {
-      init();
+      renderApp();
     } catch (err) {
       const ErrorBox = require('./components/ErrorBox');
       render(<ErrorBox error={err} />, rootEl, rootEl.firstChild);
