@@ -30,8 +30,6 @@
   bottom: 0;
   left: 0;
   margin: 0;
-  background-color: black;
-  background-color: var(--transparent, black);
   color: white;
   color: var(--abc-white, white);
   transition: 0.25s opacity;
@@ -44,7 +42,7 @@
 }
 
 .root > :nth-child(2) em {
-  color: var(--pod-grey);
+  color: var(--abc-lightgrey);
 }
 
 .root::after {

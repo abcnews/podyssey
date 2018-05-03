@@ -34,7 +34,7 @@
   padding: 0;
   width: 100%;
   max-width: 29.375rem;
-  animation: fadeIn 0.75s var(--pod-bounce) backwards;
+  animation: fadeIn 0.75s backwards;
 }
 
 .root:nth-last-child(2) {
@@ -56,5 +56,5 @@
 
 .content > * {
   display: inline-block;
-  background-color: var(--pod-grey);
+  background-color: var(--pod-filter);
 }

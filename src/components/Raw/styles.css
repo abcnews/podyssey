@@ -62,10 +62,3 @@
 .root ol li::before {
   content: '';
 }
-
-.root > * a,
-.root > * a:active,
-.root > * a:link,
-.root > * a:visited {
-  color: var(--pod-link);
-}

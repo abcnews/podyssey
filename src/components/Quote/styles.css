@@ -7,8 +7,8 @@
 
 /* Higher specificity required */
 .root.root {
-  border-left: 0.5rem solid black;
-  border-color: var(--abc-yellow, black);
+  border-left: 0.5rem solid white;
+  border-color: var(--abc-white, white);
 }
 
 .root.isPullquote {
