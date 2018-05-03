@@ -51,18 +51,10 @@
 
 .content {
   overflow: hidden;
-  -webkit-mask-image: -webkit-radial-gradient(white, black);
   margin: 0.5rem 0 0;
-}
-
-.content,
-.content > * {
-  border-radius: var(--pod-radius);
 }
 
 .content > * {
   display: inline-block;
   background-color: var(--pod-grey);
-  border: 2px solid black;
-  border-width: var(--pod-ui-border-width, 2px);
 }

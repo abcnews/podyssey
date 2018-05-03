@@ -11,12 +11,10 @@
   --pod-link: #069bc0;
   --pod-filter: rgba(0, 0, 0, 0.25);
   --pod-shadow: 0 0.125rem 0.5rem var(--pod-filter);
-  --pod-radius: 0.5rem;
   --pod-blend: linear-gradient(to bottom, rgba(63, 63, 63, 0) 0%, rgba(63, 63, 63, 0.75) 100%);
   --pod-bounce: cubic-bezier(0.68, 1.77, 0.51, 0.85);
   --pod-font-weight-normal: 400;
   --pod-font-weight-heavy: 700;
-  --pod-ui-border-width: 0;
 }
 
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3),
