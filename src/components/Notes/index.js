@@ -1,5 +1,4 @@
 const { h, Component } = require('preact');
-const { disableBodyScroll, enableBodyScroll } = require('body-scroll-lock');
 const Note = require('../Note');
 const styles = require('./styles.css');
 
@@ -27,7 +26,6 @@ class Notes extends Component {
 
   componentDidMount() {
     this.notesEl.scrollTop = this.notesEl.scrollHeight;
-    disableBodyScroll(this.notesEl);
   }
 
   componentWillReceiveProps() {
@@ -50,10 +48,6 @@ class Notes extends Component {
 
     this._wasNearEnd = null;
     this._hasMoreContent = null;
-  }
-
-  componentWillUnmount() {
-    enableBodyScroll(this.notesEl);
   }
 
   render({ entries, sections, time }) {
