@@ -83,8 +83,8 @@ class App extends Component {
         <Portal into={'body'}>
           <div className={styles.portal}>
             {isOpen && (
-              <Modal>
-                {playerProps && <Player key="player" audioCMID={audioCMID} close={this.close} {...playerProps} />}
+              <Modal close={this.close}>
+                {playerProps && <Player key="player" audioCMID={audioCMID} {...playerProps} />}
               </Modal>
             )}
           </div>

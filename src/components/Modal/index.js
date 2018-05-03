@@ -7,11 +7,16 @@ class Modal extends Component {
     super(props);
   }
 
-  render({ children }) {
+  render({ children, close }) {
     return (
       <div className={styles.root}>
         <Loader className={styles.loader} inverted large overlay />
         {children}
+        {close && (
+          <button className={styles.close} onClick={close}>
+            X
+          </button>
+        )}
       </div>
     );
   }

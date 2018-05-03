@@ -3,9 +3,7 @@ const { h, Component } = require('preact');
 const { Button, FormattedTime, PauseButton, PlayButton, ProgressBar } = require('react-player-controls');
 const Slider = require('react-rangeslider').default;
 const { detach } = require('../../dom');
-const Header = require('../Header');
 const Notes = require('../Notes');
-const Picture = require('../Picture');
 const styles = require('./styles.css');
 
 const STORAGE_PREFIX = 'podyssey';
@@ -125,21 +123,15 @@ class Player extends Component {
     detach(this.audioEl);
   }
 
-  render({ audioData, cover, entries, sections, title, close }, { currentTime, duration, isEnded, isPaused }) {
+  render({ audioData, entries, sections, title }, { currentTime, duration, isEnded, isPaused }) {
     return (
       <div className={styles.root}>
         <audio ref={this.getAudioElRef}>
           <source src={audioData.url} type={audioData.contentType} />}
         </audio>
-        <Header close={close} title={title} />
         <main>
           <Notes entries={entries} sections={sections} time={Math.round(currentTime)} onTimeLink={this.playFrom} />
           <footer className={styles.controls} onTouchMove={NO_BUBBLE} onMouseMove={NO_BUBBLE}>
-            {cover && (
-              <div className={styles.cover}>
-                <Picture url={cover} />
-              </div>
-            )}
             <div className={styles.scrub}>
               <Slider
                 min={0}

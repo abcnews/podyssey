@@ -37,3 +37,18 @@
 .loader:not(:last-child) {
   opacity: 0;
 }
+
+.close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: 0;
+  padding: 0;
+  width: 2.75rem;
+  background-color: transparent;
+  color: white;
+  font-size: 1.125rem;
+  line-height: 2.75rem;
+  text-align: center;
+  cursor: pointer;
+}

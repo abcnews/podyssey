@@ -173,7 +173,6 @@ module.exports.parsePlayerProps = html => {
   });
 
   return {
-    cover: getMetaContent('og:image', doc),
     title: getMetaContent('title', doc),
     audioData,
     sections,
