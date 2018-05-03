@@ -49,35 +49,10 @@
   animation-name: none;
 }
 
-.time {
-  margin: 1.5rem auto 0 0.75rem;
-  border-bottom: 2px solid black;
-  border-bottom-width: var(--pod-ui-border-width, 2px);
-  padding-bottom: 2px;
-  padding-bottom: var(--pod-ui-border-width, 2px);
-  color: var(--abc-lightgrey);
-  font-size: 0.75rem;
-  line-height: 1;
-}
-
-@media (min-width: 80rem) and (min-height: 40rem) and (orientation: landscape) {
-  .time {
-    position: absolute;
-    right: 100%;
-    margin: 1.5rem 0.75rem 0;
-  }
-}
-
 .content {
   overflow: hidden;
   -webkit-mask-image: -webkit-radial-gradient(white, black);
   margin: 0.5rem 0 0;
-}
-
-@media (min-width: 80rem) and (min-height: 40rem) and (orientation: landscape) {
-  .time + .content {
-    margin-top: 1.5rem;
-  }
 }
 
 .content,

@@ -87,7 +87,6 @@ class Notes extends Component {
                 section={section}
                 time={time}
                 timeIndex={timeIndex}
-                onTimeLink={this.props.onTimeLink}
               />
             ))
             .concat(isComposing ? [<Note key="composing" component={Composing} time={time - 5} />] : [])

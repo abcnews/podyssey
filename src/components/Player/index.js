@@ -21,7 +21,6 @@ class Player extends Component {
     this.getPlayElRef = this.getPlayElRef.bind(this);
     this.pause = this.pause.bind(this);
     this.play = this.play.bind(this);
-    this.playFrom = this.playFrom.bind(this);
     this.seek = this.seek.bind(this);
     this.seekEnd = this.seekEnd.bind(this);
     this.seekStart = this.seekStart.bind(this);
@@ -62,14 +61,6 @@ class Player extends Component {
 
     this.audioActions.play();
     this.pauseEl.focus();
-  }
-
-  playFrom(time) {
-    this.audioActions.setPlaytime(time);
-
-    if (this.state.isPaused) {
-      this.play();
-    }
   }
 
   seek(time, event) {
@@ -130,7 +121,7 @@ class Player extends Component {
           <source src={audioData.url} type={audioData.contentType} />}
         </audio>
         <main>
-          <Notes entries={entries} sections={sections} time={Math.round(currentTime)} onTimeLink={this.playFrom} />
+          <Notes entries={entries} sections={sections} time={Math.round(currentTime)} />
           <footer className={styles.controls} onTouchMove={NO_BUBBLE} onMouseMove={NO_BUBBLE}>
             <div className={styles.scrub}>
               <Slider
