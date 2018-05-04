@@ -135,39 +135,37 @@ class Player extends Component {
             />
           )}
         </main>
-        <nav>
-          <div className={styles.controls} onTouchMove={NO_BUBBLE} onMouseMove={NO_BUBBLE}>
-            <div className={styles.scrub}>
-              <Slider
-                min={0}
-                max={duration}
-                value={currentTime}
-                tooltip={false}
-                onChangeStart={this.seekStart}
-                onChange={this.seek}
-                onChangeComplete={this.seekEnd}
-              />
+        <nav className={styles.controls} onTouchMove={NO_BUBBLE} onMouseMove={NO_BUBBLE}>
+          <div className={styles.scrub}>
+            <Slider
+              min={0}
+              max={duration}
+              value={currentTime}
+              tooltip={false}
+              onChangeStart={this.seekStart}
+              onChange={this.seek}
+              onChangeComplete={this.seekEnd}
+            />
+          </div>
+          <div className={styles.playback}>
+            <div className={styles.times}>
+              <FormattedTime numSeconds={Math.round(currentTime)} />
+              <FormattedTime numSeconds={Math.round(duration)} />
             </div>
-            <div className={styles.playback}>
-              <div className={styles.times}>
-                <FormattedTime numSeconds={Math.round(currentTime)} />
-                <FormattedTime numSeconds={Math.round(duration)} />
-              </div>
-              <div className={styles.buttons}>
-                <StepButton
-                  seconds={HOP_BACK_SECONDS}
-                  isEnabled={currentTime - HOP_BACK_SECONDS >= 0}
-                  onClick={this.hopBack}
-                />
-                <PauseButton ref={this.getPauseElRef} isEnabled={!isPaused} onClick={this.pause} />
-                <PlayButton ref={this.getPlayElRef} isEnabled={isPaused} onClick={this.play} />
-                <StepButton
-                  seconds={HOP_FORWARD_SECONDS}
-                  isEnabled={currentTime + HOP_FORWARD_SECONDS <= duration}
-                  isForward={true}
-                  onClick={this.hopForward}
-                />
-              </div>
+            <div className={styles.buttons}>
+              <StepButton
+                seconds={HOP_BACK_SECONDS}
+                isEnabled={currentTime - HOP_BACK_SECONDS >= 0}
+                onClick={this.hopBack}
+              />
+              <PauseButton ref={this.getPauseElRef} isEnabled={!isPaused} onClick={this.pause} />
+              <PlayButton ref={this.getPlayElRef} isEnabled={isPaused} onClick={this.play} />
+              <StepButton
+                seconds={HOP_FORWARD_SECONDS}
+                isEnabled={currentTime + HOP_FORWARD_SECONDS <= duration}
+                isForward={true}
+                onClick={this.hopForward}
+              />
             </div>
           </div>
         </nav>
