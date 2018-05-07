@@ -58,22 +58,46 @@
 
 html.hasOpen,
 html.hasOpen > body {
+  overflow: hidden;
+}
+
+html.hasOpen {
   min-height: 100%;
 }
 
 html.hasOpen > body {
+  height: 100%;
+
   /* Reset Phase 1 (standard)'s 100px fixed width */
   min-width: auto;
 }
 
-/* html > body::before,
-html > body::after,
-html > body > :not(.portal) {
-  will-change: opacity;
-} */
+@keyframes out {
+  0% {
+    opacity: 1;
+  }
+  99% {
+    opacity: 0;
+    transform: none;
+  }
+  100% {
+    transform: translate(100vh, 0);
+  }
+}
 
 html.hasOpen > body::before,
-html.hasOpen > body::after,
-html.hasOpen > body > :not(.portal) {
-  display: none;
+html.hasOpen > body::after {
+  opacity: 0;
+}
+
+html.hasOpen > body > header,
+html.hasOpen > body > main,
+html.hasOpen > body > footer,
+html.hasOpen > body > div:not(.portal) {
+  pointer-events: none;
+  animation: out 0.5s forwards;
+}
+
+html.hasOpen .open svg {
+  opacity: 0;
 }

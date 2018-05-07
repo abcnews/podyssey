@@ -99,7 +99,7 @@ class Timeline extends Component {
     this.base.addEventListener('mousedown', this.scrubStart);
     this.base.addEventListener('touchstart', this.scrubStart, { passive: true });
     document.addEventListener('mousemove', this.scrub);
-    this.base.addEventListener('touchmove', this.scrub, { passive: true });
+    document.addEventListener('touchmove', this.scrub, { passive: true });
     document.addEventListener('mouseup', this.scrubEnd);
     document.addEventListener('touchend', this.scrubEnd);
     document.addEventListener('touchcancel', this.scrubEnd);
@@ -109,7 +109,7 @@ class Timeline extends Component {
     this.base.removeEventListener('mousedown', this.scrubStart);
     this.base.removeEventListener('touchstart', this.scrubStart);
     document.removeEventListener('mousemove', this.scrub);
-    this.base.removeEventListener('touchmove', this.scrub);
+    document.removeEventListener('touchmove', this.scrub);
     document.removeEventListener('mouseup', this.scrubEnd);
     document.removeEventListener('touchend', this.scrubEnd);
     document.removeEventListener('touchcancel', this.scrubEnd);

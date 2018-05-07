@@ -1,5 +1,6 @@
 const { h, Component } = require('preact');
 const Portal = require('preact-portal');
+const { select } = require('../../dom');
 const Button = require('../Button');
 const Icon = require('../Icon');
 const Modal = require('../Modal');
@@ -18,7 +19,8 @@ class App extends Component {
     this.state = {
       hasOpenedAtLeastOnce: false,
       isDismissed: false,
-      isOpen: false
+      isOpen: false,
+      transitionData: null
     };
   }
 
@@ -27,7 +29,11 @@ class App extends Component {
   }
 
   open() {
-    this.setState({ hasOpenedAtLeastOnce: true, isOpen: true });
+    const transitionData = {
+      playIconRect: select('svg[data-type="play"]').getBoundingClientRect()
+    };
+
+    this.setState({ hasOpenedAtLeastOnce: true, isOpen: true, transitionData });
   }
 
   close() {
@@ -50,11 +56,11 @@ class App extends Component {
     this.base.parentElement.classList[this.state.isDismissed ? 'add' : 'remove'](styles.hasDismissed);
   }
 
-  render({ playerProps }, { hasOpenedAtLeastOnce, isDismissed, isOpen }) {
+  render({ playerProps }, { hasOpenedAtLeastOnce, isDismissed, isOpen, transitionData }) {
     return (
       <div className={styles.root}>
         <div className={styles.notice}>
-          <Icon type="audio" size="small" />
+          <Icon type="audio" size="tiny" />
           <span>This story features audio</span>
         </div>
         <Button type="play" className={styles.open} onClick={this.open} iconProps={{ block: true, size: 'large' }}>
@@ -68,7 +74,11 @@ class App extends Component {
         <div ref={this.getBottomRef} className={styles.bottom} />
         <Portal into={'body'}>
           <div className={styles.portal}>
-            {isOpen && <Modal close={this.close}>{playerProps && <Player key="player" {...playerProps} />}</Modal>}
+            {isOpen && (
+              <Modal close={this.close}>
+                {playerProps && <Player key="player" transitionData={transitionData} {...playerProps} />}
+              </Modal>
+            )}
           </div>
         </Portal>
       </div>

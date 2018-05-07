@@ -1,14 +1,6 @@
-/* @keyframes enter {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-} */
-
 .root {
   display: flex;
+  z-index: 3;
   position: fixed;
   top: 0;
   left: 0;
@@ -18,11 +10,7 @@
   box-sizing: border-box;
   width: 100%;
   height: 100%;
-  background-color: dimgrey;
-  background-color: var(--abc-warmgrey, dimgrey);
   cursor: auto;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  /* animation: enter 0.75s backwards; */
 }
 
 .root *,
@@ -39,25 +27,81 @@
   opacity: 0;
 }
 
-.close {
+.root button[data-type='close'] {
   position: absolute;
   top: 0;
   right: 0;
   z-index: 1;
-  border: 0;
-  padding: 0;
-  width: 2.75rem;
-  background-color: transparent;
-  color: white;
-  font-size: 1.125rem;
-  line-height: 2.75rem;
-  text-align: center;
-  cursor: pointer;
 }
 
 @media (min-width: 40rem) and (min-height: 40rem) {
-  .close {
+  .root button[data-type='close'] {
     top: calc(50% - 20rem);
     right: calc(50% - 20rem);
+  }
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  animation: appear 0.5s;
+}
+
+.content {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  box-shadow: var(--pod-black-shadow);
+}
+
+@media (min-width: 40rem) and (min-height: 40rem) {
+  .content {
+    border-radius: 0.5rem;
+    max-width: 40rem;
+    max-height: 40rem;
+  }
+}
+
+@keyframes rotateHint {
+  0%,
+  50%,
+  100% {
+    transform: translate(-50%, -50%);
+  }
+
+  33% {
+    transform: translate(-50%, -50%) rotate(15deg);
+  }
+}
+
+@media (max-height: 30rem) and (orientation: landscape) {
+  .content > * {
+    display: none;
+  }
+
+  .content::after {
+    content: 'Please turn your device vertically';
+    transform: translate(-50%, -50%);
+    animation: rotateHint 2s infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    max-width: 20rem;
+    font-size: 1.5rem;
+    text-align: center;
   }
 }

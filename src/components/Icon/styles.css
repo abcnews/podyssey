@@ -28,10 +28,18 @@
   margin: 0.5rem auto 0;
 }
 
-.small {
+.tiny {
   font-size: 1.25rem;
 }
 
+.small {
+  font-size: 1.75rem;
+}
+
 .large {
+  font-size: 3.25rem;
+}
+
+.huge {
   font-size: 3.75rem;
 }

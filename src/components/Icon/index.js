@@ -17,6 +17,7 @@ module.exports = ({ type, block, size }) => (
     className={`${styles.root}${block ? ` ${styles.block}` : ''}${size ? ` ${styles[size]}` : ''}`}
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 40 40"
+    data-type={type}
   >
     <path d={TYPE_PATHS[type]} />
   </svg>

@@ -1,6 +1,6 @@
 const { actions, events } = require('html5-audio-driver');
 const { h, Component } = require('preact');
-const { detach } = require('../../dom');
+const { detach, select } = require('../../dom');
 const Button = require('../Button');
 const Entry = require('../Entry');
 const Time = require('../Time');
@@ -11,15 +11,12 @@ const STORAGE_PREFIX = 'podyssey';
 const HOP_BACK_SECONDS = 15;
 const HOP_FORWARD_SECONDS = 30;
 const INERT_EL = { focus: () => {} };
-const NO_BUBBLE = event => event.stopPropagation();
 
 class Player extends Component {
   constructor(props) {
     super(props);
 
     this.getAudioElRef = this.getAudioElRef.bind(this);
-    this.getPauseElRef = this.getPauseElRef.bind(this);
-    this.getPlayElRef = this.getPlayElRef.bind(this);
     this.pause = this.pause.bind(this);
     this.play = this.play.bind(this);
     this.hopBack = this.hopBack.bind(this);
@@ -41,17 +38,8 @@ class Player extends Component {
     this.audioEl = el;
   }
 
-  getPauseElRef(component) {
-    this.pauseEl = component ? component.base : INERT_EL;
-  }
-
-  getPlayElRef(component) {
-    this.playEl = component ? component.base : INERT_EL;
-  }
-
   pause() {
     this.audioActions.pause();
-    this.playEl.focus();
   }
 
   play() {
@@ -60,7 +48,6 @@ class Player extends Component {
     }
 
     this.audioActions.play();
-    this.pauseEl.focus();
   }
 
   hopTo(time) {
@@ -95,6 +82,32 @@ class Player extends Component {
     );
     // this.audioActions.setPlaytime(this._lastStoredTime);
 
+    // FLIP playback icon
+
+    const playbackIconEl = select('svg[data-type="play"], svg[data-type="pause"]', this.base);
+    const playbackIconRect = playbackIconEl.getBoundingClientRect();
+
+    if (this.props.transitionData) {
+      const transform = {
+        translateY:
+          this.props.transitionData.playIconRect.top -
+          playbackIconRect.top +
+          (this.props.transitionData.playIconRect.height - playbackIconRect.height) / 2,
+        scale: this.props.transitionData.playIconRect.width / playbackIconRect.width
+      };
+
+      playbackIconEl.style.transitionDelay = '0s';
+      playbackIconEl.style.transitionDuration = '0s';
+      playbackIconEl.style.transform = `translate(0, ${transform.translateY}px) scale(${transform.scale})`;
+
+      setTimeout(() => {
+        playbackIconEl.style.transitionDelay = '';
+        playbackIconEl.style.transitionDuration = '';
+        playbackIconEl.style.transform = '';
+      });
+    }
+
+    // Auto-play
     this.play();
   }
 
@@ -125,7 +138,7 @@ class Player extends Component {
             />
           )}
         </main>
-        <nav className={styles.controls} onTouchMove={NO_BUBBLE}>
+        <nav ref={this.getControlsElRef} className={styles.controls}>
           <Timeline
             currentTime={currentTime}
             duration={duration}
@@ -138,8 +151,7 @@ class Player extends Component {
           </div>
           <div className={styles.buttons}>
             <Button type="prev" disabled={currentTime - HOP_BACK_SECONDS <= 0} onClick={this.hopBack} />
-            <Button ref={this.getPauseElRef} type="pause" disabled={isPaused} onClick={this.pause} />
-            <Button ref={this.getPlayElRef} type="play" disabled={!isPaused} onClick={this.play} />
+            <Button type={isPaused ? 'play' : 'pause'} onClick={this[isPaused ? 'play' : 'pause']} />
             <Button type="next" disabled={currentTime + HOP_FORWARD_SECONDS >= duration} onClick={this.hopForward} />
           </div>
         </nav>

@@ -1,11 +1,6 @@
 .root {
-  overflow: hidden;
-  position: relative;
-  width: 100%;
   height: 100%;
-  background-color: black;
-  background-color: var(--pod-black, black);
-  box-shadow: var(--pod-black-shadow);
+  background-color: transparent;
   color: white;
   color: var(--pod-white, white);
   font-family: ABCSans;
@@ -19,46 +14,17 @@
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
-@media (min-width: 40rem) and (min-height: 40rem) {
-  .root {
-    border-radius: 0.5rem;
-    max-width: 40rem;
-    max-height: 40rem;
-  }
-}
-
-@keyframes rotateHint {
-  0%,
-  50%,
-  100% {
-    transform: translate(-50%, -50%);
-  }
-
-  33% {
-    transform: translate(-50%, -50%) rotate(15deg);
-  }
-}
-
-@media (max-height: 30rem) and (orientation: landscape) {
-  .root > * {
-    display: none;
-  }
-
-  .root::after {
-    content: 'Please turn your device vertically';
-    transform: translate(-50%, -50%);
-    animation: rotateHint 2s infinite;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    max-width: 20rem;
-    font-size: 1.5rem;
-    text-align: center;
-  }
-}
-
 .main {
   height: 100%;
+}
+
+@keyframes controls {
+  from {
+    transform: translate(0, 100%);
+  }
+  to {
+    transform: none;
+  }
 }
 
 .controls {
@@ -68,6 +34,7 @@
   bottom: 0;
   left: 0;
   padding: 1rem 1rem 4rem;
+  animation: controls 1s 0.125s backwards;
 }
 
 .controls::before {
@@ -79,7 +46,7 @@
   right: 0;
   width: 100%;
   height: 12rem;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 40%);
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 30%);
 }
 
 .times {
@@ -104,9 +71,9 @@
   margin: 0 0.5rem;
 }
 
-.buttons > [data-type='play'][disabled],
-.buttons > [data-type='pause'][disabled] {
-  display: none;
+.buttons > * > svg {
+  /* See index.js for FLIP */
+  transition: transform 1s 0.125s;
 }
 
 /* Safari removes padding from last flex child */

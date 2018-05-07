@@ -1,22 +1,89 @@
 const { h, Component } = require('preact');
+const Button = require('../Button');
 const Loader = require('../Loader');
 const styles = require('./styles.css');
+
+let nextMaskIndex = 0;
 
 class Modal extends Component {
   constructor(props) {
     super(props);
+
+    this.getContentElRef = this.getContentElRef.bind(this);
+    this.updateMask = this.updateMask.bind(this);
+
+    this.state = {
+      maskIndex: nextMaskIndex++
+    };
   }
 
-  render({ children, close }) {
+  getContentElRef(el) {
+    this.contentEl = el;
+  }
+
+  updateMask() {
+    const contentRect = this.contentEl.getBoundingClientRect();
+    const contentRadius = window.getComputedStyle(this.contentEl).borderRadius;
+
+    this.setState({
+      mask:
+        contentRadius === '0px'
+          ? null
+          : {
+              width: window.innerWidth,
+              height: window.innerHeight,
+              contentX: Math.ceil(contentRect.left),
+              contentY: Math.ceil(contentRect.top),
+              contentWidth: Math.floor(contentRect.width),
+              contentHeight: Math.floor(contentRect.height),
+              contentRadius
+            }
+    });
+  }
+
+  componentDidMount() {
+    this.updateMask();
+
+    window.addEventListener('resize', this.updateMask);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateMask);
+  }
+
+  render({ children, close }, { maskIndex, mask }) {
     return (
       <div className={styles.root}>
-        {close && (
-          <button className={styles.close} onClick={close}>
-            X
-          </button>
-        )}
+        {close && <Button type="close" onClick={close} />}
         <Loader className={styles.loader} inverted large overlay />
-        {children}
+        {mask && (
+          <svg className={styles.mask} viewbox={`0 0 ${mask.width} ${mask.height}`}>
+            <defs>
+              <mask id={`${styles.mask}_mask${maskIndex}`} x="0" y="0" width={mask.width} height={mask.height}>
+                <rect x="0" y="0" width={mask.width} height={mask.height} fill="#fff" />
+                <rect
+                  x={mask.contentX}
+                  y={mask.contentY}
+                  width={mask.contentWidth}
+                  height={mask.contentHeight}
+                  rx={mask.contentRadius}
+                  ry={mask.contentRadius}
+                />
+              </mask>
+            </defs>
+            <rect
+              x="0"
+              y="0"
+              width={mask.width}
+              height={mask.height}
+              mask={`url(#${styles.mask}_mask${maskIndex})`}
+              fill="#1c1c1c"
+            />
+          </svg>
+        )}
+        <div ref={this.getContentElRef} className={styles.content}>
+          {children}
+        </div>
       </div>
     );
   }
