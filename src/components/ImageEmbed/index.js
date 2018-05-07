@@ -19,7 +19,7 @@ class ImageEmbed extends Component {
   render({ picture, caption }, { isActive }) {
     return (
       <figure className={`${styles.root}${isActive ? ` ${styles.isActive}` : ''}`} onClick={this.toggle}>
-        <Picture url={picture.url} alt={picture.alt} />
+        <Picture key={picture.url} url={picture.url} alt={picture.alt} />
         <Caption text={caption.text || picture.alt} attribution={caption.attribution} />
       </figure>
     );

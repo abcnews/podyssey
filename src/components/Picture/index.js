@@ -64,14 +64,16 @@ class Picture extends Component {
     }
 
     load(this.state.src, () => {
-      this.imageEl.src = this.state.src;
-      setTimeout(() => this.setState({ loaded: true }));
+      if (this.imageEl) {
+        this.imageEl.src = this.state.src;
+        setTimeout(() => this.setState({ loaded: true }));
+      }
     });
   }
 
   render({ alt = '' }, { aspectClassName, loaded, src, wasPreloaded }) {
     return (
-      <div key={`Picture_${src}`} className={styles.root}>
+      <div className={styles.root}>
         <div className={aspectClassName} />
         <Loader inverted large overlay />
         <img ref={this.getImageRef} src={wasPreloaded ? src : null} alt={alt} loaded={loaded ? '' : null} />

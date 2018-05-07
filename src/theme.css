@@ -1,12 +1,10 @@
 :root {
   --abc-white: #fff;
-  --abc-black: #000;
   --abc-lightgrey: #9d9d9c;
   --abc-warmgrey: #3c3c3b;
-  --abc-yellow: #fdc605;
-  --pod-filter: rgba(0, 0, 0, 0.25);
-  --pod-shadow: 0 0.125rem 0.5rem var(--pod-filter);
-  --pod-blend: linear-gradient(to bottom, rgba(63, 63, 63, 0) 0%, rgba(63, 63, 63, 0.75) 100%);
+  --abc-black: #000;
+  --pod-black-filter: rgba(0, 0, 0, 0.25);
+  --pod-black-shadow: 0 0.125rem 0.5rem var(--pod-black-filter);
   --pod-font-weight-normal: 400;
   --pod-font-weight-heavy: 700;
 }

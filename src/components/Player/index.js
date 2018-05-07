@@ -1,9 +1,10 @@
 const { actions, events } = require('html5-audio-driver');
 const { h, Component } = require('preact');
-const { Button, FormattedTime, PauseButton, PlayButton, ProgressBar } = require('react-player-controls');
-const Slider = require('react-rangeslider').default;
 const { detach } = require('../../dom');
+const Button = require('../Button');
 const Entry = require('../Entry');
+const Time = require('../Time');
+const Timeline = require('../Timeline');
 const styles = require('./styles.css');
 
 const STORAGE_PREFIX = 'podyssey';
@@ -21,11 +22,9 @@ class Player extends Component {
     this.getPlayElRef = this.getPlayElRef.bind(this);
     this.pause = this.pause.bind(this);
     this.play = this.play.bind(this);
-    this.seek = this.seek.bind(this);
-    this.seekEnd = this.seekEnd.bind(this);
-    this.seekStart = this.seekStart.bind(this);
     this.hopBack = this.hopBack.bind(this);
     this.hopForward = this.hopForward.bind(this);
+    this.hopTo = this.hopTo.bind(this);
 
     this._lastStoredTime = +localStorage.getItem(`${STORAGE_PREFIX}__currentTime__${this.props.audioCMID}`);
 
@@ -63,29 +62,16 @@ class Player extends Component {
     this.pauseEl.focus();
   }
 
-  seek(time, event) {
-    if (event.type === 'keydown') {
-      this.audioActions.setPlaytime(time);
-    } else {
-      this.setState({ currentTime: time });
-    }
-  }
-
-  seekEnd() {
-    this._isSeeking = false;
-    this.audioActions.setPlaytime(this.state.currentTime);
-  }
-
-  seekStart() {
-    this._isSeeking = true;
+  hopTo(time) {
+    this.audioActions.setPlaytime(time);
   }
 
   hopBack() {
-    this.audioActions.setPlaytime(this.state.currentTime - HOP_BACK_SECONDS);
+    this.hopTo(this.state.currentTime - HOP_BACK_SECONDS);
   }
 
   hopForward() {
-    this.audioActions.setPlaytime(this.state.currentTime + HOP_FORWARD_SECONDS);
+    this.hopTo(this.state.currentTime + HOP_FORWARD_SECONDS);
   }
 
   componentDidUpdate() {
@@ -107,6 +93,8 @@ class Player extends Component {
       () => this._isSeeking || this.setState({ currentTime: this.audioEl ? this.audioEl.currentTime : 0 })
     );
     this.audioActions.setPlaytime(this._lastStoredTime);
+
+    this.play();
   }
 
   componentWillUnmount() {
@@ -119,13 +107,14 @@ class Player extends Component {
       .reverse()
       .find(time => time < currentTime);
     const activeEntry = activeEntryTime === null ? null : entries[activeEntryTime];
+    const snappableSectionTimes = sections.filter(section => section.title).map(section => section.time);
 
     return (
       <div className={styles.root}>
-        <audio ref={this.getAudioElRef} preload="auto">
+        <audio ref={this.getAudioElRef}>
           <source src={audioData.url} type={audioData.contentType} />}
         </audio>
-        <main>
+        <main className={styles.main}>
           {activeEntry && (
             <Entry
               key={activeEntry}
@@ -135,68 +124,27 @@ class Player extends Component {
             />
           )}
         </main>
-        <nav className={styles.controls} onTouchMove={NO_BUBBLE} onMouseMove={NO_BUBBLE}>
-          <div className={styles.scrub}>
-            <Slider
-              min={0}
-              max={duration}
-              value={currentTime}
-              tooltip={false}
-              onChangeStart={this.seekStart}
-              onChange={this.seek}
-              onChangeComplete={this.seekEnd}
-            />
+        <nav className={styles.controls} onTouchMove={NO_BUBBLE}>
+          <Timeline
+            currentTime={currentTime}
+            duration={duration}
+            snapTimes={snappableSectionTimes}
+            update={this.hopTo}
+          />
+          <div className={styles.times}>
+            <Time numSeconds={Math.round(currentTime)} />
+            <Time numSeconds={Math.round(duration)} />
           </div>
-          <div className={styles.playback}>
-            <div className={styles.times}>
-              <FormattedTime numSeconds={Math.round(currentTime)} />
-              <FormattedTime numSeconds={Math.round(duration)} />
-            </div>
-            <div className={styles.buttons}>
-              <StepButton
-                seconds={HOP_BACK_SECONDS}
-                isEnabled={currentTime - HOP_BACK_SECONDS >= 0}
-                onClick={this.hopBack}
-              />
-              <PauseButton ref={this.getPauseElRef} isEnabled={!isPaused} onClick={this.pause} />
-              <PlayButton ref={this.getPlayElRef} isEnabled={isPaused} onClick={this.play} />
-              <StepButton
-                seconds={HOP_FORWARD_SECONDS}
-                isEnabled={currentTime + HOP_FORWARD_SECONDS <= duration}
-                isForward={true}
-                onClick={this.hopForward}
-              />
-            </div>
+          <div className={styles.buttons}>
+            <Button type="prev" disabled={currentTime - HOP_BACK_SECONDS <= 0} onClick={this.hopBack} />
+            <Button ref={this.getPauseElRef} type="pause" disabled={isPaused} onClick={this.pause} />
+            <Button ref={this.getPlayElRef} type="play" disabled={!isPaused} onClick={this.play} />
+            <Button type="next" disabled={currentTime + HOP_FORWARD_SECONDS >= duration} onClick={this.hopForward} />
           </div>
         </nav>
       </div>
     );
   }
 }
-
-const StepButton = ({ seconds, isEnabled, isForward, onClick }) => (
-  <Button isEnabled={isEnabled} onClick={onClick}>
-    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-      <path
-        transform={`scale(${isForward ? '-' : ''}1, 1) translate(-2, 1)`}
-        transform-origin="50% 50%"
-        fill="currentColor"
-        d="M32.3,14.9c0-7.3-6-13.3-13.3-13.3C12.5,1.7,6.8,6.5,5.9,13l-0.1,0.9H2.7l4.1,5.5l4.1-5.5H7.8l0.2-1.2
-          c1.1-5.2,5.7-9,11-9c6.2,0,11.2,5,11.2,11.2c0,5.8-4.5,10.6-10.2,11.2v2.1C26.9,27.7,32.3,21.9,32.3,14.9z"
-      />
-      <text
-        className={styles.stepButtonText}
-        x="50%"
-        y="50%"
-        dx={`${isForward ? '-' : ''}1`}
-        fill="currentColor"
-        text-anchor="middle"
-        alignment-baseline="middle"
-      >
-        {seconds}
-      </text>
-    </svg>
-  </Button>
-);
 
 module.exports = Player;

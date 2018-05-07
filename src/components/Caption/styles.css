@@ -1,23 +1,18 @@
 .root {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  padding: 0.5rem 0.75rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding: 1rem;
   width: 100%;
-  font-size: 0.875rem;
-}
-
-.root > :first-child {
-  margin-right: 0.75rem;
+  height: 4rem;
+  color: white;
+  color: var(--abc-white, white);
+  font-size: 0.625rem;
+  text-align: center;
 }
 
 .attribution {
-  margin-top: 0.1875rem;
   color: var(--abc-lightgrey);
-  font-size: 0.75rem;
-  line-height: 1rem;
-}
-
-.root:first-line .attribution {
-  text-align: right;
 }

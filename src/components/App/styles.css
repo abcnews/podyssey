@@ -1,36 +1,45 @@
 .root {
   margin: 6rem 0 0;
   min-height: 5rem;
-  font-size: 1.125rem;
+  font-family: ABCSans;
+  font-size: 0.75rem;
   text-align: center;
+  letter-spacing: 0.125rem;
 }
 
-.root button {
-  border: 0;
-  cursor: pointer;
+:global(.u-richtext-invert) .root {
+  color: white;
+  color: var(--abc-white, white);
+}
+
+.notice {
+  text-transform: uppercase;
+  line-height: 1.125rem;
 }
 
 .open {
-  padding: 0.75rem 1.5rem;
-  background-color: var(--abc-yellow);
+  margin: 1rem;
+  padding: 1rem 0.5rem;
+  width: 7rem;
+  background-color: black;
+  background-color: var(--abc-black, black);
   margin-bottom: 0.75rem;
   font-family: ABCSans;
-  font-size: 1.5rem;
-}
-
-.icon {
-  position: relative;
-  top: 0.25rem;
-  padding-left: 0.75rem;
-  font-size: 2rem;
-  line-height: 0;
+  font-size: 0.875rem;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.125rem;
 }
 
 .dismiss {
-  padding: 0 0.25rem;
+  border: 0;
+  padding: 0.5rem;
+  max-width: 15rem;
   background: none;
-  font-size: inherit;
+  color: inherit;
   text-decoration: underline;
+  letter-spacing: 0.125rem;
+  cursor: pointer;
 }
 
 .bottom {
@@ -41,6 +50,10 @@
 [data-podyssey-root].hasDismissed .dismissChoice,
 [data-podyssey-root]:not(.hasDismissed) ~ * {
   display: none;
+}
+
+[data-podyssey-root] ~ [name='credits'] ~ :not(:global(.MasterGallery)) {
+  display: block;
 }
 
 html.hasOpen,

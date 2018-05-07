@@ -1,0 +1,65 @@
+.root {
+  padding: 1rem 0;
+  color: white;
+  color: var(--abc-white, white);
+}
+
+.track {
+  position: relative;
+  height: 0.1875rem;
+}
+
+.halo {
+  position: absolute;
+  top: -0.5rem;
+  right: 0;
+  bottom: -0.5rem;
+  left: 0;
+}
+
+.snapTimes {
+  opacity: 0.3;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: currentColor;
+}
+
+.snapTime,
+.currentTimeMarker,
+.handle {
+  transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 0;
+  background-color: currentColor;
+}
+
+.snapTime,
+.handle {
+  border-radius: 50%;
+}
+
+.snapTime {
+  width: 0.5625rem;
+  height: 0.5625rem;
+}
+
+.currentTimeProgress,
+.progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background-color: currentColor;
+}
+
+.currentTimeProgress {
+  opacity: 0.3;
+}
+
+.handle {
+  width: 0.9375rem;
+  height: 0.9375rem;
+}

@@ -6,7 +6,81 @@ body > :global(.tooltip) {
   display: none !important;
 }
 
-:global(.FormattedTime) {
-  font-variant-numeric: oldstyle-nums;
-  letter-spacing: 0.05rem;
+:global(.ProgressBar) {
+  position: relative;
+  background: black;
+  border-radius: 4px;
+  height: 8px;
+  margin: 10px 0;
+}
+
+:global(.ProgressBar-elapsed),
+:global(.ProgressBar-value) {
+  background: white;
+  border-radius: 4px;
+}
+
+:global(.ProgressBar-elapsed) {
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+:global(.ProgressBar-buffered) {
+  height: 100%;
+  border-radius: 4px;
+  background: lightgray;
+}
+
+:global(.ProgressBar-seek) {
+  position: absolute;
+  cursor: pointer;
+  top: -6px;
+  right: 0;
+  bottom: -6px;
+  left: 0;
+}
+
+:global(.ProgressBar-handle) {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: green;
+  border-radius: 100%;
+  transform: scale(0);
+  transition: transform 0.2s;
+  top: 0;
+  margin: -4px 0 0 -8px;
+}
+
+:global(.ProgressBar.isSeekable):hover :global(.ProgressBar-handle),
+:global(.ProgressBar.isEnabled):hover :global(.ProgressBar-handle) {
+  transform: scale(1);
+}
+
+:global(.ProgressBar.isSeekable):hover :global(.ProgressBar-handle) {
+  transform: scale(1);
+}
+
+:global(.ProgressBar.isSeekable):hover :global(.ProgressBar-intent),
+:global(.ProgressBar.isEnabled):hover :global(.ProgressBar-intent) {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+:global(.ProgressBar.isSeekable):hover :global(.ProgressBar-intent) {
+  top: 0;
+  left: 0;
+  height: 100%;
+}
+
+:global(.ProgressBar.isSeekable) :global(.ProgressBar-elapsed),
+:global(.ProgressBar.isEnabled) :global(.ProgressBar-elapsed) {
+  background: green;
+}
+
+:global(.ProgressBar.isLoading) {
+  opacity: 0.5;
+  background: #ccc;
 }

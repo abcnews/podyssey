@@ -1,12 +1,3 @@
-@keyframes enter {
-  from {
-    transform: scale(0);
-  }
-  to {
-    transform: none;
-  }
-}
-
 .root {
   overflow: hidden;
   position: relative;
@@ -14,7 +5,7 @@
   height: 100%;
   background-color: black;
   background-color: var(--pod-black, black);
-  box-shadow: var(--pod-shadow);
+  box-shadow: var(--pod-black-shadow);
   color: white;
   color: var(--pod-white, white);
   font-family: ABCSans;
@@ -26,7 +17,6 @@
   -ms-user-select: none;
   user-select: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  animation: enter 0.75s backwards;
 }
 
 @media (min-width: 40rem) and (min-height: 40rem) {
@@ -67,107 +57,38 @@
   }
 }
 
-.controls {
-  position: absolute;
-  right: 0;
-  bottom: 3rem;
-  left: 0;
-  padding: 0.5rem;
-}
-
-.scrub {
-  margin: 0.5rem 0;
-}
-
-.scrub :global(.rangeslider) {
-  position: relative;
-  border-radius: 0.25rem;
-  width: 100%;
-  height: 0.5rem;
-  background-color: #666;
-  background-color: var(--abc-lightgrey, #666);
-  touch-action: none;
-}
-
-.scrub :global(.rangeslider)::before {
-  content: '';
-  position: absolute;
-  top: -1rem;
-  right: 0;
-  bottom: -1rem;
-  left: 0;
-}
-
-.scrub :global(.rangeslider__fill),
-.scrub :global(.rangeslider__handle) {
-  background-color: white;
-  background-color: var(--abc-white, white);
-}
-
-.scrub :global(.rangeslider__fill) {
-  border-radius: 0.25rem;
+.main {
   height: 100%;
 }
 
-.scrub :global(.rangeslider__handle) {
-  transform: translate(-50%, -50%);
+.controls {
+  z-index: 1;
   position: absolute;
-  top: 50%;
-  border-radius: 50%;
-  width: 1.25rem;
-  height: 1.25rem;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem 1rem 4rem;
 }
 
-.scrub :global(.rangeslider__handle)::before {
+.controls::before {
   content: '';
+  opacity: 0.75;
+  z-index: -1;
   position: absolute;
-  top: -0.5rem;
-  right: -0.5rem;
-  bottom: -0.5rem;
-  left: -0.5rem;
-}
-
-.playback {
-  position: relative;
-  margin: 0.125rem 0 0;
-}
-
-@media (min-width: 40rem) and (min-height: 40rem) {
-  .playback {
-    margin: 0.5rem 0 0;
-  }
-}
-
-.playback > * {
-  display: flex;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 12rem;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 40%);
 }
 
 .times {
+  display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  position: absolute;
-  top: 0;
-  left: 0;
+  margin-top: -0.25rem;
   width: 100%;
-  pointer-events: none;
-}
-
-@media (min-width: 40rem) and (min-height: 40rem) {
-  .times {
-    top: -0.375rem;
-  }
-}
-
-.times > * {
-  display: block;
   font-size: 0.75rem;
-  width: 6em;
-}
-
-@media (min-width: 40rem) and (min-height: 40rem) {
-  .times > * {
-    font-size: 0.875rem;
-  }
+  pointer-events: none;
 }
 
 .times > :last-child {
@@ -175,42 +96,17 @@
 }
 
 .buttons {
+  display: flex;
   justify-content: center;
 }
 
 .buttons > * {
-  border: 0;
   margin: 0 0.5rem;
-  padding: 0.125rem;
-  background-color: transparent;
-  color: white;
-  color: var(--pod-white, white);
-  font-size: 1rem;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transition: opacity 0.25s;
 }
 
-.buttons > [disabled] {
-  opacity: 0.125;
-}
-
-.buttons > :global(.PauseButton)[disabled],
-.buttons > :global(.PlayButton)[disabled] {
+.buttons > [data-type='play'][disabled],
+.buttons > [data-type='pause'][disabled] {
   display: none;
-}
-
-.buttons svg {
-  width: 2rem;
-  height: auto;
-  vertical-align: bottom;
-  fill: currentColor;
-}
-
-@media (min-width: 40rem) and (min-height: 40rem) {
-  .buttons svg {
-    width: 2.5rem;
-  }
 }
 
 /* Safari removes padding from last flex child */
@@ -218,10 +114,4 @@
   content: '';
   display: block;
   flex: 0 0 0.0625rem;
-}
-
-.stepButtonText {
-  font-size: 0.75rem;
-  font-family: ABCSans;
-  font-variant-numeric: oldstyle-nums;
 }
