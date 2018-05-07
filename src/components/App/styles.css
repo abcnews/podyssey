@@ -24,7 +24,7 @@
   background-color: black;
   background-color: var(--abc-black, black);
   margin-bottom: 0.75rem;
-  font-family: ABCSans;
+  font-family: inherit;
   font-size: 0.875rem;
   text-align: center;
   text-transform: uppercase;
@@ -37,6 +37,8 @@
   max-width: 15rem;
   background: none;
   color: inherit;
+  font-family: inherit;
+  font-size: 0.75rem;
   text-decoration: underline;
   letter-spacing: 0.125rem;
   cursor: pointer;
