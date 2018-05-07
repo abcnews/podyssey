@@ -52,7 +52,7 @@
   display: none;
 }
 
-[data-podyssey-root] ~ [name='credits'] ~ :not(:global(.MasterGallery)) {
+[data-podyssey-root] ~ [name='footer'] ~ :not(:global(.MasterGallery)) {
   display: block;
 }
 
