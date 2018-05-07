@@ -26,10 +26,11 @@ class Player extends Component {
     this.hopForward = this.hopForward.bind(this);
     this.hopTo = this.hopTo.bind(this);
 
-    this._lastStoredTime = +localStorage.getItem(`${STORAGE_PREFIX}__currentTime__${this.props.audioCMID}`);
+    // this._lastStoredTime = +localStorage.getItem(`${STORAGE_PREFIX}__currentTime__${this.props.audioCMID}`);
 
     this.state = {
-      currentTime: this._lastStoredTime,
+      // currentTime: this._lastStoredTime,
+      currentTime: 0,
       duration: 0,
       isPaused: true,
       isEnded: false
@@ -76,10 +77,10 @@ class Player extends Component {
 
   componentDidUpdate() {
     // Persist playback time if changed by 5 seconds
-    if (Math.abs(this._lastStoredTime - this.state.currentTime) > 5) {
-      this._lastStoredTime = Math.round(this.state.currentTime);
-      localStorage.setItem(`${STORAGE_PREFIX}__currentTime__${this.props.audioCMID}`, this._lastStoredTime);
-    }
+    // if (Math.abs(this._lastStoredTime - this.state.currentTime) > 5) {
+    //   this._lastStoredTime = Math.round(this.state.currentTime);
+    //   localStorage.setItem(`${STORAGE_PREFIX}__currentTime__${this.props.audioCMID}`, this._lastStoredTime);
+    // }
   }
 
   componentDidMount() {
@@ -92,7 +93,7 @@ class Player extends Component {
     this.audioEvents.onPlaytimeUpdate(
       () => this._isSeeking || this.setState({ currentTime: this.audioEl ? this.audioEl.currentTime : 0 })
     );
-    this.audioActions.setPlaytime(this._lastStoredTime);
+    // this.audioActions.setPlaytime(this._lastStoredTime);
 
     this.play();
   }
