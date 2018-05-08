@@ -12,4 +12,5 @@
 
 .root[disabled] {
   opacity: 0.125;
+  cursor: default;
 }

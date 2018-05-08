@@ -74,30 +74,24 @@ html.hasOpen > body {
   min-width: auto;
 }
 
-@keyframes out {
+html.hasOpen > body::before,
+html.hasOpen > body::after,
+html.hasOpen > body > :not(.portal) {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes disappear {
   0% {
     opacity: 1;
   }
-  99% {
-    opacity: 0;
-    transform: none;
-  }
   100% {
-    transform: translate(100vh, 0);
+    opacity: 0;
   }
 }
 
-html.hasOpen > body::before,
-html.hasOpen > body::after {
-  opacity: 0;
-}
-
-html.hasOpen > body > header,
-html.hasOpen > body > main,
-html.hasOpen > body > footer,
-html.hasOpen > body > div:not(.portal) {
-  pointer-events: none;
-  animation: out 0.5s forwards;
+html.hasOpen > body > :not(.portal) {
+  animation: disappear 0.5s backwards;
 }
 
 html.hasOpen .open svg {

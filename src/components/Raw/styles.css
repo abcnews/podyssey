@@ -19,7 +19,7 @@
   line-height: 1.5;
 }
 
-@media (min-width: 24rem) {
+@media (min-width: 30rem) {
   .root p,
   .root li {
     font-size: 1rem;
@@ -35,7 +35,7 @@
   margin-left: 0.875rem;
 }
 
-@media (min-width: 24rem) {
+@media (min-width: 30rem) {
   .root ol,
   .root ul {
     margin-left: 1.125rem;

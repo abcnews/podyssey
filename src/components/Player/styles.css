@@ -18,7 +18,7 @@
   height: 100%;
 }
 
-@keyframes controls {
+@keyframes up {
   from {
     transform: translate(0, 100%);
   }
@@ -34,7 +34,7 @@
   bottom: 0;
   left: 0;
   padding: 1rem 1rem 4rem;
-  animation: controls 1s 0.125s backwards;
+  animation: up 1s 0.125s backwards;
 }
 
 .controls::before {
@@ -47,6 +47,12 @@
   width: 100%;
   height: 12rem;
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 30%);
+}
+
+.controls > * {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 36rem;
 }
 
 .times {
@@ -81,4 +87,40 @@
   content: '';
   display: block;
   flex: 0 0 0.0625rem;
+}
+
+.regions {
+  position: absolute;
+  top: 3rem;
+  right: 0;
+  bottom: 11rem;
+  left: 0;
+}
+
+.regions button {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  outline: 0;
+}
+
+.regions button,
+.regions button[disabled] {
+  opacity: 0;
+}
+
+.regions button:not([disabled]):hover:not([active]) {
+  opacity: 0.25;
+}
+
+.regions > :first-child {
+  left: 0;
+  width: 32%;
+  text-align: left;
+}
+
+.regions > :last-child {
+  right: 0;
+  width: 64%;
+  text-align: right;
 }

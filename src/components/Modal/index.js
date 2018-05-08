@@ -22,22 +22,24 @@ class Modal extends Component {
   }
 
   updateMask() {
-    const contentRect = this.contentEl.getBoundingClientRect();
-    const contentRadius = window.getComputedStyle(this.contentEl).borderRadius;
+    setTimeout(() => {
+      const contentRect = this.contentEl.getBoundingClientRect();
+      const contentRadius = window.getComputedStyle(this.contentEl).borderRadius;
 
-    this.setState({
-      mask:
-        contentRadius === '0px'
-          ? null
-          : {
-              width: window.innerWidth,
-              height: window.innerHeight,
-              contentX: Math.ceil(contentRect.left),
-              contentY: Math.ceil(contentRect.top),
-              contentWidth: Math.floor(contentRect.width),
-              contentHeight: Math.floor(contentRect.height),
-              contentRadius
-            }
+      this.setState({
+        mask:
+          contentRadius === '0px'
+            ? null
+            : {
+                width: window.innerWidth,
+                height: window.innerHeight,
+                contentX: Math.ceil(contentRect.left),
+                contentY: Math.ceil(contentRect.top),
+                contentWidth: Math.floor(contentRect.width),
+                contentHeight: Math.floor(contentRect.height),
+                contentRadius
+              }
+      });
     });
   }
 
@@ -54,7 +56,6 @@ class Modal extends Component {
   render({ children, close }, { maskIndex, mask }) {
     return (
       <div className={styles.root}>
-        {close && <Button type="close" onClick={close} />}
         <Loader className={styles.loader} inverted large overlay />
         {mask && (
           <svg className={styles.mask} viewbox={`0 0 ${mask.width} ${mask.height}`}>
@@ -83,6 +84,7 @@ class Modal extends Component {
         )}
         <div ref={this.getContentElRef} className={styles.content}>
           {children}
+          {close && <Button type="close" onClick={close} />}
         </div>
       </div>
     );

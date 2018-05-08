@@ -19,9 +19,8 @@ class Player extends Component {
     this.getAudioElRef = this.getAudioElRef.bind(this);
     this.pause = this.pause.bind(this);
     this.play = this.play.bind(this);
-    this.hopBack = this.hopBack.bind(this);
-    this.hopForward = this.hopForward.bind(this);
     this.hopTo = this.hopTo.bind(this);
+    this.hopToDataTime = this.hopToDataTime.bind(this);
 
     // this._lastStoredTime = +localStorage.getItem(`${STORAGE_PREFIX}__currentTime__${this.props.audioCMID}`);
 
@@ -54,12 +53,8 @@ class Player extends Component {
     this.audioActions.setPlaytime(time);
   }
 
-  hopBack() {
-    this.hopTo(this.state.currentTime - HOP_BACK_SECONDS);
-  }
-
-  hopForward() {
-    this.hopTo(this.state.currentTime + HOP_FORWARD_SECONDS);
+  hopToDataTime(event) {
+    this.hopTo(event.currentTarget.getAttribute('data-time'));
   }
 
   componentDidUpdate() {
@@ -117,11 +112,18 @@ class Player extends Component {
   }
 
   render({ audioData, entries, sections, title }, { currentTime, duration, isEnded, isPaused }) {
-    const activeEntryTime = Object.keys(entries)
+    const titledSectionTimes = sections.filter(section => section.title).map(section => section.time);
+    const activeTitledSectionTime = titledSectionTimes
+      .slice()
       .reverse()
       .find(time => time < currentTime);
+    const prevTitledSectionTime =
+      titledSectionTimes.length > 1 && titledSectionTimes[titledSectionTimes.indexOf(activeTitledSectionTime) - 1];
+    const nextTitledSectionTime =
+      titledSectionTimes.length > 1 && titledSectionTimes[titledSectionTimes.indexOf(activeTitledSectionTime) + 1];
+    const entryTimes = Object.keys(entries);
+    const activeEntryTime = entryTimes.reverse().find(time => time < currentTime);
     const activeEntry = activeEntryTime === null ? null : entries[activeEntryTime];
-    const snappableSectionTimes = sections.filter(section => section.title).map(section => section.time);
 
     return (
       <div className={styles.root}>
@@ -139,25 +141,34 @@ class Player extends Component {
           )}
         </main>
         <nav ref={this.getControlsElRef} className={styles.controls}>
-          <Timeline
-            currentTime={currentTime}
-            duration={duration}
-            snapTimes={snappableSectionTimes}
-            update={this.hopTo}
-          />
+          <Timeline currentTime={currentTime} duration={duration} snapTimes={titledSectionTimes} update={this.hopTo} />
           <div className={styles.times}>
             <Time numSeconds={Math.round(currentTime)} />
             <Time numSeconds={Math.round(duration)} />
           </div>
           <div className={styles.buttons}>
-            <Button type="prev" disabled={currentTime - HOP_BACK_SECONDS <= 0} onClick={this.hopBack} />
+            <HopButton type="prev" time={prevTitledSectionTime} onClick={this.hopToDataTime} />
             <Button type={isPaused ? 'play' : 'pause'} onClick={this[isPaused ? 'play' : 'pause']} />
-            <Button type="next" disabled={currentTime + HOP_FORWARD_SECONDS >= duration} onClick={this.hopForward} />
+            <HopButton type="next" time={nextTitledSectionTime} onClick={this.hopToDataTime} />
           </div>
+        </nav>
+        <nav className={styles.regions}>
+          <HopButton type="prev" time={prevTitledSectionTime} onClick={this.hopToDataTime} tabindex="0" />
+          <HopButton type="next" time={nextTitledSectionTime} onClick={this.hopToDataTime} tabindex="0" />
         </nav>
       </div>
     );
   }
 }
+
+const HopButton = ({ type, time, onClick, ...props }) => (
+  <Button
+    type={type}
+    disabled={typeof time !== 'number'}
+    onClick={onClick}
+    data-time={typeof time !== 'number' ? null : time + 0.01}
+    {...props}
+  />
+);
 
 module.exports = Player;

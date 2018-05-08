@@ -6,10 +6,10 @@ const styles = require('./styles.css');
 
 const DEFAULT_RATIO = '1x1';
 const RATIO_SIZES = {
-  '16x9': '940x529',
+  '16x9': '2150x1210',
   '3x2': '940x627',
   '4x3': '940x705',
-  '1x1': '940x940',
+  '1x1': '1400x1400',
   '3x4': '940x1253'
 };
 const RATIO_PATTERN = /(\d+x\d+)/;
@@ -48,7 +48,6 @@ class Picture extends Component {
 
     this.state = {
       aspectClassName: styleUtils[`aspect${ratio}`],
-      loaded: wasPreloaded,
       src,
       wasPreloaded
     };
@@ -64,19 +63,16 @@ class Picture extends Component {
     }
 
     load(this.state.src, () => {
-      if (this.imageEl) {
-        this.imageEl.src = this.state.src;
-        setTimeout(() => this.setState({ loaded: true }));
-      }
+      this.imageEl.src = this.state.src;
     });
   }
 
-  render({ alt = '' }, { aspectClassName, loaded, src, wasPreloaded }) {
+  render({ alt = '' }, { aspectClassName, src, wasPreloaded }) {
     return (
       <div className={styles.root}>
         <div className={aspectClassName} />
         <Loader inverted large overlay />
-        <img ref={this.getImageRef} src={wasPreloaded ? src : null} alt={alt} loaded={loaded ? '' : null} />
+        <img key={src} ref={this.getImageRef} src={wasPreloaded ? src : null} alt={alt} />
       </div>
     );
   }
@@ -92,5 +88,3 @@ module.exports.inferProps = el => {
     alt: el.alt
   };
 };
-
-module.exports.resize = resize;

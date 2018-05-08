@@ -27,20 +27,6 @@
   opacity: 0;
 }
 
-.root button[data-type='close'] {
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 1;
-}
-
-@media (min-width: 40rem) and (min-height: 40rem) {
-  .root button[data-type='close'] {
-    top: calc(50% - 20rem);
-    right: calc(50% - 20rem);
-  }
-}
-
 @keyframes appear {
   from {
     opacity: 0;
@@ -68,15 +54,17 @@
   box-shadow: var(--pod-black-shadow);
 }
 
-@media (min-width: 40rem) and (min-height: 40rem) {
+@media (min-width: 30rem) {
   .content {
     border-radius: 0.5rem;
-    max-width: 40rem;
-    max-height: 40rem;
+    width: calc(100vmin - 2rem);
+    height: calc(100vmin - 2rem);
+    max-width: 62rem;
+    max-height: 62rem;
   }
 }
 
-@keyframes rotateHint {
+@keyframes tilt {
   0%,
   50%,
   100% {
@@ -89,6 +77,10 @@
 }
 
 @media (max-height: 30rem) and (orientation: landscape) {
+  .content {
+    background-color: #111;
+  }
+
   .content > * {
     display: none;
   }
@@ -96,12 +88,20 @@
   .content::after {
     content: 'Please turn your device vertically';
     transform: translate(-50%, -50%);
-    animation: rotateHint 2s infinite;
     position: absolute;
     top: 50%;
     left: 50%;
     max-width: 20rem;
+    color: #eee;
     font-size: 1.5rem;
     text-align: center;
+    animation: tilt 2s infinite;
   }
+}
+
+.root button[data-type='close'] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
 }
