@@ -27,6 +27,10 @@
   line-height: 1.25;
 }
 
+/* html[standalone] .sectionTitle {
+  padding-top: 20px;
+} */
+
 .notes {
   display: flex;
   flex-direction: column;

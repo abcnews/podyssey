@@ -1,4 +1,5 @@
 const { h, Component } = require('preact');
+const FocusTrap = require('react-focus-trap');
 const Button = require('../Button');
 const Loader = require('../Loader');
 const styles = require('./styles.css');
@@ -10,6 +11,7 @@ class Modal extends Component {
     super(props);
 
     this.getContentElRef = this.getContentElRef.bind(this);
+    this.stopTouchMove = this.stopTouchMove.bind(this);
     this.updateMask = this.updateMask.bind(this);
 
     this.state = {
@@ -19,6 +21,10 @@ class Modal extends Component {
 
   getContentElRef(el) {
     this.contentEl = el;
+  }
+
+  stopTouchMove(event) {
+    event.preventDefault();
   }
 
   updateMask() {
@@ -55,7 +61,7 @@ class Modal extends Component {
 
   render({ children, close }, { maskIndex, mask }) {
     return (
-      <div className={styles.root}>
+      <div className={styles.root} onTouchMove={this.stopTouchMove}>
         {mask && (
           <svg className={styles.mask} viewbox={`0 0 ${mask.width} ${mask.height}`}>
             <defs>
@@ -81,11 +87,13 @@ class Modal extends Component {
             />
           </svg>
         )}
-        <div ref={this.getContentElRef} className={styles.content}>
-          {children}
-          <Loader className={styles.loader} inverted large overlay />
-          {close && <Button type="close" onClick={close} />}
-        </div>
+        <FocusTrap>
+          <div ref={this.getContentElRef} className={styles.content}>
+            {children}
+            <Loader className={styles.loader} inverted large overlay />
+            {close && <Button type="close" onClick={close} />}
+          </div>
+        </FocusTrap>
       </div>
     );
   }

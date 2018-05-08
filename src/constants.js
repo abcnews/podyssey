@@ -52,3 +52,5 @@ module.exports.MOCK_ELEMENT = Object.assign(
   },
   MOCK_NODE
 );
+
+module.exports.IS_STANDALONE = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
