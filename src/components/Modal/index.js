@@ -61,7 +61,7 @@ class Modal extends Component {
 
   render({ children, close }, { maskIndex, mask }) {
     return (
-      <div className={styles.root} onTouchMove={this.stopTouchMove}>
+      <FocusTrap className={styles.root} onTouchMove={this.stopTouchMove}>
         {mask && (
           <svg className={styles.mask} viewbox={`0 0 ${mask.width} ${mask.height}`}>
             <defs>
@@ -87,14 +87,12 @@ class Modal extends Component {
             />
           </svg>
         )}
-        <FocusTrap>
-          <div ref={this.getContentElRef} className={styles.content}>
-            {children}
-            <Loader className={styles.loader} inverted large overlay />
-            {close && <Button type="close" onClick={close} />}
-          </div>
-        </FocusTrap>
-      </div>
+        <div ref={this.getContentElRef} className={styles.content}>
+          {children}
+          <Loader className={styles.loader} inverted large overlay />
+          {close && <Button type="close" onClick={close} />}
+        </div>
+      </FocusTrap>
     );
   }
 }
