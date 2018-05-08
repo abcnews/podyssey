@@ -109,10 +109,6 @@
   opacity: 0;
 }
 
-.regions button:not([disabled]):hover:not([active]) {
-  opacity: 0.25;
-}
-
 .regions > :first-child {
   left: 0;
   width: 32%;
