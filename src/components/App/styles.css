@@ -67,11 +67,26 @@ html.hasOpen {
   min-height: 100%;
 }
 
-html.hasOpen > body {
-  height: 100%;
+@keyframes pan {
+  0%,
+  50%,
+  100% {
+    background-position: 50% 0;
+  }
+  25% {
+    background-position: 30% 0;
+  }
+  75% {
+    background-position: 70% 0;
+  }
+}
 
-  /* Reset Phase 1 (standard)'s 100px fixed width */
+html.hasOpen > body {
+  width: 100%;
+  height: 100%;
   min-width: auto;
+  min-height: auto;
+  animation: pan 60s linear;
 }
 
 html.hasOpen > body::before,
