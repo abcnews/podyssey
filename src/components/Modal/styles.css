@@ -19,12 +19,14 @@
   box-sizing: inherit;
 }
 
-.loader {
-  transition: 0.5s opacity;
-}
-
-.loader:not(:last-child) {
-  opacity: 0;
+.mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  animation: appear 0.5s;
 }
 
 @keyframes appear {
@@ -36,14 +38,10 @@
   }
 }
 
-.mask {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  animation: appear 0.5s;
+@media (min-width: 30rem) and (min-height: 30rem) {
+  .mask {
+    animation: appear 0.5s;
+  }
 }
 
 .content {
@@ -54,7 +52,7 @@
   box-shadow: var(--pod-black-shadow);
 }
 
-@media (min-width: 30rem) {
+@media (min-width: 30rem) and (min-height: 30rem) {
   .content {
     border-radius: 0.5rem;
     width: calc(100vmin - 2rem);
@@ -82,7 +80,8 @@
   }
 
   .content > * {
-    display: none;
+    opacity: 0;
+    pointer-events: none;
   }
 
   .content::after {
@@ -95,8 +94,16 @@
     color: #eee;
     font-size: 1.5rem;
     text-align: center;
-    animation: tilt 2s infinite;
+    animation: tilt 2s 2s infinite;
   }
+}
+
+.loader {
+  transition: 0.5s opacity;
+}
+
+.loader:not(:first-child) {
+  opacity: 0;
 }
 
 .root button[data-type='close'] {

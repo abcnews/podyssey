@@ -56,7 +56,6 @@ class Modal extends Component {
   render({ children, close }, { maskIndex, mask }) {
     return (
       <div className={styles.root}>
-        <Loader className={styles.loader} inverted large overlay />
         {mask && (
           <svg className={styles.mask} viewbox={`0 0 ${mask.width} ${mask.height}`}>
             <defs>
@@ -84,6 +83,7 @@ class Modal extends Component {
         )}
         <div ref={this.getContentElRef} className={styles.content}>
           {children}
+          <Loader className={styles.loader} inverted large overlay />
           {close && <Button type="close" onClick={close} />}
         </div>
       </div>
