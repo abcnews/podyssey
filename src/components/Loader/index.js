@@ -1,11 +1,18 @@
+const cn = require('classnames');
 const { h, Component } = require('preact');
 const styles = require('./styles.css');
 
 module.exports = ({ inverted, large, overlay, className, ...props }) => (
   <div
-    className={`${styles.root}${inverted ? ` ${styles.isInverted}` : ''}${large ? ` ${styles.isLarge}` : ''}${
-      overlay ? ` ${styles.isOverlay}` : ''
-    }${className ? ` ${className}` : ''}`}
+    className={cn(
+      styles.root,
+      {
+        [styles.isInverted]: inverted,
+        [styles.isLarge]: large,
+        [styles.isOverlay]: overlay
+      },
+      className
+    )}
     {...props}
   >
     {large && (

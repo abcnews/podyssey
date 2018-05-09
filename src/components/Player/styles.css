@@ -78,6 +78,22 @@
   margin: 0 0.5rem;
 }
 
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.buffering button[data-type='play'],
+.buffering button[data-type='pause'] {
+  animation: pulse 1s infinite;
+}
+
 .buttons > * > svg {
   /* See index.js for FLIP */
   transition: transform 1s 0.125s;

@@ -1,4 +1,5 @@
-const { h } = require('preact');
+const cn = require('classnames');
+const { h, Component } = require('preact');
 const { linebreaksToParagraphs } = require('../../cm');
 const { MOCK_NODE, append, clone, select, selectAll } = require('../../dom');
 const Raw = require('../Raw');
@@ -6,7 +7,7 @@ const styles = require('./styles.css');
 
 const Quote = ({ isPullquote = false, paragraphsHTML = [], attributionHTML = null }) => {
   return (
-    <blockquote className={`${styles.root}${isPullquote ? ` ${styles.isPullquote}` : ''}`}>
+    <blockquote className={cn(styles.root, { [styles.isPullquote]: isPullquote })}>
       {paragraphsHTML.concat(attributionHTML ? [attributionHTML] : []).map(html => html && <Raw html={html} />)}
     </blockquote>
   );

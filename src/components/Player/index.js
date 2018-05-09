@@ -1,4 +1,4 @@
-const { actions, events } = require('html5-audio-driver');
+const cn = require('classnames');
 const { h, Component } = require('preact');
 const { detach, select } = require('../../dom');
 const Button = require('../Button');
@@ -38,7 +38,7 @@ class Player extends Component {
   }
 
   pause() {
-    this.audioActions.pause();
+    this.audioEl.pause();
   }
 
   play() {
@@ -46,11 +46,11 @@ class Player extends Component {
       this.audioEl.currentTime = 0;
     }
 
-    this.audioActions.play();
+    this.audioEl.play();
   }
 
   hopTo(time) {
-    this.audioActions.setPlaytime(time);
+    this.audioEl.currentTime = time;
   }
 
   hopToDataTime(event) {
@@ -66,16 +66,18 @@ class Player extends Component {
   }
 
   componentDidMount() {
-    this.audioActions = actions(this.audioEl);
-    this.audioEvents = events(this.audioEl);
-    this.audioEvents.onDurationChange(() => this.setState({ duration: this.audioEl.duration }));
-    this.audioEvents.onEnd(() => this.setState({ isEnded: true }));
-    this.audioEvents.onPause(() => this.setState({ isPaused: true }));
-    this.audioEvents.onPlay(() => this.setState({ isPaused: false, isEnded: false }));
-    this.audioEvents.onPlaytimeUpdate(
+    this.audioEl.addEventListener('durationchange', () => this.setState({ duration: this.audioEl.duration }));
+    this.audioEl.addEventListener('waiting', () => console.log('xxxx'), this.setState({ isBuffering: true }));
+    this.audioEl.addEventListener('ended', () => this.setState({ isEnded: true }));
+    this.audioEl.addEventListener('pause', () => this.setState({ isPaused: true }));
+    this.audioEl.addEventListener('playing', () =>
+      this.setState({ isBuffering: false, isEnded: false, isPaused: false })
+    );
+    this.audioEl.addEventListener(
+      'timeupdate',
       () => this._isSeeking || this.setState({ currentTime: this.audioEl ? this.audioEl.currentTime : 0 })
     );
-    // this.audioActions.setPlaytime(this._lastStoredTime);
+    // this.hopTo(this._lastStoredTime);
 
     // FLIP playback icon
 
@@ -107,11 +109,11 @@ class Player extends Component {
   }
 
   componentWillUnmount() {
-    this.audioActions.pause();
+    this.audioEl.pause();
     detach(this.audioEl);
   }
 
-  render({ audioData, entries, sections, title }, { currentTime, duration, isEnded, isPaused }) {
+  render({ audioData, entries, sections, title }, { currentTime, duration, isBuffering, isEnded, isPaused }) {
     const titledSectionTimes = sections.filter(section => section.title).map(section => section.time);
     const activeTitledSectionTime = titledSectionTimes
       .slice()
@@ -126,8 +128,8 @@ class Player extends Component {
     const activeEntry = activeEntryTime === null ? null : entries[activeEntryTime];
 
     return (
-      <div className={styles.root}>
-        <audio ref={this.getAudioElRef}>
+      <div className={cn(styles.root, { [styles.buffering]: isBuffering })}>
+        <audio ref={this.getAudioElRef} preload>
           <source src={audioData.url} type={audioData.contentType} />}
         </audio>
         <main className={styles.main}>

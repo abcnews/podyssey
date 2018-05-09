@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@abcnews/url2cmid": "^1.0.1",
-    "html5-audio-driver": "^0.6.3",
+    "classnames": "^2.2.5",
     "preact": "^8.2.7",
     "preact-compat": "^3.18.0",
     "preact-markup": "^1.6.0",

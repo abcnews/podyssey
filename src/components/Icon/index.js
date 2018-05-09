@@ -1,3 +1,4 @@
+const cn = require('classnames');
 const { h, Component } = require('preact');
 const styles = require('./styles.css');
 
@@ -14,7 +15,13 @@ const TYPE_PATHS = {
 
 module.exports = ({ type, block, size }) => (
   <svg
-    className={`${styles.root}${block ? ` ${styles.block}` : ''}${size ? ` ${styles[size]}` : ''}`}
+    className={cn(
+      styles.root,
+      {
+        [styles.block]: block
+      },
+      styles[size]
+    )}
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 40 40"
     data-type={type}

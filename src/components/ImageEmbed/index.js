@@ -1,3 +1,4 @@
+const cn = require('classnames');
 const { h, Component } = require('preact');
 const Caption = require('../Caption');
 const Picture = require('../Picture');
@@ -18,7 +19,7 @@ class ImageEmbed extends Component {
 
   render({ picture, caption }, { isActive }) {
     return (
-      <figure className={`${styles.root}${isActive ? ` ${styles.isActive}` : ''}`} onClick={this.toggle}>
+      <figure className={cn(styles.root, { [styles.isActive]: isActive })} onClick={this.toggle}>
         <Picture key={picture.url} url={picture.url} alt={picture.alt} />
         <Caption text={caption.text || picture.alt} attribution={caption.attribution} />
       </figure>
