@@ -1,18 +1,14 @@
 const { h, Component } = require('preact');
 const { MS_VERSION } = require('../../constants');
-const styleUtils = require('../../utils.css');
 const Loader = require('../Loader');
 const styles = require('./styles.css');
 
-const DEFAULT_RATIO = '1x1';
-const RATIO_SIZES = {
-  '16x9': '2150x1210',
-  '3x2': '940x627',
-  '4x3': '940x705',
-  '1x1': '1400x1400',
-  '3x4': '940x1253'
+const SMALLEST_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAAAADs=';
+const IS_SIZE_SMALL_TEST = '(max-height: 940px)';
+const SIZE_WIDTHS = {
+  small: 940,
+  large: 1400
 };
-const RATIO_PATTERN = /(\d+x\d+)/;
 const P1_RATIO_SIZE_PATTERN = /(\d+x\d+)-(\d+x\d+)/;
 const P2_RATIO_SIZE_PATTERN = /(\d+x\d+)-([a-z]+)/;
 
@@ -29,11 +25,10 @@ function load(src, done) {
   loader.src = src;
 }
 
-function resize({ url, ratio }) {
+function resize({ url, size }) {
   return url
-    .replace(P2_RATIO_SIZE_PATTERN, '$1-large')
-    .replace(RATIO_PATTERN, ratio)
-    .replace(P1_RATIO_SIZE_PATTERN, `$1-${RATIO_SIZES[ratio]}`);
+    .replace(P2_RATIO_SIZE_PATTERN, '1x1-large')
+    .replace(P1_RATIO_SIZE_PATTERN, `1x1-${SIZE_WIDTHS[size]}x${SIZE_WIDTHS[size]}`);
 }
 
 class Picture extends Component {
@@ -42,13 +37,13 @@ class Picture extends Component {
 
     this.getImageRef = this.getImageRef.bind(this);
 
-    const ratio = this.props.ratio || DEFAULT_RATIO;
-    const src = resize({ url: this.props.url, ratio });
+    const size = window.matchMedia(IS_SIZE_SMALL_TEST).matches ? 'small' : 'large';
+    const src = resize({ url: this.props.url, size });
     const wasPreloaded = preloaded[src];
 
     this.state = {
-      aspectClassName: styleUtils[`aspect${ratio}`],
       src,
+      isLoaded: wasPreloaded,
       wasPreloaded
     };
   }
@@ -63,16 +58,16 @@ class Picture extends Component {
     }
 
     load(this.state.src, () => {
-      this.imageEl.src = this.state.src;
+      this.setState({ isLoaded: true });
+      // this.imageEl.src = this.state.src;
     });
   }
 
-  render({ alt = '' }, { aspectClassName, src, wasPreloaded }) {
+  render({ alt = '' }, { src, isLoaded }) {
     return (
       <div className={styles.root}>
-        <div className={aspectClassName} />
         <Loader inverted large overlay />
-        <img key={src} ref={this.getImageRef} src={wasPreloaded ? src : null} alt={alt} />
+        <img key={src} ref={this.getImageRef} src={src} alt={alt} loaded={isLoaded} />
       </div>
     );
   }

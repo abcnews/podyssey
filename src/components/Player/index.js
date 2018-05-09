@@ -67,7 +67,7 @@ class Player extends Component {
 
   componentDidMount() {
     this.audioEl.addEventListener('durationchange', () => this.setState({ duration: this.audioEl.duration }));
-    this.audioEl.addEventListener('waiting', () => console.log('xxxx'), this.setState({ isBuffering: true }));
+    this.audioEl.addEventListener('waiting', () => this.setState({ isBuffering: true }));
     this.audioEl.addEventListener('ended', () => this.setState({ isEnded: true }));
     this.audioEl.addEventListener('pause', () => this.setState({ isPaused: true }));
     this.audioEl.addEventListener('playing', () =>

@@ -5,13 +5,21 @@
 }
 
 .root img {
+  opacity: 0;
+  transform: translateX(-50%);
   position: absolute;
   top: 0;
-  left: 0;
+  left: 50%;
   padding: 0;
-  width: 100%;
+  width: auto;
   height: 100%;
+  max-width: none;
+  min-height: 100%;
   font-size: 0;
   vertical-align: top;
-  object-fit: cover;
+  transition: opacity 0.25s;
+}
+
+.root img[loaded] {
+  opacity: 1;
 }
