@@ -53,15 +53,17 @@ class Modal extends Component {
     this.updateMask();
 
     window.addEventListener('resize', this.updateMask);
+    document.addEventListener('touchmove', this.stopTouchMove);
   }
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.updateMask);
+    document.removeEventListener('touchmove', this.stopTouchMove);
   }
 
   render({ children, close }, { maskIndex, mask }) {
     return (
-      <FocusTrap className={styles.root} onTouchMove={this.stopTouchMove}>
+      <FocusTrap className={styles.root}>
         {mask && (
           <svg className={styles.mask} viewbox={`0 0 ${mask.width} ${mask.height}`}>
             <defs>

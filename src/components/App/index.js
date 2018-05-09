@@ -52,8 +52,23 @@ class App extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    document.documentElement.classList[this.state.isOpen ? 'add' : 'remove'](styles.hasOpen);
-    this.base.parentElement.classList[this.state.isDismissed ? 'add' : 'remove'](styles.hasDismissed);
+    const htmlClassList = document.documentElement.classList;
+
+    if (this.state.isOpen !== prevState.isOpen) {
+      if (this.state.isOpen) {
+        this.lastKnownScrollY = window.scrollY;
+        htmlClassList.add(styles.hasOpen, styles.hasOpening);
+        // After 1s fade-out time plus 125ms buffer for code execution...
+        setTimeout(() => htmlClassList.remove(styles.hasOpening), 1125);
+      } else {
+        htmlClassList.remove(styles.hasOpen, styles.hasOpening);
+        window.scrollTo(0, this.lastKnownScrollY);
+      }
+    }
+
+    if (this.state.hasDismissed !== prevState.hasDismissed) {
+      this.base.parentElement.classList.add(styles.hasDismissed);
+    }
   }
 
   render({ playerProps }, { hasOpenedAtLeastOnce, isDismissed, isOpen, transitionData }) {

@@ -4,6 +4,8 @@ const styles = require('./styles.css');
 const ENTER = 13;
 const LEFT = 37;
 const RIGHT = 39;
+const SKIP_BACK_SECONDS = 15;
+const SKIP_FORWARD_SECONDS = 30;
 
 class Timeline extends Component {
   constructor(props) {
@@ -17,7 +19,7 @@ class Timeline extends Component {
     this.scrubEnd = this.scrubEnd.bind(this);
 
     this.state = {
-      scrubTime: null
+      tempTime: null
     };
   }
 
@@ -34,6 +36,10 @@ class Timeline extends Component {
   }
 
   scrubStart(event) {
+    if (this.isIgnoringScrubbing) {
+      return;
+    }
+
     this.isScrubbing = true;
     this.startPointerFraction = this.getPointerFraction(event);
     this.scrub(event, !!event.touches);
@@ -49,7 +55,7 @@ class Timeline extends Component {
     }
 
     this.endPointerFraction = this.getPointerFraction(event);
-    this.setState({ scrubTime: this.getPointerTime(event) });
+    this.setState({ tempTime: this.getPointerTime(event) });
   }
 
   scrubEnd(event) {
@@ -57,9 +63,10 @@ class Timeline extends Component {
       return;
     }
 
+    const scrubDistance = Math.abs(this.startPointerFraction - this.endPointerFraction);
     let nearbySnapTime = null;
 
-    if (Math.abs(this.startPointerFraction - this.endPointerFraction) < 0.01) {
+    if (scrubDistance < 0.01) {
       nearbySnapTime = (this.props.snapTimes || []).reduce(
         (memo, snapTime) => {
           const snapFraction = snapTime / this.props.duration;
@@ -82,16 +89,26 @@ class Timeline extends Component {
     this.startPointerFraction = null;
     this.endPointerFraction = null;
 
-    if (this.props.update) {
-      this.props.update(nearbySnapTime === null ? this.state.scrubTime : nearbySnapTime + 0.01);
-    }
+    // Stop extra touch/mouse events in environments that fire both in succession
+    this.isIgnoringScrubbing = true;
+    setTimeout(() => (this.isIgnoringScrubbing = false), 200);
+
+    this.update(nearbySnapTime === null ? this.state.tempTime : nearbySnapTime + 0.01);
   }
 
   onHaloKeyDown(event) {
-    if (event.keyCode === LEFT && this.props.update) {
-      this.props.update(this.props.currentTime - 15);
-    } else if (event.keyCode === RIGHT && this.props.update) {
-      this.props.update(this.props.currentTime + 15);
+    if (event.keyCode === LEFT) {
+      this.update(this.props.currentTime - SKIP_BACK_SECONDS);
+    } else if (event.keyCode === RIGHT) {
+      this.update(this.props.currentTime + SKIP_FORWARD_SECONDS);
+    }
+  }
+
+  update(time) {
+    if (this.props.update) {
+      this.isApplyingUpdate = true;
+      this.setState({ tempTime: time });
+      this.props.update(time);
     }
   }
 
@@ -103,6 +120,12 @@ class Timeline extends Component {
     document.addEventListener('mouseup', this.scrubEnd);
     document.addEventListener('touchend', this.scrubEnd);
     document.addEventListener('touchcancel', this.scrubEnd);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.isApplyingUpdate && this.props.currentTime !== prevProps.currentTime) {
+      this.isApplyingUpdate = false;
+    }
   }
 
   componentWillUnmount() {
@@ -117,9 +140,9 @@ class Timeline extends Component {
 
   render() {
     const { currentTime, duration, snapTimes } = this.props;
-    const { scrubTime } = this.state;
+    const { tempTime } = this.state;
     const currentTimePct = `${currentTime / duration * 100}%`;
-    const progressPct = this.isScrubbing ? `${scrubTime / duration * 100}%` : currentTimePct;
+    const progressPct = this.isScrubbing || this.isApplyingUpdate ? `${tempTime / duration * 100}%` : currentTimePct;
 
     return (
       <div className={styles.root}>
