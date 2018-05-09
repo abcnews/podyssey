@@ -6,7 +6,7 @@
 
 .root img {
   opacity: 0;
-  transform: translateX(-50%);
+  transform: translate(-50%, 0);
   position: absolute;
   top: 0;
   left: 50%;

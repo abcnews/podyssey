@@ -58,8 +58,8 @@ class App extends Component {
       if (this.state.isOpen) {
         this.lastKnownScrollY = window.scrollY;
         htmlClassList.add(styles.hasOpen, styles.hasOpening);
-        // After 1s fade-out time plus 125ms buffer for code execution...
-        setTimeout(() => htmlClassList.remove(styles.hasOpening), 1125);
+        // After 750ms fade-out time plus 125ms buffer for code execution...
+        setTimeout(() => htmlClassList.remove(styles.hasOpening), 875);
       } else {
         htmlClassList.remove(styles.hasOpen, styles.hasOpening);
         window.scrollTo(0, this.lastKnownScrollY);

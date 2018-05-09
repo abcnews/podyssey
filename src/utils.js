@@ -91,7 +91,7 @@ module.exports.parsePlayerProps = html => {
   const sections = [];
   const entries = {};
   let time = null;
-  let audioData = null;
+  let audio = null;
 
   if (html.indexOf('inlineAudioData') > -1) {
     // Phase 1 (Standard)
@@ -102,14 +102,14 @@ module.exports.parsePlayerProps = html => {
         .replace(/'/g, '"')
     )[0];
 
-    audioData = { url, contentType };
+    audio = { url, contentType };
   } else if (html.indexOf('WCMS.pluginCache') > -1) {
     // Phase 2
     const { url, contentType } = JSON.parse(
       html.replace(NEWLINES_PATTERN, '').match(/"sources":(\[.*\]),"defaultTracking"/)[1]
     )[0];
 
-    audioData = { url, contentType };
+    audio = { url, contentType };
   }
 
   getSourceNodes(doc).forEach(node => {
@@ -174,7 +174,7 @@ module.exports.parsePlayerProps = html => {
 
   return {
     title: getMetaContent('title', doc),
-    audioData,
+    audio,
     sections,
     entries
   };

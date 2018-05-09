@@ -6,6 +6,8 @@ const styles = require('./styles.css');
 
 let nextMaskIndex = 0;
 
+const IS_MASK_FEATURE_ENABLED = false;
+
 class Modal extends Component {
   constructor(props) {
     super(props);
@@ -50,44 +52,53 @@ class Modal extends Component {
   }
 
   componentDidMount() {
-    this.updateMask();
+    document.body.addEventListener('touchmove', this.stopTouchMove, { passive: false });
 
-    window.addEventListener('resize', this.updateMask);
-    document.addEventListener('touchmove', this.stopTouchMove);
+    if (IS_MASK_FEATURE_ENABLED) {
+      this.updateMask();
+
+      window.addEventListener('resize', this.updateMask);
+    }
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.updateMask);
-    document.removeEventListener('touchmove', this.stopTouchMove);
+    document.body.removeEventListener('touchmove', this.stopTouchMove);
+
+    if (IS_MASK_FEATURE_ENABLED) {
+      window.removeEventListener('resize', this.updateMask);
+    }
   }
 
   render({ children, close }, { maskIndex, mask }) {
     return (
       <FocusTrap className={styles.root}>
-        {mask && (
-          <svg className={styles.mask} viewbox={`0 0 ${mask.width} ${mask.height}`}>
-            <defs>
-              <mask id={`${styles.mask}_mask${maskIndex}`} x="0" y="0" width={mask.width} height={mask.height}>
-                <rect x="0" y="0" width={mask.width} height={mask.height} fill="#fff" />
-                <rect
-                  x={mask.contentX}
-                  y={mask.contentY}
-                  width={mask.contentWidth}
-                  height={mask.contentHeight}
-                  rx={mask.contentRadius}
-                  ry={mask.contentRadius}
-                />
-              </mask>
-            </defs>
-            <rect
-              x="0"
-              y="0"
-              width={mask.width}
-              height={mask.height}
-              mask={`url(#${styles.mask}_mask${maskIndex})`}
-              fill="#1c1c1c"
-            />
-          </svg>
+        {IS_MASK_FEATURE_ENABLED ? (
+          mask && (
+            <svg className={styles.overlay} viewbox={`0 0 ${mask.width} ${mask.height}`}>
+              <defs>
+                <mask id={`${styles.overlay}_mask${maskIndex}`} x="0" y="0" width={mask.width} height={mask.height}>
+                  <rect x="0" y="0" width={mask.width} height={mask.height} fill="#fff" />
+                  <rect
+                    x={mask.contentX}
+                    y={mask.contentY}
+                    width={mask.contentWidth}
+                    height={mask.contentHeight}
+                    rx={mask.contentRadius}
+                    ry={mask.contentRadius}
+                  />
+                </mask>
+              </defs>
+              <rect
+                x="0"
+                y="0"
+                width={mask.width}
+                height={mask.height}
+                mask={`url(#${styles.overlay}_mask${maskIndex})`}
+              />
+            </svg>
+          )
+        ) : (
+          <div className={styles.overlay} />
         )}
         <div ref={this.getContentElRef} className={styles.content}>
           {children}

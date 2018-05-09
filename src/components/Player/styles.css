@@ -2,19 +2,24 @@
   height: 100%;
   background-color: transparent;
   color: white;
-  color: var(--pod-white, white);
+  color: var(--abc-white, white);
   font-family: ABCSans;
   font-weight: var(--pod-font-weight-normal);
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
   contain: strict;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .main {
   height: 100%;
+  animation: appear 1s 1s backwards;
 }
 
 @keyframes up {
@@ -33,7 +38,7 @@
   bottom: 0;
   left: 0;
   padding: 1rem 1rem 4rem;
-  animation: up 1s 0.125s backwards;
+  animation: up 1s 0.25s backwards;
 }
 
 .controls::before {
@@ -94,7 +99,7 @@
 
 .buttons > * > svg {
   /* See index.js for FLIP */
-  transition: transform 1s 0.125s;
+  transition: transform 1.25s 0.25s;
 }
 
 /* Safari removes padding from last flex child */

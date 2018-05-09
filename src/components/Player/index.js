@@ -10,7 +10,7 @@ const styles = require('./styles.css');
 const STORAGE_PREFIX = 'podyssey';
 const HOP_BACK_SECONDS = 15;
 const HOP_FORWARD_SECONDS = 30;
-const INERT_EL = { focus: () => {} };
+const NOOP = () => {};
 
 class Player extends Component {
   constructor(props) {
@@ -21,11 +21,11 @@ class Player extends Component {
     this.play = this.play.bind(this);
     this.hopTo = this.hopTo.bind(this);
     this.hopToDataTime = this.hopToDataTime.bind(this);
+    this.forgetTime = this.forgetTime.bind(this);
 
-    // this._lastStoredTime = +localStorage.getItem(`${STORAGE_PREFIX}__currentTime__${this.props.audioCMID}`);
+    this.storageKey = `${STORAGE_PREFIX}__currentTime__${this.props.cmid}`;
 
     this.state = {
-      // currentTime: this._lastStoredTime,
       currentTime: 0,
       duration: 0,
       isPaused: true,
@@ -46,7 +46,9 @@ class Player extends Component {
       this.audioEl.currentTime = 0;
     }
 
-    this.audioEl.play();
+    try {
+      this.audioEl.play().catch(NOOP);
+    } catch (e) {}
   }
 
   hopTo(time) {
@@ -57,12 +59,16 @@ class Player extends Component {
     this.hopTo(event.currentTarget.getAttribute('data-time'));
   }
 
-  componentDidUpdate() {
-    // Persist playback time if changed by 5 seconds
-    // if (Math.abs(this._lastStoredTime - this.state.currentTime) > 5) {
-    //   this._lastStoredTime = Math.round(this.state.currentTime);
-    //   localStorage.setItem(`${STORAGE_PREFIX}__currentTime__${this.props.audioCMID}`, this._lastStoredTime);
-    // }
+  loadTime() {
+    return +sessionStorage.getItem(this.storageKey);
+  }
+
+  saveTime() {
+    sessionStorage.setItem(this.storageKey, this.state.currentTime);
+  }
+
+  forgetTime() {
+    sessionStorage.removeItem(this.storageKey);
   }
 
   componentDidMount() {
@@ -77,7 +83,6 @@ class Player extends Component {
       'timeupdate',
       () => this._isSeeking || this.setState({ currentTime: this.audioEl ? this.audioEl.currentTime : 0 })
     );
-    // this.hopTo(this._lastStoredTime);
 
     // FLIP playback icon
 
@@ -104,16 +109,20 @@ class Player extends Component {
       });
     }
 
-    // Auto-play
+    window.addEventListener('unload', this.forgetTime);
+    this.hopTo(this.loadTime());
+    this.audioEl.load();
     this.play();
   }
 
   componentWillUnmount() {
     this.audioEl.pause();
     detach(this.audioEl);
+    window.removeEventListener('unload', this.forgetTime);
+    this.saveTime();
   }
 
-  render({ audioData, entries, sections, title }, { currentTime, duration, isBuffering, isEnded, isPaused }) {
+  render({ audio, entries, sections, title }, { currentTime, duration, isBuffering, isEnded, isPaused }) {
     const titledSectionTimes = sections.filter(section => section.title).map(section => section.time);
     const activeTitledSectionTime = titledSectionTimes
       .slice()
@@ -129,8 +138,8 @@ class Player extends Component {
 
     return (
       <div className={cn(styles.root, { [styles.buffering]: isBuffering })}>
-        <audio ref={this.getAudioElRef} preload>
-          <source src={audioData.url} type={audioData.contentType} />}
+        <audio ref={this.getAudioElRef} preload title={title}>
+          <source src={audio.url} type={audio.contentType} />}
         </audio>
         <main className={styles.main}>
           {activeEntry && (

@@ -33,7 +33,11 @@ xhr({ url: audioDocumentURL }, (error, response, body) => {
     console.error(error || new Error(response.statusCode));
   }
 
-  playerProps = parsePlayerProps(body);
+  playerProps = {
+    cmid: audioDocumentCMID,
+    ...parsePlayerProps(body)
+  };
+
   renderApp();
 });
 
