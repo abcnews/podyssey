@@ -118,7 +118,6 @@ class Player extends Component {
   componentWillUnmount() {
     this.audioEl.pause();
     detach(this.audioEl);
-    window.removeEventListener('unload', this.forgetTime);
     this.saveTime();
   }
 
