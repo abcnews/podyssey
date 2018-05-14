@@ -15,6 +15,7 @@
     "@abcnews/aunty": "^7.8.0"
   },
   "dependencies": {
+    "@abcnews/alternating-case-to-object": "^2.0.0",
     "@abcnews/url2cmid": "^1.0.1",
     "classnames": "^2.2.5",
     "preact": "^8.2.7",

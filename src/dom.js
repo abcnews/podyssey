@@ -1,3 +1,4 @@
+const alternatingCaseToObject = require('@abcnews/alternating-case-to-object');
 const smartquotes = require('./vendor/smartquotes');
 
 const INLINE_TAG_NAMES = [
@@ -178,3 +179,17 @@ module.exports.toggleBooleanAttributes = (node, map) =>
 module.exports.getMetaContent = (name, doc) =>
   (select(`meta[name="${name}"], meta[property="${name}"]`, doc || document) || MOCK_ELEMENT).getAttribute('content') ||
   null;
+
+const parseConfig = (module.exports.parseConfig = configString => alternatingCaseToObject(configString));
+
+module.exports.inferConfig = (name, el) => {
+  const configEl = el.previousElementSibling;
+
+  if (!configEl.matches(`a[name^="${name}"]`)) {
+    return null;
+  }
+
+  const configString = configEl.getAttribute('name');
+
+  return parseConfig(configString);
+};

@@ -13,6 +13,10 @@
   }
 }
 
+.root > :first-child {
+  width: 100%;
+}
+
 .root > :nth-child(2) {
   z-index: 2;
   position: absolute;
