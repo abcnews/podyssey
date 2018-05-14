@@ -1,4 +1,6 @@
+const cn = require('classnames');
 const { h, Component } = require('preact');
+const Time = require('../Time');
 const styles = require('./styles.css');
 
 const ENTER = 13;
@@ -175,7 +177,15 @@ class Timeline extends Component {
           </div>
           <div className={styles.currentTimeProgress} style={{ width: currentTimePct }} />
           <div className={styles.progress} style={{ width: progressPct }} />
-          <div className={styles.handle} style={{ left: progressPct }} />
+          <div className={styles.handle} style={{ left: progressPct }}>
+            <div className={cn(styles.handleTime, { [styles.isVisible]: this.isScrubbing })}>
+              <Time numSeconds={Math.round(tempTime)} />
+            </div>
+          </div>
+        </div>
+        <div className={styles.extents}>
+          <Time numSeconds={Math.round(currentTime)} />
+          <Time numSeconds={Math.round(duration)} />
         </div>
       </div>
     );

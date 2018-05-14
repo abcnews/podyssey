@@ -4,7 +4,6 @@ const ReactCSSTransitionReplace = require('react-css-transition-replace');
 const { detach, select } = require('../../dom');
 const Button = require('../Button');
 const Entry = require('../Entry');
-const Time = require('../Time');
 const Timeline = require('../Timeline');
 const styles = require('./styles.css');
 
@@ -225,10 +224,6 @@ class Player extends Component {
         </main>
         <nav ref={this.getControlsElRef} className={styles.controls}>
           <Timeline currentTime={currentTime} duration={duration} snapTimes={titledSectionTimes} update={this.hopTo} />
-          <div className={styles.times}>
-            <Time numSeconds={Math.round(currentTime)} />
-            <Time numSeconds={Math.round(duration)} />
-          </div>
           <div className={styles.buttons}>
             <HopButton type="prev" time={prevTitledSectionTime} onClick={this.hopToDataTime} />
             <Button type={isPaused ? 'play' : 'pause'} onClick={this[isPaused ? 'play' : 'pause']} />

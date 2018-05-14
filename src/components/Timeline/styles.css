@@ -1,7 +1,9 @@
 .root {
-  padding: 1rem 0;
+  position: relative;
+  padding: 1.5rem 0 1.75rem;
   color: white;
   color: var(--abc-white, white);
+  font-size: 0.75rem;
 }
 
 .track {
@@ -62,4 +64,33 @@
 .handle {
   width: 0.9375rem;
   height: 0.9375rem;
+}
+
+.handleTime {
+  opacity: 0;
+  transform: translate(-50%, 0);
+  position: absolute;
+  bottom: 1.25rem;
+  left: 50%;
+  pointer-events: none;
+  transition: opacity 0.25s 0.5s;
+}
+
+.isVisible {
+  opacity: 1;
+  transition: opacity 0.125s 0.125s;
+}
+
+.extents {
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+}
+
+.extents > :last-child {
+  text-align: right;
 }

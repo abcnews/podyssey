@@ -176,19 +176,6 @@
   max-width: 36rem;
 }
 
-.times {
-  display: flex;
-  justify-content: space-between;
-  margin-top: -0.25rem;
-  width: 100%;
-  font-size: 0.75rem;
-  pointer-events: none;
-}
-
-.times > :last-child {
-  text-align: right;
-}
-
 .buttons {
   display: flex;
   justify-content: center;
