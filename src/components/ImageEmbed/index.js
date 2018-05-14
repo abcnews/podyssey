@@ -8,18 +8,12 @@ class ImageEmbed extends Component {
   constructor(props) {
     super(props);
 
-    this.toggle = this.toggle.bind(this);
-
-    this.state = { isActive: false };
+    this.state = {};
   }
 
-  toggle() {
-    this.setState({ isActive: !this.state.isActive });
-  }
-
-  render({ image, caption }, { isActive }) {
+  render({ image, caption }, {}) {
     return (
-      <figure className={cn(styles.root, { [styles.isActive]: isActive })} onClick={this.toggle}>
+      <figure className={cn(styles.root)}>
         <Image key={image.url} url={image.url} alt={image.alt} />
         <Caption text={caption.text || image.alt} attribution={caption.attribution} />
       </figure>
