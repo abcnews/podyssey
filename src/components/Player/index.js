@@ -1,5 +1,6 @@
 const cn = require('classnames');
 const { h, Component } = require('preact');
+const ReactCSSTransitionReplace = require('react-css-transition-replace');
 const { detach, select } = require('../../dom');
 const Button = require('../Button');
 const Entry = require('../Entry');
@@ -11,6 +12,33 @@ const STORAGE_PREFIX = 'podyssey';
 const HOP_BACK_SECONDS = 15;
 const HOP_FORWARD_SECONDS = 30;
 const NOOP = () => {};
+
+const TRANSITIONS = {
+  SECTION_TITLE: {
+    enter: styles.sectionTitleEnter,
+    enterActive: styles.sectionTitleEnterActive,
+    leave: styles.sectionTitleLeave,
+    leaveActive: styles.sectionTitleLeaveActive
+  },
+  ENTRY: {
+    enter: styles.entryContainerEnter,
+    enterActive: styles.entryContainerEnterActive,
+    leave: styles.entryContainerLeave,
+    leaveActive: styles.entryContainerLeaveActive
+  },
+  ENTRY_SECTION_FORWARDS: {
+    enter: styles.entryContainerEnterSection,
+    enterActive: styles.entryContainerEnterActiveSection,
+    leave: styles.entryContainerLeaveSection,
+    leaveActive: styles.entryContainerLeaveActiveSection
+  },
+  ENTRY_SECTION_BACKWARDS: {
+    enter: styles.entryContainerEnterSectionBackwards,
+    enterActive: styles.entryContainerEnterActiveSection,
+    leave: styles.entryContainerLeaveSection,
+    leaveActive: styles.entryContainerLeaveActiveSectionBackwards
+  }
+};
 
 class Player extends Component {
   constructor(props) {
@@ -24,6 +52,11 @@ class Player extends Component {
     this.forgetTime = this.forgetTime.bind(this);
 
     this.storageKey = `${STORAGE_PREFIX}__currentTime__${this.props.cmid}`;
+
+    this._prevCurrentTime = -1;
+    // this._prevActiveEntryTime = -1;
+    this._prevActiveSectionIndex = -1;
+    // this._lastActiveEntryTransitionDate = Date.now();
 
     this.state = {
       currentTime: 0,
@@ -79,9 +112,10 @@ class Player extends Component {
     this.audioEl.addEventListener('playing', () =>
       this.setState({ isBuffering: false, isEnded: false, isPaused: false })
     );
-    this.audioEl.addEventListener(
-      'timeupdate',
-      () => this._isSeeking || this.setState({ currentTime: this.audioEl ? this.audioEl.currentTime : 0 })
+    this.audioEl.addEventListener('timeupdate', () =>
+      this.setState({
+        currentTime: this.audioEl ? this.audioEl.currentTime : 0
+      })
     );
 
     // FLIP playback icon
@@ -121,7 +155,7 @@ class Player extends Component {
     this.saveTime();
   }
 
-  render({ audio, entries, sections, title }, { currentTime, duration, isBuffering, isEnded, isPaused }) {
+  render({ audio, entries, sections, title }, { currentTime, duration, isBuffering, isEnded, isPaused, wasBackwards }) {
     const titledSectionTimes = sections.filter(section => section.title).map(section => section.time);
     const activeTitledSectionTime = titledSectionTimes
       .slice()
@@ -134,7 +168,22 @@ class Player extends Component {
     const entryTimes = Object.keys(entries);
     const activeEntryTime = entryTimes.reverse().find(time => time < currentTime);
     const activeEntry = activeEntryTime === null ? null : entries[activeEntryTime];
-    const activeSection = activeEntry ? sections[activeEntry.sectionIndex] : null;
+    const activeSectionIndex = activeEntry ? activeEntry.sectionIndex : -1;
+    const activeSection = activeEntry ? sections[activeSectionIndex] : null;
+
+    const hasTimeAdvanced = currentTime > this._prevCurrentTime;
+    // const hasActiveEntryChanged = activeEntryTime !== this._prevActiveEntryTime;
+    const hasSectionChanged = activeSectionIndex !== this._prevActiveSectionIndex;
+    // const now = Date.now();
+    // const shouldTransition = now - this._lastActiveEntryTransitionDate < 1000;
+
+    this._prevCurrentTime = currentTime;
+    // this._prevActiveEntryTime = activeEntryTime;
+    this._prevActiveSectionIndex = activeSectionIndex;
+
+    // if (hasActiveEntryChanged) {
+    // this._lastActiveEntryTransitionDate = now;
+    // }
 
     return (
       <div className={cn(styles.root, { [styles.buffering]: isBuffering })}>
@@ -142,14 +191,32 @@ class Player extends Component {
           <source src={audio.url} type={audio.contentType} />}
         </audio>
         <header className={styles.section}>
-          {activeSection && (
-            <h2 key={activeSection} className={styles.sectionTitle}>
-              {activeSection.title}
+          <ReactCSSTransitionReplace
+            transitionName={TRANSITIONS.SECTION_TITLE}
+            transitionEnterTimeout={1000}
+            transitionLeaveTimeout={1000}
+          >
+            <h2 key={activeSectionIndex} className={styles.sectionTitle}>
+              {activeSection ? activeSection.title : ' '}
             </h2>
-          )}
+          </ReactCSSTransitionReplace>
         </header>
         <main className={styles.main}>
-          {activeEntry && <Entry key={activeEntry} media={activeEntry.media} notes={activeEntry.notes} />}
+          <ReactCSSTransitionReplace
+            transitionName={
+              hasSectionChanged
+                ? hasTimeAdvanced
+                  ? TRANSITIONS.ENTRY_SECTION_FORWARDS
+                  : TRANSITIONS.ENTRY_SECTION_BACKWARDS
+                : TRANSITIONS.ENTRY
+            }
+            transitionEnterTimeout={1000}
+            transitionLeaveTimeout={1000}
+          >
+            <div key={activeEntryTime} className={styles.entryContainer}>
+              {activeEntry ? <Entry media={activeEntry.media} notes={activeEntry.notes} /> : null}
+            </div>
+          </ReactCSSTransitionReplace>
         </main>
         <nav ref={this.getControlsElRef} className={styles.controls}>
           <Timeline currentTime={currentTime} duration={duration} snapTimes={titledSectionTimes} update={this.hopTo} />

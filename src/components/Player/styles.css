@@ -23,22 +23,94 @@
   top: 0;
   left: 0;
   width: 100%;
-  padding: 1rem 2.75rem 1rem 1rem;
 }
 
 .sectionTitle {
+  margin: 0;
+  padding: 1rem 2.75rem 1rem 1rem;
+  min-height: 6rem;
+  color: inherit;
   font-size: 1.5rem;
   font-weight: var(--pod-font-weight-normal);
   line-height: 1.25;
+  text-transform: none;
 }
 
-/* html[standalone] .sectionTitle {
-  padding-top: 20px;
-} */
+.sectionTitleLeave {
+  opacity: 1;
+  transform: none;
+}
+
+.sectionTitleLeaveActive {
+  opacity: 0;
+  transform: translate(0, -6rem);
+  transition: opacity 0.5s, transform 1s;
+}
+
+.sectionTitleEnter {
+  opacity: 0;
+  transform: translate(0, -6rem);
+}
+
+.sectionTitleEnterActive {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.5s 0.5s, transform 1s;
+}
 
 .main {
   height: 100%;
   animation: appear 1s 1s backwards;
+}
+
+.main > *,
+.entryContainer {
+  height: 100%;
+}
+
+.entryContainerLeave {
+  transform: none;
+}
+
+.entryContainerLeaveSection {
+  opacity: 1;
+}
+
+.entryContainerLeaveActive {
+  opacity: 0;
+  transition: opacity 1s;
+}
+
+.entryContainerLeaveActiveSection {
+  transform: translate(-100%, 0);
+  transition: transform 1s;
+}
+
+.entryContainerLeaveActiveSectionBackwards {
+  transform: translate(100%, 0);
+  transition: transform 1s;
+}
+
+.entryContainerEnter {
+  opacity: 0;
+}
+
+.entryContainerEnterSection {
+  transform: translate(100%, 0);
+}
+
+.entryContainerEnterSectionBackwards {
+  transform: translate(-100%, 0);
+}
+
+.entryContainerEnterActive {
+  opacity: 1;
+  transition: opacity 1s;
+}
+
+.entryContainerEnterActiveSection {
+  transform: none;
+  transition: transform 1s;
 }
 
 @keyframes up {

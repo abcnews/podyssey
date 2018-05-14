@@ -26,6 +26,7 @@
   overflow: hidden;
   flex-grow: 1;
   margin: 4rem auto 8rem;
+  width: 100%;
   max-width: 36rem;
 }
 
