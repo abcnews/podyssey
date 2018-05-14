@@ -5,12 +5,12 @@ const styles = require('./styles.css');
 
 const SMALLEST_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAAAADs=';
 const IS_SIZE_SMALL_TEST = '(max-height: 940px)';
-const SIZE_WIDTHS = {
-  small: 940,
-  large: 1400
+const SIZE_DIMENSIONS = {
+  small: '940x529',
+  large: '2150x1210'
 };
-const P1_RATIO_SIZE_PATTERN = /(\d+x\d+)-(\d+x\d+)/;
-const P2_RATIO_SIZE_PATTERN = /(\d+x\d+)-([a-z]+)/;
+const P1_RATIO_AND_DIMENSIONS_PATTERN = /(\d+x\d+)-(\d+x\d+)/;
+const P2_RATIO_AND_DIMENSIONS_PATTERN = /(\d+x\d+)-([a-z]+)/;
 
 const preloaded = {};
 
@@ -27,8 +27,8 @@ function load(src, done) {
 
 function resize({ url, size }) {
   return url
-    .replace(P2_RATIO_SIZE_PATTERN, '1x1-large')
-    .replace(P1_RATIO_SIZE_PATTERN, `1x1-${SIZE_WIDTHS[size]}x${SIZE_WIDTHS[size]}`);
+    .replace(P2_RATIO_AND_DIMENSIONS_PATTERN, '16x9-large')
+    .replace(P1_RATIO_AND_DIMENSIONS_PATTERN, `16x9-${SIZE_DIMENSIONS[size]}`);
 }
 
 class Picture extends Component {
