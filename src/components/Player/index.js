@@ -134,21 +134,22 @@ class Player extends Component {
     const entryTimes = Object.keys(entries);
     const activeEntryTime = entryTimes.reverse().find(time => time < currentTime);
     const activeEntry = activeEntryTime === null ? null : entries[activeEntryTime];
+    const activeSection = activeEntry ? sections[activeEntry.sectionIndex] : null;
 
     return (
       <div className={cn(styles.root, { [styles.buffering]: isBuffering })}>
         <audio ref={this.getAudioElRef} preload title={title}>
           <source src={audio.url} type={audio.contentType} />}
         </audio>
-        <main className={styles.main}>
-          {activeEntry && (
-            <Entry
-              key={activeEntry}
-              media={activeEntry.media}
-              notes={activeEntry.notes}
-              section={sections[activeEntry.sectionIndex]}
-            />
+        <header className={styles.section}>
+          {activeSection && (
+            <h2 key={activeSection} className={styles.sectionTitle}>
+              {activeSection.title}
+            </h2>
           )}
+        </header>
+        <main className={styles.main}>
+          {activeEntry && <Entry key={activeEntry} media={activeEntry.media} notes={activeEntry.notes} />}
         </main>
         <nav ref={this.getControlsElRef} className={styles.controls}>
           <Timeline currentTime={currentTime} duration={duration} snapTimes={titledSectionTimes} update={this.hopTo} />

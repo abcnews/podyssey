@@ -19,25 +19,14 @@
   padding: 1rem;
 }
 
-.sectionTitle {
-  padding-right: 2.75rem;
-  min-height: 2rem;
-  font-size: 1.5rem;
-  font-weight: var(--pod-font-weight-normal);
-  line-height: 1.25;
-}
-
-/* html[standalone] .sectionTitle {
-  padding-top: 20px;
-} */
-
 .notes {
   display: flex;
   flex-direction: column;
   justify-content: center;
   overflow: hidden;
   flex-grow: 1;
-  margin-bottom: 8rem;
+  margin: 4rem auto 8rem;
+  max-width: 36rem;
 }
 
 .note {

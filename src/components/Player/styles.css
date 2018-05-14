@@ -17,6 +17,25 @@
   }
 }
 
+.section {
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 1rem 2.75rem 1rem 1rem;
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: var(--pod-font-weight-normal);
+  line-height: 1.25;
+}
+
+/* html[standalone] .sectionTitle {
+  padding-top: 20px;
+} */
+
 .main {
   height: 100%;
   animation: appear 1s 1s backwards;
