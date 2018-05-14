@@ -15,7 +15,7 @@ const P2_RATIO_AND_DIMENSIONS_PATTERN = /(\d+x\d+)-([a-z]+)/;
 const preloaded = {};
 
 function load(src, done) {
-  const loader = new Image();
+  const loader = new window.Image();
 
   loader.onload = () => {
     preloaded[src] = true;
@@ -31,14 +31,12 @@ function resize({ url, size }) {
     .replace(P1_RATIO_AND_DIMENSIONS_PATTERN, `16x9-${SIZE_DIMENSIONS[size]}`);
 }
 
-class Picture extends Component {
+class Image extends Component {
   constructor(props) {
     super(props);
 
-    this.getImageRef = this.getImageRef.bind(this);
-
     const size = window.matchMedia(IS_SIZE_SMALL_TEST).matches ? 'small' : 'large';
-    const src = resize({ url: this.props.url, size });
+    const src = resize({ url: props.url, size });
     const wasPreloaded = preloaded[src];
 
     this.state = {
@@ -48,10 +46,6 @@ class Picture extends Component {
     };
   }
 
-  getImageRef(el) {
-    this.imageEl = el;
-  }
-
   componentDidMount() {
     if (this.state.wasPreloaded) {
       return;
@@ -59,7 +53,6 @@ class Picture extends Component {
 
     load(this.state.src, () => {
       this.setState({ isLoaded: true });
-      // this.imageEl.src = this.state.src;
     });
   }
 
@@ -67,13 +60,13 @@ class Picture extends Component {
     return (
       <div className={styles.root}>
         <Loader inverted large overlay />
-        <img key={src} ref={this.getImageRef} src={src} alt={alt} loaded={isLoaded} />
+        <img key={src} src={src} alt={alt} loaded={isLoaded} />
       </div>
     );
   }
 }
 
-module.exports = Picture;
+module.exports = Image;
 
 module.exports.inferProps = el => {
   el = el.matches('img') ? el : el.querySelector('img');

@@ -1,7 +1,7 @@
 const cn = require('classnames');
 const { h, Component } = require('preact');
 const Caption = require('../Caption');
-const Picture = require('../Picture');
+const Image = require('../Image');
 const styles = require('./styles.css');
 
 class ImageEmbed extends Component {
@@ -17,11 +17,11 @@ class ImageEmbed extends Component {
     this.setState({ isActive: !this.state.isActive });
   }
 
-  render({ picture, caption }, { isActive }) {
+  render({ image, caption }, { isActive }) {
     return (
       <figure className={cn(styles.root, { [styles.isActive]: isActive })} onClick={this.toggle}>
-        <Picture key={picture.url} url={picture.url} alt={picture.alt} />
-        <Caption text={caption.text || picture.alt} attribution={caption.attribution} />
+        <Image key={image.url} url={image.url} alt={image.alt} />
+        <Caption text={caption.text || image.alt} attribution={caption.attribution} />
       </figure>
     );
   }
@@ -30,6 +30,6 @@ class ImageEmbed extends Component {
 module.exports = ImageEmbed;
 
 module.exports.inferProps = el => ({
-  picture: Picture.inferProps(el),
+  image: Image.inferProps(el),
   caption: Caption.inferProps(el)
 });
