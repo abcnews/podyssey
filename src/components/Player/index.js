@@ -196,7 +196,12 @@ class Player extends Component {
             transitionEnterTimeout={1000}
             transitionLeaveTimeout={1000}
           >
-            <h2 key={activeSectionIndex} className={styles.sectionTitle}>
+            <h2
+              key={activeSectionIndex}
+              className={cn(styles.sectionTitle, {
+                [styles.isLong]: activeSection && (activeSection.title || '').length > 20
+              })}
+            >
               {activeSection ? activeSection.title : ' '}
             </h2>
           </ReactCSSTransitionReplace>

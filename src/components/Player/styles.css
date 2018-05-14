@@ -34,8 +34,8 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 7rem;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 100%);
+  height: 4.5rem;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 1) 30%, rgba(0, 0, 0, 0) 100%);
 }
 
 .sectionTitle {
@@ -47,6 +47,10 @@
   font-weight: var(--pod-font-weight-normal);
   line-height: 1.25;
   text-transform: none;
+}
+
+.isLong {
+  font-size: 1.125rem;
 }
 
 .sectionTitleLeave {
