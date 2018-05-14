@@ -14,6 +14,7 @@ class Timeline extends Component {
     this.getPointerFraction = this.getPointerFraction.bind(this);
     this.getPointerTime = this.getPointerTime.bind(this);
     this.onHaloKeyDown = this.onHaloKeyDown.bind(this);
+    this.onHaloKeyUp = this.onHaloKeyUp.bind(this);
     this.scrubStart = this.scrubStart.bind(this);
     this.scrub = this.scrub.bind(this);
     this.scrubEnd = this.scrubEnd.bind(this);
@@ -97,11 +98,28 @@ class Timeline extends Component {
   }
 
   onHaloKeyDown(event) {
-    if (event.keyCode === LEFT) {
-      this.update(this.props.currentTime - SKIP_BACK_SECONDS);
-    } else if (event.keyCode === RIGHT) {
-      this.update(this.props.currentTime + SKIP_FORWARD_SECONDS);
+    if (event.keyCode !== LEFT && event.keyCode !== RIGHT) {
+      return;
     }
+
+    this.isScrubbing = true;
+
+    const tempTime = typeof this.state.tempTime === 'number' ? this.state.tempTime : this.props.currentTime;
+
+    if (event.keyCode === LEFT) {
+      this.setState({ tempTime: tempTime - SKIP_BACK_SECONDS });
+    } else if (event.keyCode === RIGHT) {
+      this.setState({ tempTime: tempTime + SKIP_FORWARD_SECONDS });
+    }
+  }
+
+  onHaloKeyUp(event) {
+    if (event.keyCode !== LEFT && event.keyCode !== RIGHT) {
+      return;
+    }
+
+    this.isScrubbing = false;
+    this.update(this.state.tempTime);
   }
 
   update(time) {
@@ -147,7 +165,7 @@ class Timeline extends Component {
     return (
       <div className={styles.root}>
         <div className={styles.track}>
-          <div className={styles.halo} tabindex="0" onKeyDown={this.onHaloKeyDown} />
+          <div className={styles.halo} tabindex="0" onKeyDown={this.onHaloKeyDown} onKeyUp={this.onHaloKeyUp} />
           <div className={styles.snapTimes}>
             {snapTimes.map(snapTime => {
               const snapTimePct = Math.max(0, Math.min(snapTime / duration, 1)) * 100;
