@@ -27,3 +27,7 @@
   letter-spacing: 0.0625rem;
   animation: appear 0.5s 1s backwards;
 }
+
+:not(:last-child) > * > * > * > .root > :nth-child(2) {
+  display: none;
+}
