@@ -3,7 +3,7 @@ const styles = require('./styles.css');
 
 const pad = digit => `${digit < 10 ? '0' : ''}${digit}`;
 
-module.exports = ({ numSeconds = 0 }) => {
+module.exports = ({ numSeconds = 0, ...props }) => {
   const prefix = numSeconds < 0 ? '-' : '';
   const abs = Math.abs(numSeconds);
   const hours = Math.floor(abs / 3600);
@@ -12,7 +12,11 @@ module.exports = ({ numSeconds = 0 }) => {
   const formatted =
     hours > 0 ? `${prefix}${hours}:${pad(minutes)}:${pad(seconds)}` : `${prefix}${minutes}:${pad(seconds)}`;
 
-  return <span className={styles.root}>{formatted}</span>;
+  return (
+    <span className={styles.root} {...props}>
+      {formatted}
+    </span>
+  );
 };
 
 module.exports.displayName = 'Time';
