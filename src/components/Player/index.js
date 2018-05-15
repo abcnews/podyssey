@@ -194,7 +194,7 @@ class Player extends Component {
 
     return (
       <div className={cn(styles.root, { [styles.buffering]: isBuffering })}>
-        <audio ref={this.getAudioElRef} preload title={title}>
+        <audio ref={this.getAudioElRef} title={title} preload="auto">
           <source src={audio.url} type={audio.contentType} />}
         </audio>
         <header className={styles.section}>
