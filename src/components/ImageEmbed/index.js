@@ -62,7 +62,7 @@ const transformX = (pct, ratio) => {
   const pctX = typeof pct === 'number' ? 50 - Math.min(100, Math.max(0, pct)) : 0;
   const absPctX = Math.abs(pctX);
 
-  return Math.min(absPctX, (1 - ratio) * 50) * (pctX / absPctX);
+  return Math.min(absPctX, (1 - ratio) / ratio * 50) * (pctX / absPctX);
 };
 
 const animationCSS = (id, { from = 0, to = 100, duration = 0, delay = 0, infinite = false }, ratio = 1) => {
