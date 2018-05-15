@@ -65,7 +65,7 @@ const transformX = (pct, ratio) => {
   return Math.min(absPctX, (1 - ratio) / ratio * 50) * (pctX / absPctX);
 };
 
-const animationCSS = (id, { from = 0, to = 100, duration = 0, delay = 0, infinite = false }, ratio = 1) => {
+const animationCSS = (id, { from = 0, to = 100, duration = 10, delay = 0, infinite = false }, ratio = 1) => {
   const name = `${id}_ratio${String(ratio * 100).split('.')[0]}`;
 
   return `
