@@ -4,11 +4,8 @@ const Loader = require('../Loader');
 const styles = require('./styles.css');
 
 const SMALLEST_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAAAADs=';
-const IS_SIZE_SMALL_TEST = '(max-height: 940px)';
-const SIZE_DIMENSIONS = {
-  small: '940x529',
-  large: '2150x1210'
-};
+const DIMENSIONS =
+  window.ABC && ABC.News && ABC.News.bandwidth && ABC.News.bandwidth.isSlowConnection ? '940x529' : '2150x1210';
 const P1_RATIO_AND_DIMENSIONS_PATTERN = /(\d+x\d+)-(\d+x\d+)/;
 const P2_RATIO_AND_DIMENSIONS_PATTERN = /(\d+x\d+)-([a-z]+)/;
 
@@ -25,18 +22,17 @@ function load(src, done) {
   loader.src = src;
 }
 
-function resize({ url, size }) {
+function resize(url) {
   return url
     .replace(P2_RATIO_AND_DIMENSIONS_PATTERN, '16x9-large')
-    .replace(P1_RATIO_AND_DIMENSIONS_PATTERN, `16x9-${SIZE_DIMENSIONS[size]}`);
+    .replace(P1_RATIO_AND_DIMENSIONS_PATTERN, `16x9-${DIMENSIONS}`);
 }
 
 class Image extends Component {
   constructor(props) {
     super(props);
 
-    const size = window.matchMedia(IS_SIZE_SMALL_TEST).matches ? 'small' : 'large';
-    const src = resize({ url: props.url, size });
+    const src = resize(props.url);
     const wasPreloaded = preloaded[src];
 
     this.state = {
