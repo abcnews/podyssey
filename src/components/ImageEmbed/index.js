@@ -40,7 +40,7 @@ class ImageEmbed extends Component {
   render({ image, caption, animation }, { ratio }) {
     return (
       <figure className={cn(styles.root)}>
-        <Image key={image.url} id={this.imageId} url={image.url} alt={image.alt} />
+        <Image key={image.src} id={this.imageId} src={image.src} alt={image.alt} />
         <Caption text={`Photo: ${caption.attribution}`} />
         {animation && ratio && <style>{animationCSS(this.imageId, animation, ratio)}</style>}
       </figure>

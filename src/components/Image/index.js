@@ -15,8 +15,8 @@ function load(src, done) {
   const loader = new window.Image();
 
   loader.onload = () => {
-    preloaded[src] = true;
-    done();
+    preloaded[src] = loader;
+    done && done();
   };
 
   loader.src = src;
@@ -32,27 +32,22 @@ class Image extends Component {
   constructor(props) {
     super(props);
 
-    const src = resize(props.url);
-    const wasPreloaded = preloaded[src];
-
     this.state = {
-      src,
-      isLoaded: wasPreloaded,
-      wasPreloaded
+      isLoaded: preloaded[props.src]
     };
   }
 
   componentDidMount() {
-    if (this.state.wasPreloaded) {
+    if (this.state.isLoaded) {
       return;
     }
 
-    load(this.state.src, () => {
+    load(this.props.src, () => {
       this.setState({ isLoaded: true });
     });
   }
 
-  render({ id, alt = '' }, { src, isLoaded }) {
+  render({ id, src, alt = '' }, { isLoaded }) {
     return (
       <div id={id} className={styles.root}>
         <Loader inverted large overlay />
@@ -67,8 +62,12 @@ module.exports = Image;
 module.exports.inferProps = el => {
   el = el.matches('img') ? el : el.querySelector('img');
 
+  const src = resize(el.src);
+
+  load(src);
+
   return {
-    url: el.src,
+    src,
     alt: el.alt
   };
 };
