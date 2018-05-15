@@ -49,8 +49,10 @@
   text-transform: none;
 }
 
-.isLong {
-  font-size: 1.125rem;
+@media (max-width: 30rem) {
+  .isLong {
+    font-size: 1rem;
+  }
 }
 
 .sectionTitleLeave {
@@ -73,6 +75,18 @@
   opacity: 1;
   transform: none;
   transition: opacity 0.5s 0.5s, transform 1s;
+}
+
+.section > * > :first-child:not(:nth-last-child(2)):not(:last-child) > *,
+.section > * > :first-child:not(:nth-last-child(2)):not(:last-child) ~ * > * {
+  opacity: 0 !important;
+  transform: translate(0, -6rem) !important;
+  transition: none !important;
+}
+
+.section > * > :first-child:not(:nth-last-child(2)):not(:last-child) ~ :last-child > * {
+  opacity: 1 !important;
+  transform: none !important;
 }
 
 @keyframes appear {
@@ -137,6 +151,13 @@
 .entryContainerEnterActiveSection {
   transform: none;
   transition: transform 1s;
+}
+
+.main > * > :first-child:not(:nth-last-child(2)):not(:last-child) > *,
+.main > * > :first-child:not(:nth-last-child(2)):not(:last-child) ~ * > * {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
 }
 
 @keyframes up {

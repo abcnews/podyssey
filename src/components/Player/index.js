@@ -1,6 +1,7 @@
 const cn = require('classnames');
 const { h, Component } = require('preact');
 const ReactCSSTransitionReplace = require('react-css-transition-replace');
+const widont = require('widont');
 const { detach, select } = require('../../dom');
 const Button = require('../Button');
 const Entry = require('../Entry');
@@ -201,7 +202,7 @@ class Player extends Component {
                 [styles.isLong]: activeSection && (activeSection.title || '').length > 20
               })}
             >
-              {activeSection ? activeSection.title : ' '}
+              {activeSection ? widont(activeSection.title) : ' '}
             </h2>
           </ReactCSSTransitionReplace>
         </header>
