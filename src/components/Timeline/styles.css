@@ -6,6 +6,10 @@
   font-size: 0.75rem;
 }
 
+.root:focus-within {
+  cursor: pointer;
+}
+
 .track {
   position: relative;
   height: 0.1875rem;
@@ -40,6 +44,7 @@
 .snapTime,
 .handle {
   border-radius: 50%;
+  cursor: pointer;
 }
 
 .snapTime {
@@ -55,6 +60,7 @@
   width: 0;
   height: 100%;
   background-color: currentColor;
+  pointer-events: none;
 }
 
 .currentTimeProgress {

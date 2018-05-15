@@ -70,11 +70,13 @@ class Timeline extends Component {
     let nearbySnapTime = null;
 
     if (scrubDistance < 0.01) {
+      const snapRange = event.type.indexOf('touch') < 0 ? 0.01 : 0.04;
+
       nearbySnapTime = (this.props.snapTimes || []).reduce(
         (memo, snapTime) => {
           const snapFraction = snapTime / this.props.duration;
           const snapDistance = Math.abs(snapFraction - this.endPointerFraction);
-          const isNearby = snapDistance < 0.02;
+          const isNearby = snapDistance < snapRange;
           const isClosestSoFar = memo.distance === null || snapDistance < memo.distance;
 
           return isNearby && isClosestSoFar
