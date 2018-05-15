@@ -72,12 +72,14 @@
   height: 0.9375rem;
 }
 
-.handleTime {
+.scrubTime {
   opacity: 0;
-  transform: translate(-50%, 0);
+  display: flex;
+  justify-content: center;
   position: absolute;
-  bottom: 1.25rem;
-  left: 50%;
+  top: -0.25rem;
+  left: 0;
+  width: 100%;
   pointer-events: none;
   transition: opacity 0.25s 0.5s;
 }
@@ -85,6 +87,10 @@
 .isVisible {
   opacity: 1;
   transition: opacity 0.125s 0.125s;
+}
+
+.scrubTime > * {
+  display: block;
 }
 
 .extents {

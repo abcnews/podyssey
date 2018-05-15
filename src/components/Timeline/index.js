@@ -111,9 +111,9 @@ class Timeline extends Component {
     const tempTime = typeof this.state.tempTime === 'number' ? this.state.tempTime : this.props.currentTime;
 
     if (event.keyCode === LEFT) {
-      this.setState({ tempTime: tempTime - SKIP_BACK_SECONDS });
+      this.setState({ tempTime: Math.max(0, tempTime - SKIP_BACK_SECONDS) });
     } else if (event.keyCode === RIGHT) {
-      this.setState({ tempTime: tempTime + SKIP_FORWARD_SECONDS });
+      this.setState({ tempTime: Math.min(this.props.duration, tempTime + SKIP_FORWARD_SECONDS) });
     }
   }
 
@@ -163,8 +163,10 @@ class Timeline extends Component {
   render() {
     const { currentTime, duration, snapTimes } = this.props;
     const { tempTime } = this.state;
-    const currentTimePct = `${currentTime / duration * 100}%`;
-    const progressPct = this.isScrubbing || this.isApplyingUpdate ? `${tempTime / duration * 100}%` : currentTimePct;
+    const currentTimeFraction = currentTime / duration;
+    const currentTimePct = `${currentTimeFraction * 100}%`;
+    const progressFraction = this.isScrubbing || this.isApplyingUpdate ? tempTime / duration : currentTimeFraction;
+    const progressPct = `${progressFraction * 100}%`;
 
     return (
       <div className={styles.root}>
@@ -179,11 +181,16 @@ class Timeline extends Component {
           </div>
           <div className={styles.currentTimeProgress} style={{ width: currentTimePct }} />
           <div className={styles.progress} style={{ width: progressPct }} />
-          <div className={styles.handle} style={{ left: progressPct }}>
-            <div className={cn(styles.handleTime, { [styles.isVisible]: this.isScrubbing })}>
-              <Time numSeconds={Math.round(tempTime)} />
-            </div>
-          </div>
+          <div className={styles.handle} style={{ left: progressPct }} />
+        </div>
+        <div className={cn(styles.scrubTime, { [styles.isVisible]: this.isScrubbing })}>
+          <Time
+            numSeconds={Math.round(tempTime)}
+            style={{
+              marginLeft: `${Math.max(progressFraction * 100 - 10, 0)}%`,
+              marginRight: `${Math.max((1 - progressFraction) * 100 - 10, 0)}%`
+            }}
+          />
         </div>
         <div className={styles.extents}>
           <Time numSeconds={Math.round(currentTime)} />
