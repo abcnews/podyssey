@@ -66,7 +66,7 @@ class App extends Component {
       }
     }
 
-    if (this.state.hasDismissed !== prevState.hasDismissed) {
+    if (this.state.isDismissed !== prevState.isDismissed) {
       this.base.parentElement.classList.add(styles.hasDismissed);
     }
   }
