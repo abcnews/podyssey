@@ -40,7 +40,7 @@ class Image extends Component {
     super(props);
 
     this.state = {
-      isLoaded: preloaded[props.src]
+      isLoaded: !!preloaded[props.src]
     };
   }
 
