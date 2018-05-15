@@ -58,7 +58,7 @@ class Image extends Component {
     return (
       <div id={id} className={styles.root}>
         <Loader inverted large overlay />
-        <img key={src} src={src} alt={alt} loaded={isLoaded} />
+        <img key={src} src={src} alt={alt} loaded={isLoaded ? '' : null} />
       </div>
     );
   }
