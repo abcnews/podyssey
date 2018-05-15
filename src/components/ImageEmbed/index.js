@@ -56,6 +56,8 @@ module.exports.inferProps = el => ({
   animation: inferConfig('animation', el)
 });
 
+module.exports.preload = props => Image.preload(props.image);
+
 const transformX = (pct, ratio) => {
   const pctX = typeof pct === 'number' ? 50 - Math.min(100, Math.max(0, pct)) : 0;
   const absPctX = Math.abs(pctX);

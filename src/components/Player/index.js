@@ -149,6 +149,14 @@ class Player extends Component {
     this.play();
   }
 
+  componentDidUpdate() {
+    if (this._nextMedia && this._nextMedia.component.preload) {
+      this._nextMedia.component.preload(this._nextMedia.props);
+    }
+
+    this._nextMedia = null;
+  }
+
   componentWillUnmount() {
     this.audioEl.pause();
     detach(this.audioEl);
@@ -166,24 +174,23 @@ class Player extends Component {
     const nextTitledSectionTime =
       titledSectionTimes.length > 1 && titledSectionTimes[titledSectionTimes.indexOf(activeTitledSectionTime) + 1];
     const entryTimes = Object.keys(entries);
-    const activeEntryTime = entryTimes.reverse().find(time => time < currentTime);
+    const activeEntryTime = entryTimes
+      .slice()
+      .reverse()
+      .find(time => time < currentTime);
+    const nextEntryTime = entryTimes[entryTimes.indexOf(activeEntryTime) + 1];
     const activeEntry = activeEntryTime === null ? null : entries[activeEntryTime];
     const activeSectionIndex = activeEntry ? activeEntry.sectionIndex : -1;
     const activeSection = activeEntry ? sections[activeSectionIndex] : null;
-
     const hasTimeAdvanced = currentTime > this._prevCurrentTime;
-    // const hasActiveEntryChanged = activeEntryTime !== this._prevActiveEntryTime;
     const hasSectionChanged = activeSectionIndex !== this._prevActiveSectionIndex;
-    // const now = Date.now();
-    // const shouldTransition = now - this._lastActiveEntryTransitionDate < 1000;
 
     this._prevCurrentTime = currentTime;
-    // this._prevActiveEntryTime = activeEntryTime;
     this._prevActiveSectionIndex = activeSectionIndex;
 
-    // if (hasActiveEntryChanged) {
-    // this._lastActiveEntryTransitionDate = now;
-    // }
+    if (nextEntryTime) {
+      this._nextMedia = (entries[nextEntryTime] || {}).media;
+    }
 
     return (
       <div className={cn(styles.root, { [styles.buffering]: isBuffering })}>

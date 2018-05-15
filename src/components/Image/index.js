@@ -12,10 +12,17 @@ const P2_RATIO_AND_DIMENSIONS_PATTERN = /(\d+x\d+)-([a-z]+)/;
 const preloaded = {};
 
 function load(src, done) {
+  if (preloaded[src]) {
+    return done && done();
+  }
+
   const loader = new window.Image();
 
   loader.onload = () => {
-    preloaded[src] = loader;
+    if (!preloaded[src]) {
+      preloaded[src] = loader;
+    }
+
     done && done();
   };
 
@@ -62,12 +69,10 @@ module.exports = Image;
 module.exports.inferProps = el => {
   el = el.matches('img') ? el : el.querySelector('img');
 
-  const src = resize(el.src);
-
-  load(src);
-
   return {
-    src,
+    src: resize(el.src),
     alt: el.alt
   };
 };
+
+module.exports.preload = props => load(props.src);
