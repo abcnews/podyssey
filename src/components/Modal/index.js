@@ -6,7 +6,7 @@ const styles = require('./styles.css');
 
 let nextMaskIndex = 0;
 
-const IS_MASK_FEATURE_ENABLED = false;
+const IS_MASK_FEATURE_ENABLED = true;
 
 class Modal extends Component {
   constructor(props) {
