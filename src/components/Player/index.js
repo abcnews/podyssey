@@ -226,7 +226,7 @@ class Player extends Component {
             transitionLeaveTimeout={1000}
           >
             <div key={activeEntryTime} className={styles.entryContainer}>
-              {activeEntry ? <Entry media={activeEntry.media} notes={activeEntry.notes} /> : null}
+              {activeEntry ? <Entry media={activeEntry.media} notes={activeEntry.notes} isPaused={isPaused} /> : null}
             </div>
           </ReactCSSTransitionReplace>
         </main>
