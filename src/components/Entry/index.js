@@ -14,10 +14,12 @@ class Entry extends Component {
     super(props);
   }
 
-  render({ media, notes }) {
+  render({ media, notes, isPaused }) {
     return (
       <article className={styles.root}>
-        <section className={styles.media}>{media && renderComponentWithProps(media)}</section>
+        <section className={styles.media}>
+          {media && renderComponentWithProps({ component: media.component, props: { isPaused, ...media.props } })}
+        </section>
         <section className={styles.text}>
           <div className={styles.notes}>
             {notes.map(note => <div className={styles.note}>{renderComponentWithProps(note)}</div>)}

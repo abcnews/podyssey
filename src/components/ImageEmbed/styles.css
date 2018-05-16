@@ -17,6 +17,10 @@
   width: 100%;
 }
 
+.isPaused > :first-child {
+  animation-play-state: paused !important;
+}
+
 .root > :nth-child(2) {
   z-index: 2;
   position: absolute;
