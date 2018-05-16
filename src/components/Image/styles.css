@@ -1,7 +1,7 @@
 .root {
   position: relative;
   height: 100%;
-  background-color: var(--abc-black);
+  background-color: black;
 }
 
 .root img {

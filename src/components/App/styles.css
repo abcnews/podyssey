@@ -9,7 +9,6 @@
 
 :global(.u-richtext-invert) .root {
   color: white;
-  color: var(--abc-white, white);
 }
 
 .notice {
@@ -22,7 +21,6 @@
   padding: 1rem 0.5rem;
   width: 7rem;
   background-color: black;
-  background-color: var(--abc-black, black);
   margin-bottom: 0.75rem;
   font-family: inherit;
   font-size: 0.875rem;

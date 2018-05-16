@@ -33,6 +33,5 @@
 .note {
   margin: 0.25rem 0;
   border-radius: 0.25rem;
-  background-color: black;
-  background-color: var(--pod-black-filter, black);
+  background-color: rgba(0, 0, 0, 0.25);
 }

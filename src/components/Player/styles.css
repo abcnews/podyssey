@@ -2,10 +2,16 @@
   height: 100%;
   background-color: transparent;
   color: white;
-  color: var(--abc-white, white);
   font-family: ABCSans;
-  font-weight: var(--pod-font-weight-normal);
   contain: strict;
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 1.3),
+  only screen and (-o-min-device-pixel-ratio: 13/10),
+  only screen and (min-resolution: 120dpi) {
+  .root {
+    font-weight: 300;
+  }
 }
 
 @keyframes down {
@@ -44,9 +50,17 @@
   min-height: 5.5rem;
   color: inherit;
   font-size: 1.375rem;
-  font-weight: var(--pod-font-weight-normal);
+  font-weight: normal;
   line-height: 1.25;
   text-transform: none;
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 1.3),
+  only screen and (-o-min-device-pixel-ratio: 13/10),
+  only screen and (min-resolution: 120dpi) {
+  .sectionTitle {
+    font-weight: 300;
+  }
 }
 
 @media (max-width: 30rem) {

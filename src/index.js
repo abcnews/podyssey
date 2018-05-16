@@ -4,7 +4,6 @@ const { h, render } = require('preact');
 const xhr = require('xhr');
 const { IS_STANDALONE } = require('./constants');
 const { convertAudioEmbedToCMID, detailPageURLFromCMID, normalise, parsePlayerProps } = require('./utils');
-require('./theme.css');
 require('./global.css');
 
 if (IS_STANDALONE) {

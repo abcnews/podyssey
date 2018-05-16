@@ -35,7 +35,7 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
-  color: #1c1c1c;
+  color: black;
   animation: appear 0.75s backwards;
 }
 
@@ -52,7 +52,6 @@ div.overlay {
   position: relative;
   width: 100%;
   height: 100%;
-  box-shadow: var(--pod-black-shadow);
 }
 
 @media (min-width: 30rem) and (min-height: 30rem) {

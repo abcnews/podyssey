@@ -2,7 +2,6 @@
   position: relative;
   padding: 1.5rem 0 1.75rem;
   color: white;
-  color: var(--abc-white, white);
   font-size: 0.75rem;
 }
 

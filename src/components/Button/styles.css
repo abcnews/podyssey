@@ -3,7 +3,6 @@
   padding: 0;
   background-color: transparent;
   color: white;
-  color: var(--abc-white, white);
   font-size: 1rem;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
