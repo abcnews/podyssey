@@ -238,10 +238,6 @@ class Player extends Component {
             <HopButton type="next" time={nextTitledSectionTime} onClick={this.hopToDataTime} />
           </div>
         </nav>
-        <nav className={styles.regions}>
-          <HopButton type="prev" time={prevTitledSectionTime} onClick={this.hopToDataTime} tabindex="0" />
-          <HopButton type="next" time={nextTitledSectionTime} onClick={this.hopToDataTime} tabindex="0" />
-        </nav>
       </div>
     );
   }

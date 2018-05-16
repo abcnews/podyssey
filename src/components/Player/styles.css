@@ -233,35 +233,3 @@
   display: block;
   flex: 0 0 0.0625rem;
 }
-
-.regions {
-  position: absolute;
-  top: 3rem;
-  right: 0;
-  bottom: 11rem;
-  left: 0;
-}
-
-.regions button {
-  position: absolute;
-  top: 0;
-  height: 100%;
-  outline: 0;
-}
-
-.regions button,
-.regions button[disabled] {
-  opacity: 0;
-}
-
-.regions > :first-child {
-  left: 0;
-  width: 32%;
-  text-align: left;
-}
-
-.regions > :last-child {
-  right: 0;
-  width: 64%;
-  text-align: right;
-}
