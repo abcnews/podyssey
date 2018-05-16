@@ -1,4 +1,5 @@
 const url2cmid = require('@abcnews/url2cmid');
+const { resize } = require('./components/Image');
 const ImageEmbed = require('./components/ImageEmbed');
 const Quote = require('./components/Quote');
 const Raw = require('./components/Raw');
@@ -84,6 +85,16 @@ const getSourceNodes = doc => {
   }
 
   return nodes;
+};
+
+const getCover = doc => {
+  const url = getMetaContent('og:image', doc);
+
+  if (!url) {
+    return null;
+  }
+
+  return resize(url);
 };
 
 module.exports.parsePlayerProps = html => {
@@ -174,6 +185,7 @@ module.exports.parsePlayerProps = html => {
 
   return {
     title: getMetaContent('title', doc),
+    cover: getCover(doc),
     audio,
     sections,
     entries

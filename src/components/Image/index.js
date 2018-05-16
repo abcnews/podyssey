@@ -76,3 +76,6 @@ module.exports.inferProps = el => {
 };
 
 module.exports.preload = props => load(props.src);
+
+module.exports.load = load;
+module.exports.resize = resize;

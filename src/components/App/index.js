@@ -2,6 +2,7 @@ const { h, Component } = require('preact');
 const Portal = require('preact-portal');
 const { select } = require('../../dom');
 const Button = require('../Button');
+const { load } = require('../Image');
 const Icon = require('../Icon');
 const Modal = require('../Modal');
 const Player = require('../Player');
@@ -53,6 +54,14 @@ class App extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const htmlClassList = document.documentElement.classList;
+
+    if (this.props.playerProps && this.props.playerProps.cover) {
+      htmlClassList.add(styles.hasCover, styles.hasUnloadedCover);
+      load(this.props.playerProps.cover, () => {
+        document.body.style.backgroundImage = `url(${this.props.playerProps.cover})`;
+        htmlClassList.remove(styles.hasUnloadedCover);
+      });
+    }
 
     if (this.state.isOpen !== prevState.isOpen) {
       if (this.state.isOpen) {
