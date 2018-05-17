@@ -1,6 +1,6 @@
 {
   "name": "podyssey",
-  "version": "2.8.0",
+  "version": "2.9.0",
   "description": "A project generated from aunty's preact-app template.",
   "license": "MIT",
   "private": true,
