@@ -132,7 +132,7 @@
 
 .entryContainerLeaveActive {
   opacity: 0;
-  transition: opacity 1s;
+  transition: opacity 1s 1s;
 }
 
 .entryContainerLeaveActiveSection {
