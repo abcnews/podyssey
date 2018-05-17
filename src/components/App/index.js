@@ -19,7 +19,7 @@ class App extends Component {
     this.dismiss = this.dismiss.bind(this);
 
     this.state = {
-      hasOpenedAtLeastOnce: false,
+      hasClosedAtLeastOnce: false,
       isDismissed: false,
       isOpen: false,
       transitionData: null
@@ -40,11 +40,11 @@ class App extends Component {
       playIconRect: select('svg[data-type="play"]').getBoundingClientRect()
     };
 
-    this.setState({ hasOpenedAtLeastOnce: true, isOpen: true, transitionData });
+    this.setState({ isOpen: true, transitionData });
   }
 
   close() {
-    this.setState({ isOpen: false });
+    this.setState({ hasClosedAtLeastOnce: true, isOpen: false });
   }
 
   dismiss() {
@@ -86,7 +86,7 @@ class App extends Component {
     }
   }
 
-  render({ playerProps }, { hasOpenedAtLeastOnce, isDismissed, isOpen, transitionData }) {
+  render({ playerProps }, { hasClosedAtLeastOnce, isDismissed, isOpen, transitionData }) {
     return (
       <div className={styles.root}>
         <div className={styles.notice}>
@@ -94,7 +94,7 @@ class App extends Component {
           <span>This story features audio</span>
         </div>
         <Button type="play" className={styles.open} onClick={this.open} iconProps={{ block: true, size: 'large' }}>
-          <span>{hasOpenedAtLeastOnce ? 'Resume play' : 'Get started'}</span>
+          <span>{hasClosedAtLeastOnce ? 'Resume play' : 'Get started'}</span>
         </Button>
         <div className={styles.dismissChoice}>
           <button className={styles.dismiss} onClick={this.dismiss}>
