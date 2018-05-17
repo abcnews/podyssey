@@ -3,17 +3,11 @@ require('./polyfills');
 const { h, render } = require('preact');
 const xhr = require('xhr');
 const { IS_STANDALONE } = require('./constants');
-const { convertAudioEmbedToCMID, detailPageURLFromCMID, normalise, parsePlayerProps } = require('./utils');
+const { detailPageURLFromCMID, getAudioCMID, normalise, parsePlayerProps } = require('./utils');
 require('./global.css');
 
-if (IS_STANDALONE) {
-  document.documentElement.setAttribute('standalone', '');
-}
-
 const rootEl = document.querySelector('[data-podyssey-root]');
-
-normalise(rootEl);
-
+const audioDocumentCMID = getAudioCMID();
 let playerProps = null;
 
 function renderApp() {
@@ -22,23 +16,26 @@ function renderApp() {
   render(<App playerProps={playerProps} />, rootEl, rootEl.firstChild);
 }
 
-renderApp();
-
-const audioDocumentCMID = convertAudioEmbedToCMID();
-const audioDocumentURL = detailPageURLFromCMID(audioDocumentCMID);
-
-xhr({ url: audioDocumentURL }, (error, response, body) => {
-  if (error || response.statusCode !== 200) {
-    console.error(error || new Error(response.statusCode));
-  }
-
-  playerProps = {
-    cmid: audioDocumentCMID,
-    ...parsePlayerProps(body)
-  };
-
+if (audioDocumentCMID) {
+  normalise(rootEl);
   renderApp();
-});
+  xhr({ url: detailPageURLFromCMID(audioDocumentCMID) }, (error, response, body) => {
+    if (error || response.statusCode !== 200) {
+      console.error(error || new Error(response.statusCode));
+    }
+
+    playerProps = {
+      cmid: audioDocumentCMID,
+      ...parsePlayerProps(body)
+    };
+
+    renderApp();
+  });
+}
+
+if (IS_STANDALONE) {
+  document.documentElement.setAttribute('standalone', '');
+}
 
 if (module.hot) {
   module.hot.accept('./components/App', () => {

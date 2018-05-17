@@ -195,18 +195,30 @@ module.exports.parsePlayerProps = html => {
 module.exports.detailPageURLFromCMID = cmid =>
   `${(window.location.origin || '').replace('mobile', 'www')}/news/${cmid}?pfm=ms`;
 
-module.exports.convertAudioEmbedToCMID = () => {
+module.exports.getAudioCMID = () => {
+  // First, look for the embed using known selectors
   const embedEl = selectAll(
     '.inline-content.audio, .media-wrapper-dl.type-audio, .view-inlineMediaPlayer.doctype-abcaudio'
   ).concat(selectAll('.embed-content').filter(el => select('.type-audio', el)))[0];
 
-  if (!embedEl) {
-    return;
+  if (embedEl) {
+    detach(embedEl);
+
+    return selectAll('a', embedEl)
+      .filter(x => x.href.indexOf('mpegmedia') < 0)
+      .map(x => url2cmid(x.href))[0];
   }
 
-  detach(embedEl);
+  // Failing that, check window.dataLayer
+  if (Array.isArray(window.dataLayer)) {
+    const embedCMURL = window.dataLayer
+      .filter(
+        x => x.document && x.document.embedded && (Object.keys(x.document.embedded)[0] || '').indexOf('audio') > -1
+      )
+      .map(x => Object.keys(x.document.embedded)[0])[0];
 
-  return selectAll('a', embedEl)
-    .filter(x => x.href.indexOf('mpegmedia') < 0)
-    .map(x => url2cmid(x.href))[0];
+    if (embedCMURL) {
+      return embedCMURL.split('audio/')[1];
+    }
+  }
 };
