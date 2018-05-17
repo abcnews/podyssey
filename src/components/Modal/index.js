@@ -47,7 +47,7 @@ class Modal extends Component {
                 contentRadius
               }
       });
-    });
+    }, 100);
   }
 
   componentDidMount() {
