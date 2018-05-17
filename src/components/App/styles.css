@@ -120,7 +120,8 @@ html.hasCover > body::after {
   transition: opacity 1.5s;
 }
 
-html.hasUnloadedCover > body::after {
+html.hasUnloadedCover > body::after,
+html.hasDismissed > body::after {
   opacity: 1;
 }
 

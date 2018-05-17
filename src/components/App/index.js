@@ -37,7 +37,7 @@ class App extends Component {
       playIconRect: select('svg[data-type="play"]').getBoundingClientRect()
     };
 
-    this.setState({ isOpen: true, transitionData });
+    this.setState({ isDismissed: false, isOpen: true, transitionData });
   }
 
   close() {
