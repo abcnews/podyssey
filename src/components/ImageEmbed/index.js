@@ -38,7 +38,6 @@ class ImageEmbed extends Component {
   }
 
   render({ image, caption, animation, isPaused }, { ratio }) {
-    console.log(isPaused);
     return (
       <figure className={cn(styles.root, { [styles.isPaused]: isPaused })}>
         <Image key={image.src} id={this.imageId} src={image.src} alt={image.alt} />
