@@ -1,7 +1,6 @@
 const { h, Component } = require('preact');
 const FocusTrap = require('react-focus-trap');
 const Button = require('../Button');
-const Loader = require('../Loader');
 const styles = require('./styles.css');
 
 let nextMaskIndex = 0;
@@ -102,7 +101,6 @@ class Modal extends Component {
         )}
         <div ref={this.getContentElRef} className={styles.content}>
           {children}
-          <Loader className={styles.loader} inverted large overlay />
           {close && <Button type="close" onClick={close} />}
         </div>
       </FocusTrap>
