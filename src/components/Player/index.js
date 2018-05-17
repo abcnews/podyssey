@@ -220,8 +220,8 @@ class Player extends Component {
                   : TRANSITIONS.ENTRY_SECTION_BACKWARDS
                 : TRANSITIONS.ENTRY
             }
-            transitionEnterTimeout={1000}
-            transitionLeaveTimeout={1000}
+            transitionEnterTimeout={hasSectionChanged ? 1000 : 2000}
+            transitionLeaveTimeout={hasSectionChanged ? 1000 : 2000}
           >
             <div key={activeEntryTime} className={styles.entryContainer}>
               {activeEntry ? <Entry media={activeEntry.media} notes={activeEntry.notes} isPaused={isPaused} /> : null}
