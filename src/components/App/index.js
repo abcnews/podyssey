@@ -12,11 +12,12 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.getBottomRef = this.getBottomRef.bind(this);
     this.getPortalRef = this.getPortalRef.bind(this);
     this.open = this.open.bind(this);
     this.close = this.close.bind(this);
     this.dismiss = this.dismiss.bind(this);
+
+    this.alternativeStartEl = select('[name="alternative"]');
 
     this.state = {
       hasClosedAtLeastOnce: false,
@@ -24,10 +25,6 @@ class App extends Component {
       isOpen: false,
       transitionData: null
     };
-  }
-
-  getBottomRef(el) {
-    this.bottomEl = el;
   }
 
   getPortalRef(ref) {
@@ -50,7 +47,7 @@ class App extends Component {
   dismiss() {
     this.setState({ isDismissed: true });
     setTimeout(() => {
-      this.bottomEl.scrollIntoView({
+      this.alternativeStartEl.scrollIntoView({
         behavior: 'smooth',
         block: 'start',
         inline: 'nearest'
@@ -82,7 +79,7 @@ class App extends Component {
     }
 
     if (this.state.isDismissed !== prevState.isDismissed) {
-      this.base.parentElement.classList.add(styles.hasDismissed);
+      htmlClassList.add(styles.hasDismissed);
     }
   }
 
@@ -96,12 +93,13 @@ class App extends Component {
         <Button type="play" className={styles.open} onClick={this.open} iconProps={{ block: true, size: 'large' }}>
           <span>{hasClosedAtLeastOnce ? 'Resume play' : 'Get started'}</span>
         </Button>
-        <div className={styles.dismissChoice}>
-          <button className={styles.dismiss} onClick={this.dismiss}>
-            Give me the non-audio version
-          </button>
-        </div>
-        <div ref={this.getBottomRef} className={styles.bottom} />
+        {this.alternativeStartEl && (
+          <div className={styles.dismissChoice}>
+            <button className={styles.dismiss} onClick={this.dismiss}>
+              Give me the non-audio version
+            </button>
+          </div>
+        )}
         <Portal into={'body'} ref={this.getPortalRef}>
           <div className={styles.portal}>
             {isOpen && (
