@@ -19,6 +19,10 @@
   padding: 1rem;
 }
 
+.text:not(:empty) {
+  background-color: rgba(0, 0, 0, 0.55);
+}
+
 .notes {
   display: flex;
   flex-direction: column;
@@ -32,6 +36,4 @@
 
 .note {
   margin: 0.25rem 0;
-  border-radius: 0.25rem;
-  background-color: rgba(0, 0, 0, 0.55);
 }

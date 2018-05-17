@@ -21,9 +21,12 @@ class Entry extends Component {
           {media && renderComponentWithProps({ component: media.component, props: { isPaused, ...media.props } })}
         </section>
         <section className={styles.text}>
-          <div className={styles.notes}>
-            {notes.map(note => <div className={styles.note}>{renderComponentWithProps(note)}</div>)}
-          </div>
+          {notes &&
+            notes.length > 0 && (
+              <div className={styles.notes}>
+                {notes.map(note => <div className={styles.note}>{renderComponentWithProps(note)}</div>)}
+              </div>
+            )}
         </section>
       </article>
     );
