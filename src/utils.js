@@ -1,4 +1,5 @@
 const url2cmid = require('@abcnews/url2cmid');
+const HTMLEmbed = require('./components/HTMLEmbed');
 const { resize } = require('./components/Image');
 const ImageEmbed = require('./components/ImageEmbed');
 const Quote = require('./components/Quote');
@@ -172,6 +173,18 @@ module.exports.parsePlayerProps = html => {
       entries[time].notes.push({
         component: Quote,
         props: Quote.inferProps(node)
+      });
+    } else if (
+      node.matches(`
+        .inline-content.html-fragment,
+        .embed-fragment,
+        [class*="view-html-fragment-embedded"]
+      `)
+    ) {
+      // Transform HTML fragments into wrapped innerHTML
+      entries[time].notes.push({
+        component: HTMLEmbed,
+        props: HTMLEmbed.inferProps(node)
       });
     } else {
       // Keep everything else, as-is (with links opening in new windows),
