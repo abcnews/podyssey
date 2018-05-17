@@ -93,8 +93,6 @@ div.overlay {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 6.25rem;
-  height: 6.25rem;
 }
 
 @media (max-height: 30rem) and (orientation: landscape) {
@@ -103,74 +101,79 @@ div.overlay {
   }
 }
 
-@keyframes deviceAnimation {
+.rotator svg {
+  width: 5rem;
+  height: 8.75rem;
+}
+
+.rotator path {
+  animation: 4.167s cubic-bezier(0.42, 0, 0.58, 1) infinite both;
+}
+
+@keyframes device {
   0%,
   60% {
     transform: translate(23px, 29px) rotate(90deg) translate(-36px, -35px);
-    animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
   }
   10.8%,
   48% {
     transform: translate(23px, 29px) rotate(0deg) translate(-36px, -35px);
-    animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+  }
+  to {
+    transform: translate(23px, 29px) rotate(90deg) translate(-36px, -35px);
   }
 }
 
-.rotatorDevice {
-  animation: deviceAnimation 4.167s linear infinite both;
-}
-
-@keyframes tickAnimation {
+@keyframes tick {
   0%,
   14.4%,
   46.8% {
     transform: translate(23px, 25.3335px) scale(0, 0) translate(-36px, -30.3335px);
-    animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
   }
   19.2% {
     transform: translate(23px, 25.3335px) scale(1.5, 1.5) translate(-36px, -30.3335px);
-    animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
   }
   22.8%,
   43.5999% {
     transform: translate(23px, 25.3335px) scale(1, 1) translate(-36px, -30.3335px);
-    animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+  }
+  to {
+    transform: translate(23px, 25.3335px) scale(0, 0) translate(-36px, -30.3335px);
   }
 }
 
-.rotatorTick {
-  animation: tickAnimation 4.167s linear infinite both;
-}
-
-@keyframes crossAnimation {
+@keyframes cross {
   0%,
   63.6%,
   97.5999% {
     transform: translate(25.9142px, 28.668px) scale(0, 0) translate(-38.9142px, -35.668px);
-    animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
   }
   68% {
     transform: translate(25.9142px, 28.668px) scale(1.8, 1.8) translate(-38.9142px, -35.668px);
-    animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
   }
   72%,
   94.8% {
     transform: translate(25.9142px, 28.668px) scale(1, 1) translate(-38.9142px, -35.668px);
-    animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+  }
+  to {
+    transform: translate(25.9142px, 28.668px) scale(0, 0) translate(-38.9142px, -35.668px);
   }
 }
 
-.rotatorCross {
-  animation: crossAnimation 4.167s linear infinite both;
+.rotator path:nth-child(1) {
+  animation-name: device;
 }
 
+.rotator path:nth-child(2) {
+  animation-name: tick;
+}
+
+.rotator path:nth-child(3) {
+  animation-name: cross;
+}
 .root button[data-type='close'] {
   position: absolute;
   top: 0;
   right: 0;
   z-index: 1;
 }
-
-/* html[standalone] .root button[data-type='close'] {
-  top: 20px;
-} */

@@ -105,22 +105,19 @@ class Modal extends Component {
           {close && <Button type="close" onClick={close} />}
         </div>
         <div className={styles.rotator}>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="70" viewBox="0 0 100 100">
             <g transform="translate(27 21.5)" fill-rule="evenodd">
               <path
-                className={styles.rotatorDevice}
                 fill="#BFBFBF"
                 d="M18 0h36a2 2 0 0 1 2 2v66a2 2 0 0 1-2 2H18a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm2 5v53h32V5H20z"
                 transform="rotate(90 32.5 25.5)"
               />
               <path
-                className={styles.rotatorTick}
                 fill="#FFF"
                 d="M31.989 34.496L26.7 29.148 24 32.054l7.989 7.613L48 23.928 45.336 21z"
                 transform="matrix(0 0 0 0 23 25.334)"
               />
               <path
-                className={styles.rotatorCross}
                 fill="#FFF"
                 d="M38.914 33.086L46 26l2.828 2.828-7.085 7.086 6.593 6.594-2.828 2.828-6.594-6.593-6.593 6.593-2.829-2.828 6.594-6.594L29 28.828 31.828 26l7.086 7.086z"
                 transform="matrix(0 0 0 0 25.914 28.668)"
