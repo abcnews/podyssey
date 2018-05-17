@@ -54,9 +54,7 @@ class Player extends Component {
     this.storageKey = `${STORAGE_PREFIX}__currentTime__${this.props.cmid}`;
 
     this._prevCurrentTime = -1;
-    // this._prevActiveEntryTime = -1;
     this._prevActiveSectionIndex = -1;
-    // this._lastActiveEntryTransitionDate = Date.now();
 
     this.state = {
       currentTime: 0,
