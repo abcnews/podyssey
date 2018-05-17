@@ -28,8 +28,9 @@
   flex-direction: column;
   justify-content: center;
   overflow: hidden;
+  z-index: 2;
   flex-grow: 1;
-  margin: 4rem auto 8rem;
+  margin: 3rem auto 8rem;
   width: 100%;
   max-width: 36rem;
 }
