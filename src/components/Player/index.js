@@ -1,4 +1,5 @@
 const cn = require('classnames');
+const NoSleep = require('nosleep.js');
 const { h, Component } = require('preact');
 const ReactCSSTransitionReplace = require('react-css-transition-replace');
 const widont = require('widont');
@@ -50,6 +51,8 @@ class Player extends Component {
     this.hopTo = this.hopTo.bind(this);
     this.hopToDataTime = this.hopToDataTime.bind(this);
     this.forgetTime = this.forgetTime.bind(this);
+
+    this.nosleep = new NoSleep();
 
     this.storageKey = `${STORAGE_PREFIX}__currentTime__${this.props.cmid}`;
 
@@ -148,6 +151,7 @@ class Player extends Component {
 
     window.addEventListener('unload', this.forgetTime);
     this.hopTo(this.loadTime());
+    this.nosleep.enable();
     this.audioEl.load();
     this.play();
   }
@@ -161,6 +165,7 @@ class Player extends Component {
   }
 
   componentWillUnmount() {
+    this.nosleep.disable();
     this.audioEl.pause();
     detach(this.audioEl);
     this.saveTime();
