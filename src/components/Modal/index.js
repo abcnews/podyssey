@@ -47,7 +47,7 @@ class Modal extends Component {
                 contentRadius
               }
       });
-    }, 100);
+    });
   }
 
   componentDidMount() {
@@ -55,6 +55,7 @@ class Modal extends Component {
 
     if (IS_MASK_FEATURE_ENABLED) {
       this.updateMask();
+      setTimeout(this.updateMask, 1500); // After scroll bars have disappeared
 
       window.addEventListener('resize', this.updateMask);
     }
