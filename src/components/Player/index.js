@@ -57,8 +57,11 @@ class Player extends Component {
     this._prevActiveSectionIndex = -1;
 
     this.state = {
+      canPlay: false,
+      canPlayThrough: false,
       currentTime: 0,
       duration: 0,
+      isBuffering: false,
       isPaused: true,
       isEnded: false
     };
@@ -104,6 +107,8 @@ class Player extends Component {
 
   componentDidMount() {
     this.audioEl.addEventListener('durationchange', () => this.setState({ duration: this.audioEl.duration }));
+    this.audioEl.addEventListener('canplay', () => this.setState({ canPlay: true }));
+    this.audioEl.addEventListener('canplaythrough', () => this.setState({ canPlayThrough: true }));
     this.audioEl.addEventListener('waiting', () => this.setState({ isBuffering: true }));
     this.audioEl.addEventListener('ended', () => this.setState({ isEnded: true }));
     this.audioEl.addEventListener('pause', () => this.setState({ isPaused: true }));
@@ -161,7 +166,10 @@ class Player extends Component {
     this.saveTime();
   }
 
-  render({ audio, entries, sections, title }, { currentTime, duration, isBuffering, isEnded, isPaused, wasBackwards }) {
+  render(
+    { audio, entries, sections, title },
+    { canPlay, canPlayThrough, currentTime, duration, isBuffering, isEnded, isPaused }
+  ) {
     const titledSectionTimes = sections.filter(section => section.title).map(section => section.time);
     const activeTitledSectionTime = titledSectionTimes
       .slice()
@@ -232,7 +240,7 @@ class Player extends Component {
           <Timeline currentTime={currentTime} duration={duration} snapTimes={titledSectionTimes} update={this.hopTo} />
           <div className={styles.buttons}>
             <HopButton type="prev" time={prevTitledSectionTime} onClick={this.hopToDataTime} />
-            <Button type={isPaused ? 'play' : 'pause'} onClick={this[isPaused ? 'play' : 'pause']} />
+            <Button type={isPaused || !canPlay ? 'play' : 'pause'} onClick={this[isPaused ? 'play' : 'pause']} />
             <HopButton type="next" time={nextTitledSectionTime} onClick={this.hopToDataTime} />
           </div>
         </nav>
