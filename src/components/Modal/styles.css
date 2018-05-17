@@ -78,34 +78,90 @@ div.overlay {
 
 @media (max-height: 30rem) and (orientation: landscape) {
   .content {
-    background-color: #111;
+    background-color: #000;
   }
 
   .content > * {
     opacity: 0;
     pointer-events: none;
   }
+}
 
-  .content::after {
-    content: 'Please turn your device vertically';
-    transform: translate(-50%, -50%);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    max-width: 20rem;
-    color: #eee;
-    font-size: 1.5rem;
-    text-align: center;
-    animation: tilt 2s 2s infinite;
+.rotator {
+  display: none;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6.25rem;
+  height: 6.25rem;
+}
+
+@media (max-height: 30rem) and (orientation: landscape) {
+  .rotator {
+    display: block;
   }
 }
 
-.loader {
-  transition: 0.5s opacity;
+@keyframes deviceAnimation {
+  0%,
+  60% {
+    transform: translate(23px, 29px) rotate(90deg) translate(-36px, -35px);
+    animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+  }
+  10.8%,
+  48% {
+    transform: translate(23px, 29px) rotate(0deg) translate(-36px, -35px);
+    animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+  }
 }
 
-.loader:not(:first-child) {
-  opacity: 0;
+.rotatorDevice {
+  animation: deviceAnimation 4.167s linear infinite both;
+}
+
+@keyframes tickAnimation {
+  0%,
+  14.4%,
+  46.8% {
+    transform: translate(23px, 25.3335px) scale(0, 0) translate(-36px, -30.3335px);
+    animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+  }
+  19.2% {
+    transform: translate(23px, 25.3335px) scale(1.5, 1.5) translate(-36px, -30.3335px);
+    animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+  }
+  22.8%,
+  43.5999% {
+    transform: translate(23px, 25.3335px) scale(1, 1) translate(-36px, -30.3335px);
+    animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+  }
+}
+
+.rotatorTick {
+  animation: tickAnimation 4.167s linear infinite both;
+}
+
+@keyframes crossAnimation {
+  0%,
+  63.6%,
+  97.5999% {
+    transform: translate(25.9142px, 28.668px) scale(0, 0) translate(-38.9142px, -35.668px);
+    animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+  }
+  68% {
+    transform: translate(25.9142px, 28.668px) scale(1.8, 1.8) translate(-38.9142px, -35.668px);
+    animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+  }
+  72%,
+  94.8% {
+    transform: translate(25.9142px, 28.668px) scale(1, 1) translate(-38.9142px, -35.668px);
+    animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+  }
+}
+
+.rotatorCross {
+  animation: crossAnimation 4.167s linear infinite both;
 }
 
 .root button[data-type='close'] {
