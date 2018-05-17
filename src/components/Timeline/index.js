@@ -187,8 +187,8 @@ class Timeline extends Component {
           <Time
             numSeconds={Math.round(tempTime)}
             style={{
-              marginLeft: `${Math.max(progressFraction * 100 - 10, 0)}%`,
-              marginRight: `${Math.max((1 - progressFraction) * 100 - 10, 0)}%`
+              paddingLeft: `calc(${progressFraction * 100}% - 2.25rem)`,
+              paddingRight: `calc(${(1 - progressFraction) * 100}% - 2.25rem)`
             }}
           />
         </div>

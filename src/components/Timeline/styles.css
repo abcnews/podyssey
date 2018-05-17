@@ -11,7 +11,7 @@
 
 .track {
   position: relative;
-  height: 0.1875rem;
+  height: 0.125rem;
 }
 
 .halo {
@@ -31,24 +31,19 @@
 }
 
 .snapTime,
-.currentTimeMarker,
 .handle {
   transform: translate(-50%, -50%);
   position: absolute;
   top: 50%;
   left: 0;
-  background-color: currentColor;
-}
-
-.snapTime,
-.handle {
   border-radius: 50%;
+  background-color: currentColor;
   cursor: pointer;
 }
 
 .snapTime {
-  width: 0.5625rem;
-  height: 0.5625rem;
+  width: 0.625rem;
+  height: 0.625rem;
 }
 
 .currentTimeProgress,
@@ -67,8 +62,8 @@
 }
 
 .handle {
-  width: 0.9375rem;
-  height: 0.9375rem;
+  width: 0.875rem;
+  height: 0.875rem;
 }
 
 .scrubTime {
@@ -90,6 +85,7 @@
 
 .scrubTime > * {
   display: block;
+  white-space: nowrap;
 }
 
 .extents {
