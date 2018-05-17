@@ -13,6 +13,7 @@ class App extends Component {
     super(props);
 
     this.getBottomRef = this.getBottomRef.bind(this);
+    this.getPortalRef = this.getPortalRef.bind(this);
     this.open = this.open.bind(this);
     this.close = this.close.bind(this);
     this.dismiss = this.dismiss.bind(this);
@@ -27,6 +28,11 @@ class App extends Component {
 
   getBottomRef(el) {
     this.bottomEl = el;
+  }
+
+  getPortalRef(ref) {
+    // https://github.com/developit/preact-portal/issues/2
+    this._portal = ref;
   }
 
   open() {
@@ -96,7 +102,7 @@ class App extends Component {
           </button>
         </div>
         <div ref={this.getBottomRef} className={styles.bottom} />
-        <Portal into={'body'}>
+        <Portal into={'body'} ref={this.getPortalRef}>
           <div className={styles.portal}>
             {isOpen && (
               <Modal close={this.close}>
