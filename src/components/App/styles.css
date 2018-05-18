@@ -42,11 +42,16 @@
   cursor: pointer;
 }
 
-html:not(.hasDismissed) [data-podyssey-root] ~ [name='alternative'] ~ * {
+html:not(.hasDismissed) [data-podyssey-root] ~ [name='alternative'] ~ :not([name='endalternative']) {
   display: none;
 }
 
-[data-podyssey-root] ~ [name='endalternative'] ~ :not(:global(.MasterGallery)) {
+[name='endalternative'] {
+  display: block;
+  margin-bottom: 6rem;
+}
+
+html [data-podyssey-root] ~ [name='alternative'] ~ [name='endalternative'] ~ :not(:global(.MasterGallery)) {
   display: block;
 }
 
