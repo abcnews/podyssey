@@ -76,6 +76,7 @@ class Player extends Component {
 
   pause() {
     this.audioEl.pause();
+    this.nosleep.disable();
   }
 
   play() {
@@ -84,6 +85,7 @@ class Player extends Component {
     }
 
     try {
+      this.nosleep.enable();
       this.audioEl.play().catch(NOOP);
     } catch (e) {}
   }
@@ -151,7 +153,6 @@ class Player extends Component {
 
     window.addEventListener('unload', this.forgetTime);
     this.hopTo(this.loadTime());
-    this.nosleep.enable();
     this.audioEl.load();
     this.play();
   }
@@ -165,8 +166,7 @@ class Player extends Component {
   }
 
   componentWillUnmount() {
-    this.nosleep.disable();
-    this.audioEl.pause();
+    this.pause();
     detach(this.audioEl);
     this.saveTime();
   }
