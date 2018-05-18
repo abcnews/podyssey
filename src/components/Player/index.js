@@ -84,7 +84,7 @@ class Player extends Component {
 
   play() {
     if (this.state.isEnded) {
-      this.hopTo(0);
+      this.audioEl.currentTime = 0;
     }
 
     try {
@@ -144,6 +144,10 @@ class Player extends Component {
       //     after a hop (allowing any transitions to occur withoug jumping)
       if (this._hopTimeout !== null && Math.abs(currentTime - this.state.currentTime) < 2) {
         return;
+      }
+
+      if (isEnded) {
+        this.nosleep.disable();
       }
 
       this.setState({
