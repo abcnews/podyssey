@@ -62,6 +62,10 @@ html.hasOpen {
   user-select: none;
 }
 
+html > body {
+  width: auto !important;
+}
+
 html.hasCover > body {
   background-color: black;
   background-size: 0 0;
@@ -69,7 +73,6 @@ html.hasCover > body {
 
 html.hasOpen > body {
   overflow: hidden;
-  width: auto;
   min-height: 100%;
   min-width: auto;
 }
