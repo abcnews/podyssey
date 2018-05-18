@@ -8,6 +8,7 @@ const Button = require('../Button');
 const Caption = require('../Caption');
 const Entry = require('../Entry');
 const Timeline = require('../Timeline');
+const { trackProgress } = require('./stats');
 const styles = require('./styles.css');
 
 const STORAGE_PREFIX = 'podyssey';
@@ -156,6 +157,9 @@ class Player extends Component {
         isEnded
       });
     });
+
+    // Webtrends
+    trackProgress(this.audioEl);
 
     // FLIP playback icon
 

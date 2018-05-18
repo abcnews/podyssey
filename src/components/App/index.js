@@ -1,3 +1,4 @@
+const { Client } = require('@abcnews/poll-counters-client');
 const { h, Component } = require('preact');
 const Portal = require('preact-portal');
 const { select } = require('../../dom');
@@ -7,6 +8,11 @@ const Icon = require('../Icon');
 const Modal = require('../Modal');
 const Player = require('../Player');
 const styles = require('./styles.css');
+
+const ARTICLE_SLUG = window.location.pathname.split('/').reverse()[1];
+const NO_OP = () => {};
+const increment = (id, answer) => new Client(`podyssey-${id}`).increment({ question: ARTICLE_SLUG, answer }, NO_OP);
+const logMediaChoice = answer => increment('media-choice', answer);
 
 class App extends Component {
   constructor(props) {
@@ -38,6 +44,8 @@ class App extends Component {
     };
 
     this.setState({ isDismissed: false, isOpen: true, transitionData });
+
+    logMediaChoice('audio');
   }
 
   close() {
@@ -53,6 +61,8 @@ class App extends Component {
         inline: 'nearest'
       });
     }, 500);
+
+    logMediaChoice('text');
   }
 
   componentDidUpdate(prevProps, prevState) {

@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@abcnews/alternating-case-to-object": "^2.0.0",
+    "@abcnews/poll-counters-client": "^1.0.0",
     "@abcnews/url2cmid": "^1.0.1",
     "classnames": "^2.2.5",
     "nosleep.js": "^0.7.0",
