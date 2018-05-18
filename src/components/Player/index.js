@@ -91,6 +91,7 @@ class Player extends Component {
   }
 
   hopTo(time) {
+    console.log(`hopTo: ${time}`);
     this.audioEl.currentTime = time;
   }
 
