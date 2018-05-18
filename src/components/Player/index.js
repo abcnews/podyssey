@@ -128,8 +128,12 @@ class Player extends Component {
       }
     });
     this.audioEl.addEventListener('timeupdate', () => {
+      const currentTime = this.audioEl ? this.audioEl.currentTime : 0;
+      const isEnded = this.audioEl ? currentTime === this.audioEl.duration : false;
+
       this.setState({
-        currentTime: this.audioEl ? this.audioEl.currentTime : 0
+        currentTime,
+        isEnded
       });
     });
 
@@ -251,7 +255,10 @@ class Player extends Component {
           <Timeline currentTime={currentTime} duration={duration} snapTimes={titledSectionTimes} update={this.hopTo} />
           <div className={styles.buttons}>
             <HopButton type="prev" time={duration ? prevTitledSectionTime : null} onClick={this.hopToDataTime} />
-            <Button type={isPaused || !canPlay ? 'play' : 'pause'} onClick={this[isPaused ? 'play' : 'pause']} />
+            <Button
+              type={isEnded ? 'replay' : isPaused || !canPlay ? 'play' : 'pause'}
+              onClick={this[isPaused ? 'play' : 'pause']}
+            />
             <HopButton type="next" time={duration ? nextTitledSectionTime : null} onClick={this.hopToDataTime} />
           </div>
         </nav>
