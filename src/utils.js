@@ -1,7 +1,8 @@
 const url2cmid = require('@abcnews/url2cmid');
+const Caption = require('./components/Caption');
 const HTMLEmbed = require('./components/HTMLEmbed');
 const { resize } = require('./components/Image');
-const ImageEmbed = require('./components/ImageEmbed');
+const ImageViewer = require('./components/ImageViewer');
 const Quote = require('./components/Quote');
 const Raw = require('./components/Raw');
 const { append, before, create, detach, getMetaContent, prepend, select, selectAll } = require('./dom');
@@ -142,7 +143,12 @@ module.exports.parsePlayerProps = html => {
         }
 
         // Create the next entry
-        entries[time] = { media: null, notes: [], sectionIndex: sections.length ? sections.length - 1 : null };
+        entries[time] = {
+          media: null,
+          caption: null,
+          notes: [],
+          sectionIndex: sections.length ? sections.length - 1 : null
+        };
       }
     } else if (time === null) {
       // Skip anything that occurs before the first entry exists
@@ -153,11 +159,12 @@ module.exports.parsePlayerProps = html => {
       `) ||
       select('.type-photo', node)
     ) {
-      // Set the current entry's media
+      // Set the current entry's media (and source)
       entries[time].media = {
-        component: ImageEmbed,
-        props: ImageEmbed.inferProps(node)
+        component: ImageViewer,
+        props: ImageViewer.inferProps(node)
       };
+      entries[time].caption = Caption.inferProps(node);
     } else if (
       node.matches(
         `blockquote:not([class]),

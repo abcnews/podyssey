@@ -249,3 +249,18 @@
   display: block;
   flex: 0 0 0.0625rem;
 }
+
+.footer {
+  z-index: 1;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+.footer > * {
+  margin: 0;
+  height: 3rem;
+  letter-spacing: 0.0625rem;
+  animation: appear 0.5s 1s backwards;
+}

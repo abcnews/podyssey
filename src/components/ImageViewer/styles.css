@@ -1,0 +1,13 @@
+.root {
+  display: block !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.root > :first-child {
+  width: 100%;
+}
+
+.isPaused > :first-child {
+  animation-play-state: paused !important;
+}

@@ -1,7 +1,6 @@
 const cn = require('classnames');
 const { h, Component } = require('preact');
 const { inferConfig } = require('../../dom');
-const Caption = require('../Caption');
 const Image = require('../Image');
 const imageStyles = require('../Image/styles.css');
 const styles = require('./styles.css');
@@ -13,7 +12,7 @@ window.addEventListener('resize', () => {
   mounted.forEach((_, component) => component.updateRatio());
 });
 
-class ImageEmbed extends Component {
+class ImageViewer extends Component {
   constructor(props) {
     super(props);
 
@@ -41,18 +40,16 @@ class ImageEmbed extends Component {
     return (
       <figure className={cn(styles.root, { [styles.isPaused]: isPaused })}>
         <Image key={image.src} id={this.imageId} src={image.src} alt={image.alt} />
-        <Caption text={`Photo: ${caption.attribution}`} />
         {animation && ratio && <style>{animationCSS(this.imageId, animation, ratio)}</style>}
       </figure>
     );
   }
 }
 
-module.exports = ImageEmbed;
+module.exports = ImageViewer;
 
 module.exports.inferProps = el => ({
   image: Image.inferProps(el),
-  caption: Caption.inferProps(el),
   animation: inferConfig('animation', el)
 });
 

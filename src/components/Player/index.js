@@ -5,6 +5,7 @@ const ReactCSSTransitionReplace = require('react-css-transition-replace');
 const widont = require('widont');
 const { detach, select } = require('../../dom');
 const Button = require('../Button');
+const Caption = require('../Caption');
 const Entry = require('../Entry');
 const Timeline = require('../Timeline');
 const styles = require('./styles.css');
@@ -281,6 +282,11 @@ class Player extends Component {
             <HopButton type="next" time={duration ? nextTitledSectionTime : null} onClick={this.hopToDataTime} />
           </div>
         </nav>
+        <footer className={styles.footer}>
+          {activeEntry && activeEntry.caption ? (
+            <Caption key={activeEntry.caption.attribution} text={`Photo: ${activeEntry.caption.attribution}`} />
+          ) : null}
+        </footer>
       </div>
     );
   }
