@@ -191,7 +191,7 @@
   bottom: 0;
   left: 0;
   padding: 1rem 1rem 3.125rem;
-  animation: up 1s 0.25s backwards;
+  animation: up 1s 0.5s backwards;
 }
 
 .controls::before {
