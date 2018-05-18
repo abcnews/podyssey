@@ -58,6 +58,7 @@ class Player extends Component {
 
     this._prevCurrentTime = -1;
     this._prevActiveSectionIndex = -1;
+    this._resumeFrom = this.loadTime() || null;
 
     this.state = {
       canPlay: false,
@@ -81,7 +82,7 @@ class Player extends Component {
 
   play() {
     if (this.state.isEnded) {
-      this.audioEl.currentTime = 0;
+      this.hopTo(0);
     }
 
     try {
@@ -91,8 +92,8 @@ class Player extends Component {
   }
 
   hopTo(time) {
-    console.log(`hopTo: ${time}`);
-    this.audioEl.currentTime = time;
+    console.log(`hopTo: ${Math.round(time) + 0.01}`);
+    this.audioEl.currentTime = Math.round(time) + 0.01;
   }
 
   hopToDataTime(event) {
@@ -118,14 +119,19 @@ class Player extends Component {
     this.audioEl.addEventListener('waiting', () => this.setState({ isBuffering: true }));
     this.audioEl.addEventListener('ended', () => this.setState({ isEnded: true }));
     this.audioEl.addEventListener('pause', () => this.setState({ isPaused: true }));
-    this.audioEl.addEventListener('playing', () =>
-      this.setState({ isBuffering: false, isEnded: false, isPaused: false })
-    );
-    this.audioEl.addEventListener('timeupdate', () =>
+    this.audioEl.addEventListener('playing', () => {
+      this.setState({ isBuffering: false, isEnded: false, isPaused: false });
+
+      if (this._resumeFrom) {
+        this.hopTo(this._resumeFrom);
+        this._resumeFrom = null;
+      }
+    });
+    this.audioEl.addEventListener('timeupdate', () => {
       this.setState({
         currentTime: this.audioEl ? this.audioEl.currentTime : 0
-      })
-    );
+      });
+    });
 
     // FLIP playback icon
 
@@ -153,7 +159,6 @@ class Player extends Component {
     }
 
     window.addEventListener('unload', this.forgetTime);
-    this.hopTo(this.loadTime());
     this.audioEl.load();
     this.play();
   }
@@ -260,7 +265,7 @@ const HopButton = ({ type, time, onClick, ...props }) => (
     type={type}
     disabled={typeof time !== 'number'}
     onClick={onClick}
-    data-time={typeof time !== 'number' ? null : time + 0.01}
+    data-time={typeof time !== 'number' ? null : time}
     {...props}
   />
 );

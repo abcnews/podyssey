@@ -98,7 +98,7 @@ class Timeline extends Component {
     this.isIgnoringScrubbing = true;
     setTimeout(() => (this.isIgnoringScrubbing = false), 200);
 
-    this.update(nearbySnapTime === null ? this.state.tempTime : nearbySnapTime + 0.01);
+    this.update(nearbySnapTime === null ? this.state.tempTime : nearbySnapTime);
   }
 
   onHaloKeyDown(event) {
