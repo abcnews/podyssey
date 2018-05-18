@@ -244,9 +244,9 @@ class Player extends Component {
         <nav ref={this.getControlsElRef} className={styles.controls}>
           <Timeline currentTime={currentTime} duration={duration} snapTimes={titledSectionTimes} update={this.hopTo} />
           <div className={styles.buttons}>
-            <HopButton type="prev" time={prevTitledSectionTime} onClick={this.hopToDataTime} />
+            <HopButton type="prev" time={duration ? prevTitledSectionTime : null} onClick={this.hopToDataTime} />
             <Button type={isPaused || !canPlay ? 'play' : 'pause'} onClick={this[isPaused ? 'play' : 'pause']} />
-            <HopButton type="next" time={nextTitledSectionTime} onClick={this.hopToDataTime} />
+            <HopButton type="next" time={duration ? nextTitledSectionTime : null} onClick={this.hopToDataTime} />
           </div>
         </nav>
       </div>

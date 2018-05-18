@@ -169,7 +169,7 @@ class Timeline extends Component {
     const progressPct = `${progressFraction * 100}%`;
 
     return (
-      <div className={styles.root}>
+      <div className={cn(styles.root, { [styles.hasDuration]: !!duration })}>
         <div className={styles.track}>
           <div className={styles.halo} tabindex="0" onKeyDown={this.onHaloKeyDown} onKeyUp={this.onHaloKeyUp} />
           <div className={styles.snapTimes}>
@@ -193,8 +193,8 @@ class Timeline extends Component {
           />
         </div>
         <div className={styles.extents}>
-          <Time numSeconds={Math.round(currentTime)} />
-          <Time numSeconds={Math.round(duration)} />
+          <Time numSeconds={Math.round(currentTime)} isZeroUnknown={duration === 0} />
+          <Time numSeconds={Math.round(duration)} isZeroUnknown />
         </div>
       </div>
     );
