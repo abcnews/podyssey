@@ -51,11 +51,13 @@ class Player extends Component {
     this.hopTo = this.hopTo.bind(this);
     this.hopToDataTime = this.hopToDataTime.bind(this);
     this.forgetTime = this.forgetTime.bind(this);
+    this.resetHopTimeout = this.resetHopTimeout.bind(this);
 
     this.nosleep = new NoSleep();
 
     this.storageKey = `${STORAGE_PREFIX}__currentTime__${this.props.cmid}`;
 
+    this._hopTimeout = null;
     this._prevCurrentTime = -1;
     this._prevActiveSectionIndex = -1;
     this._resumeFrom = this.loadTime() || null;
@@ -91,8 +93,15 @@ class Player extends Component {
     } catch (e) {}
   }
 
+  resetHopTimeout() {
+    this._hopTimeout = null;
+  }
+
   hopTo(time) {
-    console.log(`hopTo: ${Math.round(time) + 0.01}`);
+    // * [1]
+    clearTimeout(this._hopTimeout);
+    this._hopTimeout = setTimeout(this.resetHopTimeout, 2000);
+
     this.audioEl.currentTime = Math.round(time) + 0.01;
   }
 
@@ -130,6 +139,12 @@ class Player extends Component {
     this.audioEl.addEventListener('timeupdate', () => {
       const currentTime = this.audioEl ? this.audioEl.currentTime : 0;
       const isEnded = this.audioEl ? currentTime === this.audioEl.duration : false;
+
+      // [1] Dont update state if a smaller (playback) time update occurs soon
+      //     after a hop (allowing any transitions to occur withoug jumping)
+      if (this._hopTimeout !== null && Math.abs(currentTime - this.state.currentTime) < 2) {
+        return;
+      }
 
       this.setState({
         currentTime,
