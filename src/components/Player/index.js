@@ -202,7 +202,7 @@ class Player extends Component {
   }
 
   render(
-    { audio, entries, sections, title },
+    { audio, cover, entries, sections, title },
     { canPlay, canPlayThrough, currentTime, duration, isBuffering, isEnded, isPaused }
   ) {
     const titledSectionTimes = sections.filter(section => section.title).map(section => section.time);
@@ -225,6 +225,9 @@ class Player extends Component {
     const activeSection = activeEntry ? sections[activeSectionIndex] : null;
     const hasTimeAdvanced = currentTime > this._prevCurrentTime;
     const hasSectionChanged = activeSectionIndex !== this._prevActiveSectionIndex;
+    const attribution = activeEntry
+      ? activeEntry.caption && activeEntry.caption.attribution
+      : cover && cover.attribution;
 
     this._prevCurrentTime = currentTime;
     this._prevActiveSectionIndex = activeSectionIndex;
@@ -283,9 +286,7 @@ class Player extends Component {
           </div>
         </nav>
         <footer className={styles.footer}>
-          {activeEntry && activeEntry.caption ? (
-            <Caption key={activeEntry.caption.attribution} text={`Photo: ${activeEntry.caption.attribution}`} />
-          ) : null}
+          {attribution && <Caption key={attribution} text={`Photo: ${attribution}`} />}
         </footer>
       </div>
     );

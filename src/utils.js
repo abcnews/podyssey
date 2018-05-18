@@ -96,7 +96,10 @@ const getCover = doc => {
     return null;
   }
 
-  return resize(url);
+  return {
+    url: resize(url),
+    attribution: getMetaContent('cover:attribution', doc)
+  };
 };
 
 module.exports.parsePlayerProps = html => {

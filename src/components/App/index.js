@@ -60,8 +60,8 @@ class App extends Component {
 
     if (this.props.playerProps && this.props.playerProps.cover) {
       htmlClassList.add(styles.hasCover, styles.hasUnloadedCover);
-      load(this.props.playerProps.cover, () => {
-        document.body.style.backgroundImage = `url(${this.props.playerProps.cover})`;
+      load(this.props.playerProps.cover.url, () => {
+        document.body.style.backgroundImage = `url(${this.props.playerProps.cover.url})`;
         htmlClassList.remove(styles.hasUnloadedCover);
       });
     }
