@@ -1,18 +1,18 @@
 {
   "name": "podyssey",
   "version": "3.1.0",
-  "description": "A project generated from aunty's preact-app template.",
+  "description": "Enhance feature-worthy podcasts.",
   "license": "MIT",
   "private": true,
   "contributors": [
     "Colin Gourlay <Gourlay.Colin@abc.net.au>"
   ],
-  "aunty": "preact-app",
+  "aunty": "preact",
   "scripts": {
     "start": "aunty serve"
   },
   "devDependencies": {
-    "@abcnews/aunty": "^7.8.0"
+    "@abcnews/aunty": "^10.3.0"
   },
   "dependencies": {
     "@abcnews/alternating-case-to-object": "^2.0.0",
