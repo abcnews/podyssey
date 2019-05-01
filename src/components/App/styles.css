@@ -138,12 +138,12 @@ html.hasCover.hasOpen > body::after {
   opacity: 0;
 }
 
-html.hasOpen > body > :not(.portal) {
+html.hasOpen > body > :not(.portal):not([data-podyssey-cover]) {
   display: none;
   pointer-events: none;
 }
 
-html.hasOpening > body > :not(.portal) {
+html.hasOpening > body > :not(.portal):not([data-podyssey-cover]) {
   display: block;
   opacity: 0;
   transition: opacity 0.75s;
