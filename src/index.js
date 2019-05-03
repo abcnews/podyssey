@@ -49,5 +49,8 @@ if (module.hot) {
 }
 
 if (process.env.NODE_ENV === 'development') {
+  window.addEventListener('podyssey:entry', ({ detail }) => {
+    console.log(detail);
+  });
   require('preact/devtools');
 }

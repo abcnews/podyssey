@@ -14,6 +14,12 @@ class Entry extends Component {
     super(props);
   }
 
+  componentDidMount() {
+    if (this.props.emit) {
+      window.dispatchEvent(new CustomEvent('podyssey:entry', { detail: this.props.emit }));
+    }
+  }
+
   render({ media, notes, isPaused }) {
     return (
       <article className={styles.root}>
@@ -21,12 +27,13 @@ class Entry extends Component {
           {media && renderComponentWithProps({ component: media.component, props: { isPaused, ...media.props } })}
         </section>
         <section className={styles.text}>
-          {notes &&
-            notes.length > 0 && (
-              <div className={styles.notes}>
-                {notes.map(note => <div className={styles.note}>{renderComponentWithProps(note)}</div>)}
-              </div>
-            )}
+          {notes && notes.length > 0 && (
+            <div className={styles.notes}>
+              {notes.map(note => (
+                <div className={styles.note}>{renderComponentWithProps(note)}</div>
+              ))}
+            </div>
+          )}
         </section>
       </article>
     );

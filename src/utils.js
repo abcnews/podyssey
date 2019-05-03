@@ -5,7 +5,7 @@ const { resize } = require('./components/Image');
 const ImageViewer = require('./components/ImageViewer');
 const Quote = require('./components/Quote');
 const Raw = require('./components/Raw');
-const { append, before, create, detach, getMetaContent, prepend, select, selectAll } = require('./dom');
+const { append, before, create, detach, getMetaContent, prepend, parseConfig, select, selectAll } = require('./dom');
 
 const META_PROPS = {
   // Android
@@ -129,11 +129,7 @@ module.exports.parsePlayerProps = html => {
   }
 
   getSourceNodes(doc).forEach(node => {
-    if (
-      !node.tagName ||
-      (node.tagName === 'P' && node.textContent.trim().length === 0) ||
-      (node.tagName === 'A' && node.getAttribute('name').length > 0)
-    ) {
+    if (!node.tagName || (node.tagName === 'P' && node.textContent.trim().length === 0)) {
       // Skip non-elements, empty paragraphs and #markers
     } else if (node.tagName.indexOf('H') === 0 && node.textContent.match(TIMESTAMP_PATTERN).toString().length > 0) {
       // Headings matching the timestamp pattern create new entries (and potentially sections)
@@ -150,11 +146,19 @@ module.exports.parsePlayerProps = html => {
           media: null,
           caption: null,
           notes: [],
+          emit: null,
           sectionIndex: sections.length ? sections.length - 1 : null
         };
       }
     } else if (time === null) {
       // Skip anything that occurs before the first entry exists
+    } else if (node.tagName === 'A') {
+      // Skip markers unless we have a purpose for them
+      const markerName = node.getAttribute('name');
+
+      if (markerName.indexOf('emit') === 0) {
+        entries[time].emit = parseConfig(markerName);
+      }
     } else if (
       node.matches(`
         .inline-content.photo,
