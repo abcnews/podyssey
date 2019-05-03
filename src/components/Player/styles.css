@@ -136,6 +136,11 @@
   transition: opacity 2s 2s;
 }
 
+.entryContainerLeaveActiveCover {
+  opacity: 0;
+  transition: opacity 2s;
+}
+
 .entryContainerLeaveActiveSection {
   transform: translate(-100%, 0);
   transition: transform 1s;

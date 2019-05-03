@@ -29,6 +29,12 @@ const TRANSITIONS = {
     leave: styles.entryContainerLeave,
     leaveActive: styles.entryContainerLeaveActive
   },
+  ENTRY_COVER: {
+    enter: styles.entryContainerEnter,
+    enterActive: styles.entryContainerEnterActive,
+    leave: styles.entryContainerLeave,
+    leaveActive: styles.entryContainerLeaveActiveCover
+  },
   ENTRY_SECTION_FORWARDS: {
     enter: styles.entryContainerEnterSection,
     enterActive: styles.entryContainerEnterActiveSection,
@@ -229,6 +235,7 @@ class Player extends Component {
     const activeSection = activeEntry ? sections[activeSectionIndex] : null;
     const hasTimeAdvanced = currentTime > this._prevCurrentTime;
     const hasSectionChanged = activeSectionIndex !== this._prevActiveSectionIndex;
+    const isCoverVisible = activeEntry && !activeEntry.media;
     const attribution = activeEntry
       ? activeEntry.caption && activeEntry.caption.attribution
       : cover && cover.attribution;
@@ -268,13 +275,22 @@ class Player extends Component {
                 ? hasTimeAdvanced
                   ? TRANSITIONS.ENTRY_SECTION_FORWARDS
                   : TRANSITIONS.ENTRY_SECTION_BACKWARDS
+                : isCoverVisible
+                ? TRANSITIONS.ENTRY_COVER
                 : TRANSITIONS.ENTRY
             }
-            transitionEnterTimeout={hasSectionChanged ? 1000 : 2000}
-            transitionLeaveTimeout={hasSectionChanged ? 1000 : 2000}
+            transitionEnterTimeout={hasSectionChanged ? 1000 : isCoverVisible ? 0 : 2000}
+            transitionLeaveTimeout={hasSectionChanged ? 1000 : isCoverVisible ? 2000 : 4000}
           >
             <div key={activeEntryTime} className={styles.entryContainer}>
-              {activeEntry ? <Entry media={activeEntry.media} notes={activeEntry.notes} isPaused={isPaused} /> : null}
+              {activeEntry ? (
+                <Entry
+                  media={activeEntry.media}
+                  notes={activeEntry.notes}
+                  emit={activeEntry.emit}
+                  isPaused={isPaused}
+                />
+              ) : null}
             </div>
           </ReactCSSTransitionReplace>
         </main>
