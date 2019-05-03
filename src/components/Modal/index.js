@@ -30,6 +30,10 @@ class Modal extends Component {
 
   updateMask() {
     setTimeout(() => {
+      if (!this.contentEl) {
+        return;
+      }
+
       const contentRect = this.contentEl.getBoundingClientRect();
       const contentRadius = window.getComputedStyle(this.contentEl).borderRadius;
 
