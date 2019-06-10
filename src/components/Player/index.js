@@ -273,7 +273,9 @@ class Player extends Component {
             transitionName={
               hasSectionChanged
                 ? hasTimeAdvanced
-                  ? TRANSITIONS.ENTRY_SECTION_FORWARDS
+                  ? activeSection.title
+                    ? TRANSITIONS.ENTRY_SECTION_FORWARDS
+                    : TRANSITIONS.ENTRY
                   : TRANSITIONS.ENTRY_SECTION_BACKWARDS
                 : isCoverVisible
                 ? TRANSITIONS.ENTRY_COVER
