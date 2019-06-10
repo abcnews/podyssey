@@ -102,14 +102,9 @@ html[data-podyssey-has-cover] > body::before {
 }
 
 html[data-podyssey-has-cover][data-podyssey-has-open] > body::before {
-  transition: background-position 30s linear 1s, background-size 5s;
+  transition: background-size 5s;
 }
 
-@media (max-width: 30rem) {
-  html.hasCover.hasOpen > body::before {
-    background-position: 60% 50%;
-  }
-}
 
 @media (min-width: 30rem) and (min-height: 30rem) {
   html[data-podyssey-has-cover][data-podyssey-has-open] > body::before {
