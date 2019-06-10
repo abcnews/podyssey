@@ -14,6 +14,10 @@ const NO_OP = () => {};
 const increment = (id, answer) => new Client(`podyssey-${id}`).increment({ question: ARTICLE_SLUG, answer }, NO_OP);
 const logMediaChoice = answer => increment('media-choice', answer);
 
+function setHTMLFlag(name, isOn) {
+  document.documentElement[isOn ? 'setAttribute' : 'removeAttribute'](`data-podyssey-${name}`, '');
+}
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -66,30 +70,31 @@ class App extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const htmlClassList = document.documentElement.classList;
-
     if (this.props.playerProps && this.props.playerProps.cover) {
-      htmlClassList.add(styles.hasCover, styles.hasUnloadedCover);
+      setHTMLFlag('has-cover', true);
+      setHTMLFlag('has-unloaded-cover', true);
       load(this.props.playerProps.cover.url, () => {
         document.body.style.backgroundImage = `url(${this.props.playerProps.cover.url})`;
-        htmlClassList.remove(styles.hasUnloadedCover);
+        setHTMLFlag('has-unloaded-cover', false);
       });
     }
 
     if (this.state.isOpen !== prevState.isOpen) {
       if (this.state.isOpen) {
         this.lastKnownScrollY = window.scrollY;
-        htmlClassList.add(styles.hasOpen, styles.hasOpening);
+        setHTMLFlag('has-open', true);
+        setHTMLFlag('has-opening', true);
         // After 750ms fade-out time plus 125ms buffer for code execution...
-        setTimeout(() => htmlClassList.remove(styles.hasOpening), 875);
+        setTimeout(() => setHTMLFlag('has-opening', false), 875);
       } else {
-        htmlClassList.remove(styles.hasOpen, styles.hasOpening);
+        setHTMLFlag('has-open', false);
+        setHTMLFlag('has-opening', false);
         window.scrollTo(0, this.lastKnownScrollY);
       }
     }
 
     if (this.state.isDismissed !== prevState.isDismissed) {
-      htmlClassList.add(styles.hasDismissed);
+      setHTMLFlag('has-dismissed', true)
     }
   }
 
