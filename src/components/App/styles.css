@@ -42,7 +42,7 @@
   cursor: pointer;
 }
 
-html:not(.hasDismissed) [data-podyssey-root] ~ [name='alternative'] ~ :not([name='endalternative']) {
+html:not([data-podyssey-has-dismissed]) [data-podyssey-root] ~ [name='alternative'] ~ :not([name='endalternative']) {
   display: none;
 }
 
