@@ -102,7 +102,7 @@ html[data-podyssey-has-cover] > body::before {
 }
 
 html[data-podyssey-has-cover][data-podyssey-has-open] > body::before {
-  transition: background-size 5s;
+  transition: background-size 2.5s;
 }
 
 
