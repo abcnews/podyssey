@@ -130,7 +130,7 @@ module.exports.parsePlayerProps = html => {
 
   getSourceNodes(doc).forEach(node => {
     if (!node.tagName || (node.tagName === 'P' && node.textContent.trim().length === 0)) {
-      // Skip non-elements, empty paragraphs and #markers
+      // Skip non-elements & empty paragraphs
     } else if (node.tagName.indexOf('H') === 0 && node.textContent.match(TIMESTAMP_PATTERN).toString().length > 0) {
       // Headings matching the timestamp pattern create new entries (and potentially sections)
       time = timestampToTime(node.textContent);
