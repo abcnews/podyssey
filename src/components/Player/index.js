@@ -16,6 +16,11 @@ const HOP_BACK_SECONDS = 15;
 const HOP_FORWARD_SECONDS = 30;
 const NOOP = () => {};
 
+// Hack to enable multiple fast transitions
+// TODO: Make Podyssey auto-detect multiple transitions with 2-4 seconds
+// between them and adjust the timeouts etc accordingly.
+const isFastTransitions = document.querySelector(".PodysseyFastTransitions");
+
 const TRANSITIONS = {
   SECTION_TITLE: {
     enter: styles.sectionTitleEnter,
@@ -261,10 +266,10 @@ class Player extends Component {
             <h2
               key={activeSectionIndex}
               className={cn(styles.sectionTitle, {
-                [styles.isLong]: activeSection && (activeSection.title || '').length > 20
+                [styles.isLong]: activeSection && (activeSection.title || "").length > 20
               })}
             >
-              {activeSection ? widont(activeSection.title) : ' '}
+              {activeSection ? widont(activeSection.title) : " "}
             </h2>
           </ReactCSSTransitionReplace>
         </header>
@@ -281,8 +286,16 @@ class Player extends Component {
                 ? TRANSITIONS.ENTRY_COVER
                 : TRANSITIONS.ENTRY
             }
-            transitionEnterTimeout={hasSectionChanged ? 1000 : isCoverVisible ? 0 : 2000}
-            transitionLeaveTimeout={hasSectionChanged ? 1000 : isCoverVisible ? 2000 : 4000}
+            // transitionEnterTimeout={hasSectionChanged ? 1000 : isCoverVisible ? 0 : 2000}
+            // transitionLeaveTimeout={hasSectionChanged ? 1000 : isCoverVisible ? 2000 : 4000}
+
+            // Hack to enable multiple speedy transitions TODO: Fix
+            transitionEnterTimeout={
+              isFastTransitions ? 1800 : hasSectionChanged ? 1000 : isCoverVisible ? 0 : 2000
+            }
+            transitionLeaveTimeout={
+              isFastTransitions ? 1800 : hasSectionChanged ? 1000 : isCoverVisible ? 2000 : 4000
+            }
           >
             <div key={activeEntryTime} className={styles.entryContainer}>
               {activeEntry ? (
@@ -297,14 +310,27 @@ class Player extends Component {
           </ReactCSSTransitionReplace>
         </main>
         <nav ref={this.getControlsElRef} className={styles.controls}>
-          <Timeline currentTime={currentTime} duration={duration} snapTimes={titledSectionTimes} update={this.hopTo} />
+          <Timeline
+            currentTime={currentTime}
+            duration={duration}
+            snapTimes={titledSectionTimes}
+            update={this.hopTo}
+          />
           <div className={styles.buttons}>
-            <HopButton type="prev" time={duration ? prevTitledSectionTime : null} onClick={this.hopToDataTime} />
-            <Button
-              type={isEnded ? 'replay' : isPaused || !canPlay ? 'play' : 'pause'}
-              onClick={this[isPaused ? 'play' : 'pause']}
+            <HopButton
+              type="prev"
+              time={duration ? prevTitledSectionTime : null}
+              onClick={this.hopToDataTime}
             />
-            <HopButton type="next" time={duration ? nextTitledSectionTime : null} onClick={this.hopToDataTime} />
+            <Button
+              type={isEnded ? "replay" : isPaused || !canPlay ? "play" : "pause"}
+              onClick={this[isPaused ? "play" : "pause"]}
+            />
+            <HopButton
+              type="next"
+              time={duration ? nextTitledSectionTime : null}
+              onClick={this.hopToDataTime}
+            />
           </div>
         </nav>
         <footer className={styles.footer}>
