@@ -21,7 +21,7 @@ const NEWLINES_PATTERN = /[\n\r]/g;
 const PREVIEW_CTX_SELECTOR = 'span[id^="CTX"]';
 const PREVIEW_SCRIPT_PATTERN = /(?:coremedia|joo\.classLoader)/;
 const TIMESTAMP_PATTERN = /^\d*h?\d*m?\d*s?/;
-const TIMESTAMP_SEGMENT_PATTERN = /(\d+)(\w)/g;
+const TIMESTAMP_SEGMENT_PATTERN = /(\d+)(h|m|s)/g;
 const TIMESTAMP_UNIT_VALUES = {
   h: 3600,
   m: 60,
