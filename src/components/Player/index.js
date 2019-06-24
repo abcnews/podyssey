@@ -200,6 +200,19 @@ class Player extends Component {
     window.addEventListener('unload', this.forgetTime);
     this.audioEl.load();
     this.play();
+
+    // Testing pre-loading all images
+    console.log(this.props.entries);
+
+    // this.props.entries.forEach(entry => {
+    //   console.log(entry)
+    // })
+
+    for (const entry in this.props.entries ) {
+      if (this.props.entries[entry].media) {
+        this.props.entries[entry].media.component.preload(this.props.entries[entry].media.props)
+      }
+    }
   }
 
   componentDidUpdate() {
