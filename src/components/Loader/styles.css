@@ -3,7 +3,7 @@
   width: 3rem;
   height: 3rem;
   color: rgba(43, 50, 55, 0.6);
-  visibility: hidden; /* Temporary quick fix */
+  /* visibility: hidden; */
 }
 
 .isInverted {

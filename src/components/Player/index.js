@@ -16,10 +16,22 @@ const HOP_BACK_SECONDS = 15;
 const HOP_FORWARD_SECONDS = 30;
 const NOOP = () => {};
 
+// If meta tag exists returns its content (boolean or string)
+const getMeta = (name) => {
+  const el = document.head.querySelector(`[name~=${name}][content]`);
+  if (!el) return null;
+  if (el.content === "true") return true;
+  if (el.content === "false") return false;
+  return el.content;
+}
+
 // Hack to enable multiple fast transitions
 // TODO: Make Podyssey auto-detect multiple transitions with 2-4 seconds
 // between them and adjust the timeouts etc accordingly.
-const isFastTransitions = document.querySelector(".PodysseyFastTransitions");
+const isFastTransitions = getMeta("fast-transitions");
+
+// Detect meta tag to see if we should pre-load all images
+const shouldPreload = getMeta("preload-all-images");
 
 const TRANSITIONS = {
   SECTION_TITLE: {
@@ -201,16 +213,15 @@ class Player extends Component {
     this.audioEl.load();
     this.play();
 
-    // Testing pre-loading all images
-    console.log(this.props.entries);
-
-    // this.props.entries.forEach(entry => {
-    //   console.log(entry)
-    // })
-
-    for (const entry in this.props.entries ) {
-      if (this.props.entries[entry].media) {
-        this.props.entries[entry].media.component.preload(this.props.entries[entry].media.props)
+    // Pre-load all images if meta tag exists
+    if (shouldPreload) {
+      const allEntries = this.props.entries
+      for (const entry in allEntries) {
+        if (allEntries[entry].media) {
+          allEntries[entry].media.component.preload(
+            allEntries[entry].media.props
+          );
+        }
       }
     }
   }
