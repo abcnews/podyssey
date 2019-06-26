@@ -31,7 +31,7 @@ const getMeta = (name) => {
 const isFastTransitions = getMeta("fast-transitions");
 
 // Detect meta tag to see if we should pre-load all images
-const shouldPreload = getMeta("preload-all-images");
+const shouldPreloadAll = getMeta("preload-all-images");
 
 const TRANSITIONS = {
   SECTION_TITLE: {
@@ -214,7 +214,7 @@ class Player extends Component {
     this.play();
 
     // Pre-load all images if meta tag exists
-    if (shouldPreload) {
+    if (shouldPreloadAll) {
       const allEntries = this.props.entries
       for (const entry in allEntries) {
         if (allEntries[entry].media) {
@@ -303,8 +303,12 @@ class Player extends Component {
               hasSectionChanged
                 ? hasTimeAdvanced
                   ? activeSection.title
-                    ? TRANSITIONS.ENTRY_SECTION_FORWARDS
+                    ? activeEntry && activeEntry.crossfade // Optional crossfades
+                      ? TRANSITIONS.ENTRY
+                      : TRANSITIONS.ENTRY_SECTION_FORWARDS
                     : TRANSITIONS.ENTRY
+                  : activeEntry && activeEntry.crossfade
+                  ? TRANSITIONS.ENTRY
                   : TRANSITIONS.ENTRY_SECTION_BACKWARDS
                 : isCoverVisible
                 ? TRANSITIONS.ENTRY_COVER
@@ -313,7 +317,8 @@ class Player extends Component {
             // transitionEnterTimeout={hasSectionChanged ? 1000 : isCoverVisible ? 0 : 2000}
             // transitionLeaveTimeout={hasSectionChanged ? 1000 : isCoverVisible ? 2000 : 4000}
 
-            // Hack to enable multiple speedy transitions TODO: Fix
+            // Hack to enable multiple speedy transitions TODO: Fix this. When transitions overlap
+            // they break and cancel out leaving no transition at all.
             transitionEnterTimeout={
               isFastTransitions ? 1800 : hasSectionChanged ? 1000 : isCoverVisible ? 0 : 2000
             }

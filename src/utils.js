@@ -27,6 +27,7 @@ const TIMESTAMP_UNIT_VALUES = {
   m: 60,
   s: 1
 };
+const XFADE_PATTERN = /Xfade/;
 
 module.exports.normalise = rootEl => {
   const viewportMetaEl = select('meta[name="viewport"]') || create('meta', { name: 'viewport' });
@@ -108,7 +109,7 @@ module.exports.parsePlayerProps = html => {
   const entries = {};
   let time = null;
   let audio = null;
-
+  
   if (html.indexOf('inlineAudioData') > -1) {
     // Phase 1 (Standard)
     const { url, contentType } = JSON.parse(
@@ -135,10 +136,23 @@ module.exports.parsePlayerProps = html => {
       // Headings matching the timestamp pattern create new entries (and potentially sections)
       time = timestampToTime(node.textContent);
 
+      // Add optional crossfade on sections
+      let crossfade = false;
+      let matchedFade = node.textContent.match(XFADE_PATTERN);
+      if (matchedFade && matchedFade.toString().length > 0) crossfade = true;
+      
+
       if (!entries[time]) {
-        if (node.tagName === 'H2' || sections.length === 0) {
+        if (node.tagName === "H2" || sections.length === 0) {
           // Create the next section
-          sections.push({ time, title: node.textContent.replace(TIMESTAMP_PATTERN, '').trim() || null });
+          sections.push({
+            time,
+            title:
+              node.textContent
+                .replace(TIMESTAMP_PATTERN, "")
+                .replace(XFADE_PATTERN, "")
+                .trim() || null
+          });
         }
 
         // Create the next entry
@@ -147,7 +161,8 @@ module.exports.parsePlayerProps = html => {
           caption: null,
           notes: [],
           emit: null,
-          sectionIndex: sections.length ? sections.length - 1 : null
+          sectionIndex: sections.length ? sections.length - 1 : null,
+          crossfade: crossfade
         };
       }
     } else if (time === null) {

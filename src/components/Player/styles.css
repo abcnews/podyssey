@@ -151,6 +151,17 @@
   transition: transform 1s;
 }
 
+/* if Xfade is specified after time in headings */
+.entryContainerLeaveActiveSectionFade {
+  opacity: 0;
+  transition: opacity 1s;
+}
+
+.entryContainerLeaveActiveSectionBackwardsFade {
+  opacity: 1;
+  transition: opacity 1s;
+}
+
 .entryContainerEnter {
   opacity: 0;
 }
@@ -172,6 +183,8 @@
   transform: none;
   transition: transform 1s;
 }
+
+
 
 .main > * > :first-child:not(:nth-last-child(2)):not(:last-child) > *,
 .main > * > :first-child:not(:nth-last-child(2)):not(:last-child) ~ * > * {
