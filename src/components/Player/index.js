@@ -231,7 +231,12 @@ class Player extends Component {
       this._nextMedia.component.preload(this._nextMedia.props);
     }
 
+    if (this._nextMedia2 && this._nextMedia2.component.preload) {
+      this._nextMedia2.component.preload(this._nextMedia2.props);
+    }
+
     this._nextMedia = null;
+    this._nextMedia2 = null;
   }
 
   componentWillUnmount() {
@@ -259,6 +264,7 @@ class Player extends Component {
       .reverse()
       .find(time => time < currentTime);
     const nextEntryTime = entryTimes[entryTimes.indexOf(activeEntryTime) + 1];
+    const nextEntryTime2 = entryTimes[entryTimes.indexOf(activeEntryTime) + 2];
     const activeEntry = activeEntryTime === null ? null : entries[activeEntryTime];
     const activeSectionIndex = activeEntry ? activeEntry.sectionIndex : -1;
     const activeSection = activeEntry ? sections[activeSectionIndex] : null;
@@ -274,6 +280,11 @@ class Player extends Component {
 
     if (nextEntryTime) {
       this._nextMedia = (entries[nextEntryTime] || {}).media;
+    }
+
+    // Failsafe load 2 in advance
+    if (nextEntryTime2) {
+      this._nextMedia2 = (entries[nextEntryTime2] || {}).media;
     }
 
     return (
