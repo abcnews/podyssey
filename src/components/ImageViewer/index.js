@@ -65,13 +65,17 @@ const transformX = (pct, ratio) => {
 const animationCSS = (id, { from = 0, to = 100, duration = 10, delay = 0, infinite = false }, ratio = 1) => {
   const name = `${id}_ratio${String(ratio * 100).split('.')[0]}`;
 
+  // Changed to "left" css animation as works in Safari
+  // Maybe make it detect Safari???
   return `
 @keyframes ${name} {
   from {
-    transform: translate(${transformX(from, ratio)}%, 0);
+    /* transform: translate(${transformX(from, ratio)}%, 0); */
+    left: ${transformX(from, ratio)}%;
   }
   to {
-    transform: translate(${transformX(to, ratio)}%, 0);
+    /* transform: translate(${transformX(to, ratio)}%, 0); */
+    left: ${transformX(to, ratio)}%;
   }
 }
 
