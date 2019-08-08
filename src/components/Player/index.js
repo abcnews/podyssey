@@ -1,5 +1,5 @@
 const cn = require('classnames');
-const NoSleep = require('nosleep.js');
+const NoSleep = require('nosleep.js/dist/NoSleep.min.js'); // only way to import ES5 build
 const { h, Component } = require('preact');
 const ReactCSSTransitionReplace = require('react-css-transition-replace');
 const widont = require('widont');
@@ -17,21 +17,21 @@ const HOP_FORWARD_SECONDS = 30;
 const NOOP = () => {};
 
 // If meta tag exists returns its content (boolean or string)
-const getMeta = (name) => {
+const getMeta = name => {
   const el = document.head.querySelector(`[name~=${name}][content]`);
   if (!el) return null;
-  if (el.content === "true") return true;
-  if (el.content === "false") return false;
+  if (el.content === 'true') return true;
+  if (el.content === 'false') return false;
   return el.content;
-}
+};
 
 // Hack to enable multiple fast transitions
 // TODO: Make Podyssey auto-detect multiple transitions with 2-4 seconds
 // between them and adjust the timeouts etc accordingly.
-const isFastTransitions = getMeta("fast-transitions");
+const isFastTransitions = getMeta('fast-transitions');
 
 // Detect meta tag to see if we should pre-load all images
-const shouldPreloadAll = getMeta("preload-all-images");
+const shouldPreloadAll = getMeta('preload-all-images');
 
 const TRANSITIONS = {
   SECTION_TITLE: {
@@ -215,12 +215,10 @@ class Player extends Component {
 
     // Pre-load all images if meta tag exists
     if (shouldPreloadAll) {
-      const allEntries = this.props.entries
+      const allEntries = this.props.entries;
       for (const entry in allEntries) {
         if (allEntries[entry].media) {
-          allEntries[entry].media.component.preload(
-            allEntries[entry].media.props
-          );
+          allEntries[entry].media.component.preload(allEntries[entry].media.props);
         }
       }
     }
@@ -301,10 +299,10 @@ class Player extends Component {
             <h2
               key={activeSectionIndex}
               className={cn(styles.sectionTitle, {
-                [styles.isLong]: activeSection && (activeSection.title || "").length > 20
+                [styles.isLong]: activeSection && (activeSection.title || '').length > 20
               })}
             >
-              {activeSection ? widont(activeSection.title) : " "}
+              {activeSection ? widont(activeSection.title) : ' '}
             </h2>
           </ReactCSSTransitionReplace>
         </header>
@@ -330,12 +328,8 @@ class Player extends Component {
 
             // Hack to enable multiple speedy transitions TODO: Fix this. When transitions overlap
             // they break and cancel out leaving no transition at all.
-            transitionEnterTimeout={
-              isFastTransitions ? 1800 : hasSectionChanged ? 1000 : isCoverVisible ? 0 : 2000
-            }
-            transitionLeaveTimeout={
-              isFastTransitions ? 1800 : hasSectionChanged ? 1000 : isCoverVisible ? 2000 : 4000
-            }
+            transitionEnterTimeout={isFastTransitions ? 1800 : hasSectionChanged ? 1000 : isCoverVisible ? 0 : 2000}
+            transitionLeaveTimeout={isFastTransitions ? 1800 : hasSectionChanged ? 1000 : isCoverVisible ? 2000 : 4000}
           >
             <div key={activeEntryTime} className={styles.entryContainer}>
               {activeEntry ? (
@@ -350,27 +344,14 @@ class Player extends Component {
           </ReactCSSTransitionReplace>
         </main>
         <nav ref={this.getControlsElRef} className={styles.controls}>
-          <Timeline
-            currentTime={currentTime}
-            duration={duration}
-            snapTimes={titledSectionTimes}
-            update={this.hopTo}
-          />
+          <Timeline currentTime={currentTime} duration={duration} snapTimes={titledSectionTimes} update={this.hopTo} />
           <div className={styles.buttons}>
-            <HopButton
-              type="prev"
-              time={duration ? prevTitledSectionTime : null}
-              onClick={this.hopToDataTime}
-            />
+            <HopButton type="prev" time={duration ? prevTitledSectionTime : null} onClick={this.hopToDataTime} />
             <Button
-              type={isEnded ? "replay" : isPaused || !canPlay ? "play" : "pause"}
-              onClick={this[isPaused ? "play" : "pause"]}
+              type={isEnded ? 'replay' : isPaused || !canPlay ? 'play' : 'pause'}
+              onClick={this[isPaused ? 'play' : 'pause']}
             />
-            <HopButton
-              type="next"
-              time={duration ? nextTitledSectionTime : null}
-              onClick={this.hopToDataTime}
-            />
+            <HopButton type="next" time={duration ? nextTitledSectionTime : null} onClick={this.hopToDataTime} />
           </div>
         </nav>
         <footer className={styles.footer}>
