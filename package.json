@@ -19,7 +19,7 @@
 		"@abcnews/poll-counters-client": "^1.2.0",
 		"@abcnews/url2cmid": "^1.0.1",
 		"classnames": "^2.2.5",
-		"nosleep.js": "^0.7.0",
+		"nosleep.js": "^0.9.0",
 		"preact": "^8.2.7",
 		"preact-compat": "^3.18.0",
 		"preact-markup": "^1.6.0",
