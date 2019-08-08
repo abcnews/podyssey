@@ -109,7 +109,7 @@ module.exports.parsePlayerProps = html => {
   const entries = {};
   let time = null;
   let audio = null;
-  
+
   if (html.indexOf('inlineAudioData') > -1) {
     // Phase 1 (Standard)
     const { url, contentType } = JSON.parse(
@@ -140,17 +140,16 @@ module.exports.parsePlayerProps = html => {
       let crossfade = false;
       let matchedFade = node.textContent.match(XFADE_PATTERN);
       if (matchedFade && matchedFade.toString().length > 0) crossfade = true;
-      
 
       if (!entries[time]) {
-        if (node.tagName === "H2" || sections.length === 0) {
+        if (node.tagName === 'H2' || sections.length === 0) {
           // Create the next section
           sections.push({
             time,
             title:
               node.textContent
-                .replace(TIMESTAMP_PATTERN, "")
-                .replace(XFADE_PATTERN, "")
+                .replace(TIMESTAMP_PATTERN, '')
+                .replace(XFADE_PATTERN, '')
                 .trim() || null
           });
         }
@@ -238,20 +237,16 @@ module.exports.detailPageURLFromCMID = cmid =>
   `${(window.location.origin || '').replace('mobile', 'www')}/news/${cmid}?pfm=ms`;
 
 module.exports.getAudioCMID = () => {
-  // First, look for the embed using known selectors
+  // First, remove the audio embed using known selectors
   const embedEl = selectAll(
     '.inline-content.audio, .media-wrapper-dl.type-audio, .view-inlineMediaPlayer.doctype-abcaudio'
   ).concat(selectAll('.embed-content').filter(el => select('.type-audio', el)))[0];
 
   if (embedEl) {
     detach(embedEl);
-
-    return selectAll('a', embedEl)
-      .filter(x => x.href.indexOf('mpegmedia') < 0)
-      .map(x => url2cmid(x.href))[0];
   }
 
-  // Failing that, check window.dataLayer
+  // Then check window.dataLayer for the audio document CMID, and return it
   if (Array.isArray(window.dataLayer)) {
     const embedCMURL = window.dataLayer
       .filter(
