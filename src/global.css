@@ -5,3 +5,7 @@ html {
 body > :global(.tooltip) {
   display: none !important;
 }
+
+:global(.Header-media) {
+  display: none;
+}
