@@ -1,0 +1,52 @@
+:global(.Main) > :global(.Header) {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: 100%;
+  background-color: transparent;
+}
+
+:global(.Main) > :global(.Header) :global(.Header-content)::before {
+  content: '';
+  display: inline-block;
+  margin-top: 0;
+  margin-bottom: 0;
+  width: 100%;
+  height: 45vw;
+  max-height: 24rem;
+  max-width: 650px;
+  background-image: url('https://live-production.wcms.abc-cdn.net.au/2518ebd27c114f599d1e5a8ad6fc295b?src');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+
+:global(.Main) > :global(.Header) :global(.Header-content) {
+  padding-bottom: 0;
+}
+
+:global(.Main) > :global(.Header) :global(.Header-content) > * {
+  overflow: hidden;
+
+  visibility: hidden;
+
+  margin-top: 0;
+
+  margin-bottom: 0;
+
+  height: 0;
+}
+
+[data-mount][id='podyssey'] button[data-type='play'] {
+  background-color: rgba(46, 255, 255, 1);
+  color: black;
+  font-weight: bold;
+}
+
+[data-mount][id='footer'] ~ :not(div):not(aside) {
+  text-align: center;
+}
+
+.u-richtext-invert a:visited,
+.u-richtext-invert a:visited > * {
+  color: #3cffd8;
+}
