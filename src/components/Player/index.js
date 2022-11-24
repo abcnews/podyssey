@@ -1,19 +1,17 @@
-const cn = require('classnames');
-const NoSleep = require('nosleep.js/dist/NoSleep.min.js'); // only way to import ES5 build
-const { h, Component } = require('preact');
-const ReactCSSTransitionReplace = require('react-css-transition-replace');
-const widont = require('widont');
-const { detach, select } = require('../../dom');
-const Button = require('../Button');
-const Caption = require('../Caption');
-const Entry = require('../Entry');
-const Timeline = require('../Timeline');
-const { trackProgress } = require('./stats');
-const styles = require('./styles.css');
+import cn from 'classnames';
+import NoSleep from 'nosleep.js/dist/NoSleep.min.js'; // only way to import ES5 build
+import { h, Component } from 'preact';
+import ReactCSSTransitionReplace from '../../vendor/react-css-transition-replace/ReactCSSTransitionReplace';
+import widont from 'widont';
+import { detach, select } from '../../dom';
+import Button from '../Button';
+import Caption from '../Caption';
+import Entry from '../Entry';
+import Timeline from '../Timeline';
+import { trackProgress } from './stats';
+import styles from './styles.css';
 
 const STORAGE_PREFIX = 'podyssey';
-const HOP_BACK_SECONDS = 15;
-const HOP_FORWARD_SECONDS = 30;
 const NOOP = () => {};
 
 // If meta tag exists returns its content (boolean or string)
@@ -65,6 +63,16 @@ const TRANSITIONS = {
     leaveActive: styles.entryContainerLeaveActiveSectionBackwards
   }
 };
+
+const HopButton = ({ type, time, onClick, ...props }) => (
+  <Button
+    type={type}
+    disabled={typeof time !== 'number'}
+    onClick={onClick}
+    data-time={typeof time !== 'number' ? null : time}
+    {...props}
+  />
+);
 
 class Player extends Component {
   constructor(props) {
@@ -147,7 +155,9 @@ class Player extends Component {
   }
 
   componentDidMount() {
-    this.audioEl.addEventListener('durationchange', () => this.setState({ duration: this.audioEl.duration }));
+    this.audioEl.addEventListener('durationchange', () =>
+      this.setState({ duration: this.audioEl.duration })
+    );
     this.audioEl.addEventListener('canplay', () => this.setState({ canPlay: true }));
     this.audioEl.addEventListener('canplaythrough', () => this.setState({ canPlayThrough: true }));
     this.audioEl.addEventListener('waiting', () => this.setState({ isBuffering: true }));
@@ -245,17 +255,21 @@ class Player extends Component {
 
   render(
     { audio, cover, entries, sections, title },
-    { canPlay, canPlayThrough, currentTime, duration, isBuffering, isEnded, isPaused }
+    { canPlay, currentTime, duration, isBuffering, isEnded, isPaused }
   ) {
-    const titledSectionTimes = sections.filter(section => section.title).map(section => section.time);
+    const titledSectionTimes = sections
+      .filter(section => section.title)
+      .map(section => section.time);
     const activeTitledSectionTime = titledSectionTimes
       .slice()
       .reverse()
       .find(time => time < currentTime);
     const prevTitledSectionTime =
-      titledSectionTimes.length > 1 && titledSectionTimes[titledSectionTimes.indexOf(activeTitledSectionTime) - 1];
+      titledSectionTimes.length > 1 &&
+      titledSectionTimes[titledSectionTimes.indexOf(activeTitledSectionTime) - 1];
     const nextTitledSectionTime =
-      titledSectionTimes.length > 1 && titledSectionTimes[titledSectionTimes.indexOf(activeTitledSectionTime) + 1];
+      titledSectionTimes.length > 1 &&
+      titledSectionTimes[titledSectionTimes.indexOf(activeTitledSectionTime) + 1];
     const entryTimes = Object.keys(entries);
     const activeEntryTime = entryTimes
       .slice()
@@ -280,15 +294,10 @@ class Player extends Component {
       this._nextMedia = (entries[nextEntryTime] || {}).media;
     }
 
-    // Failsafe load 2 in advance
-    // if (nextEntryTime2) {
-    //   this._nextMedia2 = (entries[nextEntryTime2] || {}).media;
-    // }
-
     return (
       <div className={cn(styles.root, { [styles.buffering]: isBuffering })}>
         <audio ref={this.getAudioElRef} title={title} preload="auto">
-          <source src={audio.url} type={audio.contentType} />}
+          <source src={audio.url} type={audio.contentType} />
         </audio>
         <header className={styles.section}>
           <ReactCSSTransitionReplace
@@ -323,13 +332,14 @@ class Player extends Component {
                 ? TRANSITIONS.ENTRY_COVER
                 : TRANSITIONS.ENTRY
             }
-            // transitionEnterTimeout={hasSectionChanged ? 1000 : isCoverVisible ? 0 : 2000}
-            // transitionLeaveTimeout={hasSectionChanged ? 1000 : isCoverVisible ? 2000 : 4000}
-
             // Hack to enable multiple speedy transitions TODO: Fix this. When transitions overlap
             // they break and cancel out leaving no transition at all.
-            transitionEnterTimeout={isFastTransitions ? 1800 : hasSectionChanged ? 1000 : isCoverVisible ? 0 : 2000}
-            transitionLeaveTimeout={isFastTransitions ? 1800 : hasSectionChanged ? 1000 : isCoverVisible ? 2000 : 4000}
+            transitionEnterTimeout={
+              isFastTransitions ? 1800 : hasSectionChanged ? 1000 : isCoverVisible ? 0 : 2000
+            }
+            transitionLeaveTimeout={
+              isFastTransitions ? 1800 : hasSectionChanged ? 1000 : isCoverVisible ? 2000 : 4000
+            }
           >
             <div key={activeEntryTime} className={styles.entryContainer}>
               {activeEntry ? (
@@ -344,14 +354,27 @@ class Player extends Component {
           </ReactCSSTransitionReplace>
         </main>
         <nav ref={this.getControlsElRef} className={styles.controls}>
-          <Timeline currentTime={currentTime} duration={duration} snapTimes={titledSectionTimes} update={this.hopTo} />
+          <Timeline
+            currentTime={currentTime}
+            duration={duration}
+            snapTimes={titledSectionTimes}
+            update={this.hopTo}
+          />
           <div className={styles.buttons}>
-            <HopButton type="prev" time={duration ? prevTitledSectionTime : null} onClick={this.hopToDataTime} />
+            <HopButton
+              type="prev"
+              time={duration ? prevTitledSectionTime : null}
+              onClick={this.hopToDataTime}
+            />
             <Button
               type={isEnded ? 'replay' : isPaused || !canPlay ? 'play' : 'pause'}
               onClick={this[isPaused ? 'play' : 'pause']}
             />
-            <HopButton type="next" time={duration ? nextTitledSectionTime : null} onClick={this.hopToDataTime} />
+            <HopButton
+              type="next"
+              time={duration ? nextTitledSectionTime : null}
+              onClick={this.hopToDataTime}
+            />
           </div>
         </nav>
         <footer className={styles.footer}>
@@ -362,14 +385,4 @@ class Player extends Component {
   }
 }
 
-const HopButton = ({ type, time, onClick, ...props }) => (
-  <Button
-    type={type}
-    disabled={typeof time !== 'number'}
-    onClick={onClick}
-    data-time={typeof time !== 'number' ? null : time}
-    {...props}
-  />
-);
-
-module.exports = Player;
+export default Player;

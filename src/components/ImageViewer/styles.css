@@ -2,6 +2,7 @@
   display: block !important;
   position: relative;
   overflow: hidden;
+  margin: 0;
 }
 
 .root > :first-child {

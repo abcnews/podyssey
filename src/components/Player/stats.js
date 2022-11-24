@@ -1,7 +1,7 @@
 const WT__CLIP_T = 'Podyssey_Player';
 const WT__DL = '115';
 
-module.exports.trackProgress = el => {
+export const trackProgress = el => {
   const sentEvents = {};
   let eventTimes = {};
   let previousTime = 0;
@@ -58,6 +58,9 @@ function sendWebtrendsClipEvent(el, eventName) {
   if (window.Webtrends && window.Webtrends.multiTrack) {
     Webtrends.multiTrack({ args });
   } else if (window.dcsMultiTrack) {
-    dcsMultiTrack.apply(null, Object.keys(args).reduce((memo, key) => memo.concat([key, args[key]]), []));
+    dcsMultiTrack.apply(
+      null,
+      Object.keys(args).reduce((memo, key) => memo.concat([key, args[key]]), [])
+    );
   }
 }

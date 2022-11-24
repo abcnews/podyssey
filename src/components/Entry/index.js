@@ -1,7 +1,8 @@
-const { h, Component } = require('preact');
-const styles = require('./styles.css');
+import { h, Component } from 'preact';
+import styles from './styles.css';
 
-const isStateless = component => typeof component !== 'string' && !(component.prototype && component.prototype.render);
+const isStateless = component =>
+  typeof component !== 'string' && !(component.prototype && component.prototype.render);
 
 const renderComponentWithProps = ({ component, props }) => {
   const Constructor = !isStateless(component) && component;
@@ -24,7 +25,11 @@ class Entry extends Component {
     return (
       <article className={styles.root}>
         <section className={styles.media}>
-          {media && renderComponentWithProps({ component: media.component, props: { isPaused, ...media.props } })}
+          {media &&
+            renderComponentWithProps({
+              component: media.component,
+              props: { isPaused, ...media.props }
+            })}
         </section>
         <section className={styles.text}>
           {notes && notes.length > 0 && (
@@ -40,4 +45,4 @@ class Entry extends Component {
   }
 }
 
-module.exports = Entry;
+export default Entry;

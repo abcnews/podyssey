@@ -1,63 +1,59 @@
-require("./polyfills");
-
-const { h, render } = require("preact");
-const xhr = require("xhr");
-const { IS_STANDALONE } = require("./constants");
-const {
-  detailPageURLFromCMID,
-  getAudioCMID,
-  normalise,
-  parsePlayerProps
-} = require("./utils");
-require("./global.css");
-
-const rootEl = document.querySelector("[data-podyssey-root]");
-const audioDocumentCMID = getAudioCMID();
-let playerProps = null;
-
-function renderApp() {
-  const App = require("./components/App");
-
-  render(<App playerProps={playerProps} />, rootEl, rootEl.firstChild);
-}
-
-if (audioDocumentCMID) {
-  normalise(rootEl);
-  renderApp();
-  xhr(
-    { url: detailPageURLFromCMID(audioDocumentCMID) },
-    (error, response, body) => {
-      if (error || response.statusCode !== 200) {
-        console.error(error || new Error(response.statusCode));
-      }
-
-      playerProps = {
-        cmid: audioDocumentCMID,
-        ...parsePlayerProps(body)
-      };
-
-      renderApp();
-    }
-  );
-}
+import { whenOdysseyLoaded } from '@abcnews/env-utils';
+import { selectMounts } from '@abcnews/mount-utils';
+import { h, render } from 'preact';
+import App from './components/App';
+import { IS_STANDALONE } from './constants';
+import { fetchAudioDocument, parseSectionsAndEntries } from './utils';
+import './global.css';
 
 if (IS_STANDALONE) {
-  document.documentElement.setAttribute("standalone", "");
+  document.documentElement.setAttribute('standalone', '');
 }
 
-if (module.hot) {
-  module.hot.accept("./components/App", () => {
-    try {
-      renderApp();
-    } catch (err) {
-      const ErrorBox = require("./components/ErrorBox");
-      render(<ErrorBox error={err} />, rootEl, rootEl.firstChild);
-    }
-  });
-}
+whenOdysseyLoaded.then(() => {
+  const [mountEl] = selectMounts('podyssey');
 
-if (process.env.NODE_ENV === "development") {
-  window.addEventListener("podyssey:entry", ({ detail }) => {
+  if (!mountEl) {
+    return;
+  }
+
+  fetchAudioDocument()
+    .then(doc => {
+      const audioFile = doc.media.audio.renditions.files[0];
+      const playerProps = {
+        ...parseSectionsAndEntries(doc.transcript.json.children, doc._embedded.mediaEmbedded),
+        cover: doc.media.image.poster.originalInfo,
+        cmid: doc.id,
+        title: doc.title,
+        audio: {
+          contentType: audioFile.MIMEType,
+          url: audioFile.url
+        }
+      };
+
+      render(<App playerProps={playerProps} />, mountEl, mountEl.firstChild);
+
+      // fetch(`/news/${audioDocument.id}`)
+      //   .then(response => response.text())
+      //   .then(body => {
+      //     const playerProps = {
+      //       ...parseTranscript(body),
+      //       cmid: audioDocument.id,
+      //       title: audioDocument.title,
+      //       audio: {
+      //         contentType: audioFile.MIMEType,
+      //         url: audioFile.url
+      //       }
+      //     };
+
+      //     render(<App playerProps={playerProps} />, mountEl, mountEl.firstChild);
+      //   });
+    })
+    .catch(err => console.error(err));
+});
+
+if (process.env.NODE_ENV === 'development') {
+  window.addEventListener('podyssey:entry', ({ detail }) => {
     console.log(detail);
   });
 }

@@ -1,6 +1,6 @@
-const cn = require('classnames');
-const { h, Component } = require('preact');
-const styles = require('./styles.css');
+import cn from 'classnames';
+import { h } from 'preact';
+import styles from './styles.css';
 
 const TYPE_PATHS = {
   audio: [
@@ -18,7 +18,7 @@ const TYPE_PATHS = {
   prev: ['M26.365 35l2.385-2.5L16.25 20l12.5-12.5L26.365 5 11.25 20.003z']
 };
 
-module.exports = ({ type, block, size }) => (
+const Icon = ({ type, block, size }) => (
   <svg
     className={cn(
       styles.root,
@@ -31,6 +31,10 @@ module.exports = ({ type, block, size }) => (
     viewBox="0 0 40 40"
     data-type={type}
   >
-    {TYPE_PATHS[type].map(d => <path d={d} />)}
+    {TYPE_PATHS[type].map(d => (
+      <path d={d} />
+    ))}
   </svg>
 );
+
+export default Icon;

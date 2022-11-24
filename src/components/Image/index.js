@@ -1,17 +1,17 @@
-const { h, Component } = require('preact');
-const { MS_VERSION } = require('../../constants');
-const Loader = require('../Loader');
-const styles = require('./styles.css');
+import { h, Component } from 'preact';
+import Loader from '../Loader';
+import styles from './styles.css';
 
-const SMALLEST_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAAAADs=';
 const DIMENSIONS =
-  window.ABC && ABC.News && ABC.News.bandwidth && ABC.News.bandwidth.isSlowConnection ? '940x529' : '2150x1210';
+  window.ABC && ABC.News && ABC.News.bandwidth && ABC.News.bandwidth.isSlowConnection
+    ? '940x529'
+    : '2150x1210';
 const P1_RATIO_AND_DIMENSIONS_PATTERN = /(\d+x\d+)-(\d+x\d+)/;
 const P2_RATIO_AND_DIMENSIONS_PATTERN = /(\d+x\d+)-([a-z]+)/;
 
 const preloaded = {};
 
-function load(src, done) {
+export function load(src, done) {
   if (preloaded[src]) {
     return done && done();
   }
@@ -27,12 +27,6 @@ function load(src, done) {
   };
 
   loader.src = src;
-}
-
-function resize(url) {
-  return url
-    .replace(P2_RATIO_AND_DIMENSIONS_PATTERN, '16x9-large')
-    .replace(P1_RATIO_AND_DIMENSIONS_PATTERN, `16x9-${DIMENSIONS}`);
 }
 
 class Image extends Component {
@@ -64,18 +58,8 @@ class Image extends Component {
   }
 }
 
-module.exports = Image;
+export default Image;
 
-module.exports.inferProps = el => {
-  el = el.matches('img') ? el : el.querySelector('img');
-
-  return {
-    src: resize(el.src),
-    alt: el.alt
-  };
-};
-
-module.exports.preload = props => load(props.src);
-
-module.exports.load = load;
-module.exports.resize = resize;
+export function preload(props) {
+  return load(props.src);
+}

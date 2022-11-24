@@ -184,8 +184,6 @@
   transition: transform 1s;
 }
 
-
-
 .main > * > :first-child:not(:nth-last-child(2)):not(:last-child) > *,
 .main > * > :first-child:not(:nth-last-child(2)):not(:last-child) ~ * > * {
   opacity: 1 !important;

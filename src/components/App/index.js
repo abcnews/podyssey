@@ -1,17 +1,19 @@
-const { Client } = require('@abcnews/poll-counters-client');
-const { h, Component } = require('preact');
-const Portal = require('preact-portal');
-const { select } = require('../../dom');
-const Button = require('../Button');
-const { load } = require('../Image');
-const Icon = require('../Icon');
-const Modal = require('../Modal');
-const Player = require('../Player');
-const styles = require('./styles.css');
+import { selectMounts } from '@abcnews/mount-utils';
+import { Client } from '@abcnews/poll-counters-client';
+import { h, Component } from 'preact';
+import { createPortal } from 'preact/compat';
+import { select } from '../../dom';
+import Button from '../Button';
+import { load } from '../Image';
+import Icon from '../Icon';
+import Modal from '../Modal';
+import Player from '../Player';
+import styles from './styles.css';
 
 const ARTICLE_SLUG = window.location.pathname.split('/').reverse()[1];
 const NO_OP = () => {};
-const increment = (id, answer) => new Client(`podyssey-${id}`).increment({ question: ARTICLE_SLUG, answer }, NO_OP);
+const increment = (id, answer) =>
+  new Client(`podyssey-${id}`).increment({ question: ARTICLE_SLUG, answer }, NO_OP);
 const logMediaChoice = answer => increment('media-choice', answer);
 
 function setHTMLFlag(name, isOn) {
@@ -22,12 +24,11 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.getPortalRef = this.getPortalRef.bind(this);
     this.open = this.open.bind(this);
     this.close = this.close.bind(this);
     this.dismiss = this.dismiss.bind(this);
 
-    this.alternativeStartEl = select('[name="alternative"]');
+    this.alternativeStartEl = selectMounts('alternative')[0] || null;
 
     this.state = {
       hasClosedAtLeastOnce: false,
@@ -35,11 +36,15 @@ class App extends Component {
       isOpen: false,
       transitionData: null
     };
-  }
 
-  getPortalRef(ref) {
-    // https://github.com/developit/preact-portal/issues/2
-    this._portal = ref;
+    if (this.props.playerProps && this.props.playerProps.cover) {
+      setHTMLFlag('has-cover', true);
+      setHTMLFlag('has-unloaded-cover', true);
+      load(this.props.playerProps.cover.url, () => {
+        document.body.style.backgroundImage = `url(${this.props.playerProps.cover.url})`;
+        setHTMLFlag('has-unloaded-cover', false);
+      });
+    }
   }
 
   open() {
@@ -69,16 +74,7 @@ class App extends Component {
     logMediaChoice('text');
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props.playerProps && this.props.playerProps.cover) {
-      setHTMLFlag('has-cover', true);
-      setHTMLFlag('has-unloaded-cover', true);
-      load(this.props.playerProps.cover.url, () => {
-        document.body.style.backgroundImage = `url(${this.props.playerProps.cover.url})`;
-        setHTMLFlag('has-unloaded-cover', false);
-      });
-    }
-
+  componentDidUpdate(_prevProps, prevState) {
     if (this.state.isOpen !== prevState.isOpen) {
       if (this.state.isOpen) {
         this.lastKnownScrollY = window.scrollY;
@@ -94,7 +90,7 @@ class App extends Component {
     }
 
     if (this.state.isDismissed !== prevState.isDismissed) {
-      setHTMLFlag('has-dismissed', true)
+      setHTMLFlag('has-dismissed', true);
     }
   }
 
@@ -105,7 +101,12 @@ class App extends Component {
           <Icon type="audio" size="tiny" />
           <span>This story features audio</span>
         </div>
-        <Button type="play" className={styles.open} onClick={this.open} iconProps={{ block: true, size: 'large' }}>
+        <Button
+          type="play"
+          className={styles.open}
+          onClick={this.open}
+          iconProps={{ block: true, size: 'large' }}
+        >
           <span>{hasClosedAtLeastOnce ? 'Resume play' : 'Get started'}</span>
         </Button>
         {this.alternativeStartEl && (
@@ -115,18 +116,21 @@ class App extends Component {
             </button>
           </div>
         )}
-        <Portal into={'body'} ref={this.getPortalRef}>
+        {createPortal(
           <div className={styles.portal}>
             {isOpen && (
               <Modal close={this.close}>
-                {playerProps && <Player key="player" transitionData={transitionData} {...playerProps} />}
+                {playerProps && (
+                  <Player key="player" transitionData={transitionData} {...playerProps} />
+                )}
               </Modal>
             )}
-          </div>
-        </Portal>
+          </div>,
+          document.body
+        )}
       </div>
     );
   }
 }
 
-module.exports = App;
+export default App;

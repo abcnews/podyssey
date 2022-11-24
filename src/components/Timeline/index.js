@@ -1,9 +1,8 @@
-const cn = require('classnames');
-const { h, Component } = require('preact');
-const Time = require('../Time');
-const styles = require('./styles.css');
+import cn from 'classnames';
+import { h, Component } from 'preact';
+import Time from '../Time';
+import styles from './styles.css';
 
-const ENTER = 13;
 const LEFT = 37;
 const RIGHT = 39;
 const SKIP_BACK_SECONDS = 15;
@@ -35,7 +34,10 @@ class Timeline extends Component {
   }
 
   getPointerTime(event) {
-    return Math.min(Math.round(this.getPointerFraction(event) * this.props.duration), this.props.duration - 0.01);
+    return Math.min(
+      Math.round(this.getPointerFraction(event) * this.props.duration),
+      this.props.duration - 0.01
+    );
   }
 
   scrubStart(event) {
@@ -108,7 +110,8 @@ class Timeline extends Component {
 
     this.isScrubbing = true;
 
-    const tempTime = typeof this.state.tempTime === 'number' ? this.state.tempTime : this.props.currentTime;
+    const tempTime =
+      typeof this.state.tempTime === 'number' ? this.state.tempTime : this.props.currentTime;
 
     if (event.keyCode === LEFT) {
       this.setState({ tempTime: Math.max(0, tempTime - SKIP_BACK_SECONDS) });
@@ -165,18 +168,30 @@ class Timeline extends Component {
     const { tempTime } = this.state;
     const currentTimeFraction = currentTime / duration;
     const currentTimePct = `${currentTimeFraction * 100}%`;
-    const progressFraction = this.isScrubbing || this.isApplyingUpdate ? tempTime / duration : currentTimeFraction;
+    const progressFraction =
+      this.isScrubbing || this.isApplyingUpdate ? tempTime / duration : currentTimeFraction;
     const progressPct = `${progressFraction * 100}%`;
 
     return (
       <div className={cn(styles.root, { [styles.hasDuration]: !!duration })}>
         <div className={styles.track}>
-          <div className={styles.halo} tabindex="0" onKeyDown={this.onHaloKeyDown} onKeyUp={this.onHaloKeyUp} />
+          <div
+            className={styles.halo}
+            tabindex="0"
+            onKeyDown={this.onHaloKeyDown}
+            onKeyUp={this.onHaloKeyUp}
+          />
           <div className={styles.snapTimes}>
             {snapTimes.map(snapTime => {
               const snapTimePct = Math.max(0, Math.min(snapTime / duration, 1)) * 100;
 
-              return <div key={snapTime} className={styles.snapTime} style={{ left: `${snapTimePct}%` }} />;
+              return (
+                <div
+                  key={snapTime}
+                  className={styles.snapTime}
+                  style={{ left: `${snapTimePct}%` }}
+                />
+              );
             })}
           </div>
           <div className={styles.currentTimeProgress} style={{ width: currentTimePct }} />
@@ -201,4 +216,4 @@ class Timeline extends Component {
   }
 }
 
-module.exports = Timeline;
+export default Timeline;

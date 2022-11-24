@@ -1,8 +1,8 @@
-const cn = require('classnames');
-const { h, Component } = require('preact');
-const styles = require('./styles.css');
+import cn from 'classnames';
+import { h } from 'preact';
+import styles from './styles.css';
 
-module.exports = ({ inverted, large, overlay, className, ...props }) => (
+const Loader = ({ inverted, large, overlay, className, ...props }) => (
   <div
     className={cn(
       styles.root,
@@ -27,4 +27,6 @@ module.exports = ({ inverted, large, overlay, className, ...props }) => (
   </div>
 );
 
-module.exports.displayName = 'Loader';
+export default Loader;
+
+export const displayName = 'Loader';

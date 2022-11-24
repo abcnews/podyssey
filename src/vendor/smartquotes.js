@@ -39,7 +39,8 @@ const TO_BEGINNING_SINGLE_QUOTE = /(\W|^)'(\S)/g;
 const TO_CONJUNCTIONS_POSSESSION = /([a-z])'([a-z])/gi;
 const TO_ABBREVIATED_YEAR = /(\u2018)([0-9]{2}[^\u2019]*)(\u2018([^0-9]|$)|$|\u2019[a-z])/gi;
 const TO_ENDING_SINGLE_QUOTE = /((\u2018[^']*)|[a-z])'([^0-9]|$)/gi;
-const TO_BACKWARDS_APOSTROPHE = /(\B|^)\u2018(?=([^\u2018\u2019]*\u2019\b)*([^\u2018\u2019]*\B\W[\u2018\u2019]\b|[^\u2018\u2019]*$))/gi;
+const TO_BACKWARDS_APOSTROPHE =
+  /(\B|^)\u2018(?=([^\u2018\u2019]*\u2019\b)*([^\u2018\u2019]*\B\W[\u2018\u2019]\b|[^\u2018\u2019]*$))/gi;
 const TO_DOUBLE_PRIME = /"/g;
 const TO_PRIME = /'/g;
 
@@ -104,4 +105,4 @@ function smartquotes(root) {
   return root;
 }
 
-module.exports = smartquotes;
+export default smartquotes;

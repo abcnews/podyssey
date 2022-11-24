@@ -1,7 +1,7 @@
-const { h, Component } = require('preact');
-const FocusTrap = require('react-focus-trap');
-const Button = require('../Button');
-const styles = require('./styles.css');
+import { h, Component } from 'preact';
+import FocusTrap from 'react-focus-trap';
+import Button from '../Button';
+import styles from './styles.css';
 
 let nextMaskIndex = 0;
 
@@ -80,7 +80,13 @@ class Modal extends Component {
           mask && (
             <svg className={styles.overlay} viewbox={`0 0 ${mask.width} ${mask.height}`}>
               <defs>
-                <mask id={`${styles.overlay}_mask${maskIndex}`} x="0" y="0" width={mask.width} height={mask.height}>
+                <mask
+                  id={`${styles.overlay}_mask${maskIndex}`}
+                  x="0"
+                  y="0"
+                  width={mask.width}
+                  height={mask.height}
+                >
                   <rect x="0" y="0" width={mask.width} height={mask.height} fill="#fff" />
                   <rect
                     x={mask.contentX}
@@ -134,4 +140,4 @@ class Modal extends Component {
   }
 }
 
-module.exports = Modal;
+export default Modal;

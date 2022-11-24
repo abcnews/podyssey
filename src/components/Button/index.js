@@ -1,7 +1,7 @@
-const cn = require('classnames');
-const { h, Component } = require('preact');
-const Icon = require('../Icon');
-const styles = require('./styles.css');
+import cn from 'classnames';
+import { h, Component } from 'preact';
+import Icon from '../Icon';
+import styles from './styles.css';
 
 const MAX_TIME_DIFF = 500;
 
@@ -46,4 +46,4 @@ class Button extends Component {
   }
 }
 
-module.exports = Button;
+export default Button;

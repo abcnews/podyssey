@@ -42,16 +42,23 @@
   cursor: pointer;
 }
 
-html:not([data-podyssey-has-dismissed]) [data-podyssey-root] ~ [name='alternative'] ~ :not([name='endalternative']) {
+html:not([data-podyssey-has-dismissed])
+  [data-mount][id='podyssey']
+  ~ [data-mount][id='alternative']
+  ~ :not([data-mount][id='endalternative']) {
   display: none;
 }
 
-[name='endalternative'] {
+[data-mount][id='endalternative'] {
   display: block;
   margin-bottom: 6rem;
 }
 
-html [data-podyssey-root] ~ [name='alternative'] ~ [name='endalternative'] ~ :not(:global(.MasterGallery)) {
+html
+  [data-mount][id='podyssey']
+  ~ [data-mount][id='alternative']
+  ~ [data-mount][id='endalternative']
+  ~ :not(:global(.MasterGallery)) {
   display: block;
 }
 
@@ -104,7 +111,6 @@ html[data-podyssey-has-cover] > body::before {
 html[data-podyssey-has-cover][data-podyssey-has-open] > body::before {
   transition: background-size 2.5s;
 }
-
 
 @media (min-width: 30rem) and (min-height: 30rem) {
   html[data-podyssey-has-cover][data-podyssey-has-open] > body::before {
